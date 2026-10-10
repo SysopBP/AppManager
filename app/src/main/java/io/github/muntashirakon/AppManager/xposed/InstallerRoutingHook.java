@@ -3,6 +3,7 @@ package io.github.muntashirakon.AppManager.xposed;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.ComponentName;
 import android.net.Uri;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -36,9 +37,9 @@ public final class InstallerRoutingHook implements IXposedHookLoadPackage {
                                 && !"file".equals(data.getScheme()))) return;
                         String mime = intent.getType();
                         if (!"application/vnd.android.package-archive".equals(mime)) return;
-                        // Explicit routing to AppSphere's existing exported installer activity
-                        // requires a verified target component. Until that is known, leave
-                        // the system installer unchanged rather than breaking installs.
+                        intent.setComponent(new ComponentName(APPSPHERE,
+                                APPSPHERE + ".apk.installer.PackageInstallerActivity"));
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     }
                 });
     }
