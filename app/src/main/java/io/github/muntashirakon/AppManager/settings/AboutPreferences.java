@@ -72,6 +72,16 @@ public class AboutPreferences extends PreferenceFragment {
                             .show();
                     return true;
                 });
+        ((Preference) Objects.requireNonNull(findPreference("appsphere_license_details")))
+                .setOnPreferenceClickListener(preference -> {
+                    new ScrollableDialogBuilder(requireActivity())
+                            .setTitle(R.string.license)
+                            .setMessage(R.string.appsphere_licenses_notice)
+                            .enableAnchors()
+                            .setNegativeButton(R.string.close, null)
+                            .show();
+                    return true;
+                });
         // Credits
         ((Preference) Objects.requireNonNull(findPreference("credits")))
                 .setOnPreferenceClickListener(preference -> {
