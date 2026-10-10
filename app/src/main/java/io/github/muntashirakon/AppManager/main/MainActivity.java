@@ -242,6 +242,14 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         recyclerView.setAdapter(mAdapter);
         // AppSphere floating bar: scroll down to hide, scroll up to reveal.
         final View floatingBar = findViewById(R.id.appsphere_floating_bar);
+        final android.content.SharedPreferences appearance = getSharedPreferences(
+                "appsphere_appearance", MODE_PRIVATE);
+        if (appearance.getBoolean("haptics", true)) {
+            for (int id : new int[]{R.id.appsphere_nav_home, R.id.appsphere_nav_apps,
+                    R.id.appsphere_nav_running, R.id.appsphere_nav_settings}) {
+                findViewById(id).setHapticFeedbackEnabled(true);
+            }
+        }
         final View dashboard = findViewById(R.id.appsphere_dashboard);
         final View appList = findViewById(R.id.swipe_refresh);
         findViewById(R.id.appsphere_nav_home).setOnClickListener(v -> {
@@ -249,7 +257,9 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             appList.setVisibility(View.GONE);
             updateAppSphereBackendStatus();
             updateAppSphereSystemActivity();
-            floatingBar.animate().translationY(0f).alpha(1f).setDuration(180).start();
+            if (appearance.getBoolean("haptics", true)) v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
+            if (appearance.getBoolean("animations", true)) floatingBar.animate().translationY(0f).alpha(1f).setDuration(180).start();
+            else { floatingBar.setTranslationY(0f); floatingBar.setAlpha(1f); }
         });
         findViewById(R.id.appsphere_nav_apps).setOnClickListener(v -> {
             dashboard.setVisibility(View.GONE);
