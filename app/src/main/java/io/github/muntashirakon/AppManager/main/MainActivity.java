@@ -247,7 +247,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 "appsphere_appearance", MODE_PRIVATE);
         if (appearance.getBoolean("haptics", true)) {
             for (int id : new int[]{R.id.appsphere_nav_home, R.id.appsphere_nav_apps,
-                    R.id.appsphere_nav_running, R.id.appsphere_nav_settings}) {
+                    R.id.appsphere_nav_running, R.id.appsphere_nav_installer, R.id.appsphere_nav_settings}) {
                 findViewById(id).setHapticFeedbackEnabled(true);
             }
         }
@@ -295,6 +295,12 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 showAppSphereInstallerControl());
         findViewById(R.id.appsphere_command_tools).setOnClickListener(v ->
                 startActivity(new Intent(this, SettingsActivity.class)));
+        findViewById(R.id.appsphere_nav_installer).setOnClickListener(v ->
+                showAppSphereInstallerControl());
+        findViewById(R.id.appsphere_nav_installer).setOnLongClickListener(v -> {
+            showAppSphereInstallerControl();
+            return true;
+        });
         findViewById(R.id.appsphere_nav_running).setOnClickListener(v ->
                 startActivity(new Intent(this, RunningAppsActivity.class)));
         findViewById(R.id.appsphere_nav_settings).setOnClickListener(v ->
