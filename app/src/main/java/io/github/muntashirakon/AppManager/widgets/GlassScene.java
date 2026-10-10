@@ -43,8 +43,8 @@ final class GlassScene {
         return null;
     }
 
-    boolean canCapture(Canvas canvas) {
-        return config.blurEnabled && config.blur > 0 && !failed && !capturing && canvas.isHardwareAccelerated();
+    boolean canCapture() {
+        return config.blurEnabled && config.blur > 0 && !failed && !capturing && root.isHardwareAccelerated();
     }
 
     boolean isCapturing() { return capturing; }

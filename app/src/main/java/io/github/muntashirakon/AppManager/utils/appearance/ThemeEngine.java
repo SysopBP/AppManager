@@ -163,6 +163,14 @@ public final class ThemeEngine {
         }
     }
 
+    public static void invalidateGlassSurfaces(View view) {
+        if (view instanceof GlassCardView || view.getBackground() instanceof GlassDrawable) view.invalidate();
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) invalidateGlassSurfaces(group.getChildAt(i));
+        }
+    }
+
     public static void updateNavigation(View root) {
         Config config = read(root.getContext());
         for (int id : new int[]{R.id.appsphere_nav_home, R.id.appsphere_nav_apps,

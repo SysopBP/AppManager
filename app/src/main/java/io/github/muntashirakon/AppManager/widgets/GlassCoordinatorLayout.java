@@ -5,9 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Canvas;
 import android.os.PowerManager;
 import android.util.AttributeSet;
+import android.view.ViewTreeObserver;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
@@ -18,6 +18,8 @@ import io.github.muntashirakon.AppManager.utils.appearance.ThemeEngine;
 public class GlassCoordinatorLayout extends CoordinatorLayout {
     final GlassScene scene;
     private boolean receiverRegistered;
+    private ViewTreeObserver observer;
+    private final ViewTreeObserver.OnPreDrawListener backdropUpdates = this::updateBackdrop;
     private final BroadcastReceiver powerChanges = new BroadcastReceiver() {
         @Override public void onReceive(Context context, Intent intent) {
             refreshTheme();
@@ -31,12 +33,21 @@ public class GlassCoordinatorLayout extends CoordinatorLayout {
 
     public void refreshTheme() {
         scene.config = ThemeEngine.read(getContext());
+        ThemeEngine.invalidateGlassSurfaces(this);
         invalidate();
     }
 
-    @Override public void draw(Canvas canvas) {
-        if (scene.canCapture(canvas)) scene.capture(backdrop -> super.draw(backdrop));
-        super.draw(canvas);
+    private boolean updateBackdrop() {
+        if (scene.canCapture()) {
+            try {
+                scene.capture(backdrop -> super.draw(backdrop));
+            } catch (OutOfMemoryError memoryPressure) {
+                scene.release();
+                scene.disableBlur();
+            }
+            if (scene.hasFailed()) ThemeEngine.invalidateGlassSurfaces(this);
+        }
+        return true;
     }
 
     @Override public void onAttachedToWindow() {
@@ -45,6 +56,8 @@ public class GlassCoordinatorLayout extends CoordinatorLayout {
                 new IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED),
                 ContextCompat.RECEIVER_NOT_EXPORTED);
         receiverRegistered = true;
+        observer = getViewTreeObserver();
+        observer.addOnPreDrawListener(backdropUpdates);
         refreshTheme();
     }
 
@@ -53,6 +66,8 @@ public class GlassCoordinatorLayout extends CoordinatorLayout {
             getContext().unregisterReceiver(powerChanges);
             receiverRegistered = false;
         }
+        if (observer != null && observer.isAlive()) observer.removeOnPreDrawListener(backdropUpdates);
+        observer = null;
         scene.release();
         super.onDetachedFromWindow();
     }

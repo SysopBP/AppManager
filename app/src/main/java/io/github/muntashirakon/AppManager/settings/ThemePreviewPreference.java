@@ -19,6 +19,8 @@ public class ThemePreviewPreference extends Preference {
 
     @Override public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
+        android.view.View home = holder.itemView.findViewById(R.id.appsphere_nav_home);
+        if (home != null) home.setSelected(true);
         ThemeEngine.applyScreen(holder.itemView);
     }
 

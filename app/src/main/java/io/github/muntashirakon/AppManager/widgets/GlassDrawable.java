@@ -60,6 +60,14 @@ public final class GlassDrawable extends Drawable {
         if (scene != null && scene.isCapturing()) {
             snapshot = scene.snapshot(view, getBounds(), snapshot, snapshotCanvas);
             if (snapshot != null) {
+                if (scene.config.blurEnabled && scene.root.isHardwareAccelerated()
+                        && Build.VERSION.SDK_INT >= 31) {
+                    // Update a referenced RenderNode during pre-draw. Android can reuse
+                    // parent display lists while scrolling, so a draw-only update freezes.
+                    if (renderer == null) renderer = new BlurRenderer();
+                    renderer.update(snapshot, bounds,
+                            config.blur * view.getResources().getDisplayMetrics().density);
+                }
                 // Software capture cannot draw RenderNodes. This is the backdrop for
                 // later surfaces; blur is applied separately during the real GPU draw.
                 paint.setShader(null);
@@ -72,10 +80,9 @@ public final class GlassDrawable extends Drawable {
             // Clear glass needs only an alpha fill over the actual background.
             frosted = true;
         } else if (scene != null && !scene.hasFailed() && config.blurEnabled
-                && snapshot != null && canvas.isHardwareAccelerated() && Build.VERSION.SDK_INT >= 31) {
+                && snapshot != null && renderer != null && canvas.isHardwareAccelerated() && Build.VERSION.SDK_INT >= 31) {
             try {
-                if (renderer == null) renderer = new BlurRenderer();
-                renderer.draw(canvas, snapshot, bounds, config.blur * view.getResources().getDisplayMetrics().density);
+                renderer.draw(canvas, bounds);
                 frosted = true;
             } catch (RuntimeException unsupportedRenderer) {
                 scene.disableBlur();
@@ -117,7 +124,7 @@ public final class GlassDrawable extends Drawable {
         private float radius = -1f;
         private final RectF target = new RectF();
 
-        void draw(Canvas canvas, Bitmap bitmap, RectF bounds, float blur) {
+        void update(Bitmap bitmap, RectF bounds, float blur) {
             int width = Math.max(1, Math.round(bounds.width()));
             int height = Math.max(1, Math.round(bounds.height()));
             node.setPosition(0, 0, width, height);
@@ -129,6 +136,9 @@ public final class GlassDrawable extends Drawable {
                 radius = blur;
                 node.setRenderEffect(blur > 0 ? RenderEffect.createBlurEffect(blur, blur, Shader.TileMode.CLAMP) : null);
             }
+        }
+
+        void draw(Canvas canvas, RectF bounds) {
             int save = canvas.save();
             canvas.translate(bounds.left, bounds.top);
             canvas.drawRenderNode(node);
