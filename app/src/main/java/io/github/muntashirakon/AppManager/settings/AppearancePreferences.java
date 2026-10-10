@@ -104,6 +104,11 @@ public class AppearancePreferences extends PreferenceFragment {
                     .show();
             return true;
         });
+        Objects.requireNonNull(findPreference("sphere_wallpaper"))
+                .setOnPreferenceClickListener(preference -> {
+                    new WallpaperDialogFragment().show(getParentFragmentManager(), "sphere_wallpaper");
+                    return true;
+                });
         // Black theme/custom theme
         SwitchPreferenceCompat fullBlackTheme = Objects.requireNonNull(findPreference("app_theme_pure_black"));
         fullBlackTheme.setChecked(Prefs.Appearance.isPureBlackTheme());
@@ -169,3 +174,4 @@ public class AppearancePreferences extends PreferenceFragment {
         return R.string.pref_cat_appearance;
     }
 }
+

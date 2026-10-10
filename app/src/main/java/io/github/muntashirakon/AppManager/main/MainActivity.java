@@ -832,6 +832,8 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         View bar = findViewById(R.id.appsphere_floating_bar);
         View toolbar = findViewById(R.id.toolbar);
         if (root == null || bar == null || toolbar == null) return;
+        ((io.github.muntashirakon.AppManager.widgets.WallpaperView)
+                findViewById(R.id.sphere_wallpaper)).refresh();
         boolean material = "material".equals(style);
         int dashboardText = material
                 ? com.google.android.material.color.MaterialColors.getColor(root,

@@ -8,6 +8,11 @@
     android:background="#0D0C12"
     tools:context="io.github.muntashirakon.AppManager.main.MainActivity">
 
+    <io.github.muntashirakon.AppManager.widgets.WallpaperView
+        android:id="@+id/sphere_wallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <io.github.muntashirakon.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"

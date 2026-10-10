@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="sphere_wallpaper_title">Wallpaper</string>
+    <string name="sphere_wallpaper_summary">Choose a background image and adjust dimming and brightness</string>
+    <string name="sphere_wallpaper_description">Wallpaper appears behind Home and Apps. Changes save automatically. Brightness adjusts the image only; 100% keeps its original brightness.</string>
+    <string name="sphere_wallpaper_enabled">Use wallpaper background</string>
+    <string name="sphere_wallpaper_choose">Choose wallpaper image</string>
+    <string name="sphere_wallpaper_dim">Dimming: %1$d%%</string>
+    <string name="sphere_wallpaper_brightness">Brightness: %1$d%%</string>
+    <string name="sphere_wallpaper_access_error">Unable to keep access to this image. Please choose a local image from Files.</string>
+</resources>
