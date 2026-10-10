@@ -27,7 +27,8 @@ public final class ScreenLockChecker {
             MINUTE, 3 * MINUTE, 5 * MINUTE, 10 * MINUTE, 30 * MINUTE};
 
     private final Context mContext;
-    private final Timer mTimer = new Timer();
+    private final Timer mTimer = new Timer("Sphere-screen-lock", true);
+    private boolean mClosed;
     @Nullable
     private final Runnable mRunnable;
 
@@ -44,7 +45,8 @@ public final class ScreenLockChecker {
     }
 
     @WorkerThread
-    private void checkLock(int delayIndex) {
+    private synchronized void checkLock(int delayIndex) {
+        if (mClosed) return;
         KeyguardManager keyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
         PowerManager powerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 
@@ -72,6 +74,14 @@ public final class ScreenLockChecker {
                 }
             }
         }
+    }
+
+    /** Stop pending checks and release the timer when the owning service stops. */
+    public synchronized void close() {
+        mClosed = true;
+        if (mCheckLockTask != null) mCheckLockTask.cancel();
+        mTimer.cancel();
+        mTimer.purge();
     }
 
     private static int getSafeCheckLockDelay(final int delayIndex) {

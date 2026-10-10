@@ -1,0 +1,19 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android' version '2.3.20'
+}
+android {
+    namespace 'io.github.chimio.inxlocker.engine'
+    compileSdk compile_sdk
+    defaultConfig { minSdk 26 }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions { jvmTarget = '17' }
+}
+dependencies {
+    compileOnly 'io.github.libxposed:api:102.0.0'
+    implementation 'io.github.libxposed:service:102.0.0'
+}

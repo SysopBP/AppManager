@@ -10,3 +10,5 @@ include ':libserver'
 include ':server'
 rootProject.name = "AppManager"
 gradle.ext.appManagerRoot = settingsDir
+
+include ':installer-routing'

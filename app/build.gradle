@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId 'io.github.muntashirakon.AppManager'
-        minSdk min_sdk
+        minSdk Math.max(min_sdk, 26)
         targetSdk target_sdk
         versionCode 451
         versionName "4.1.1"
@@ -46,7 +46,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue "string", "app_name", "App Manager"
+            resValue "string", "app_name", "Sphere"
         }
         debug {
             applicationIdSuffix '.debug'
@@ -111,8 +111,7 @@ android {
 
 dependencies {
     compileOnly project(path: ':hiddenapi')
-    // Legacy Xposed API supplied at runtime by LSPosed (never packaged into APK).
-    compileOnly "de.robv.android.xposed:api:82"
+    implementation project(path: ':installer-routing')
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:${desugar_jdk_version}"
 
     // Core Libraries
@@ -194,6 +193,7 @@ dependencies {
 //    androidTestImplementation "com.android.support.test.espresso:espresso-intents:3.0.2"
 
     // Unit Testing
+    testImplementation 'io.github.libxposed:api:102.0.0'
     testImplementation "junit:junit:${junit_version}"
     testImplementation "org.robolectric:robolectric:${robolectric_version}"
 }

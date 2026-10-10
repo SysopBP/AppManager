@@ -52,11 +52,14 @@ public class M3PreferenceGroupDecoration extends RecyclerView.ItemDecoration {
         // Restrained AppSphere settings surface: charcoal rows, gentle border,
         // and a narrow gap so grouped preferences remain visually distinct.
         int gap = Math.round(parent.getResources().getDisplayMetrics().density * 2);
-        outRect.left = Math.round(parent.getResources().getDisplayMetrics().density * 12);
+        outRect.left = Math.round(parent.getResources().getDisplayMetrics().density * 16);
         outRect.right = outRect.left;
-        outRect.bottom = gap;
-        cardView.setCardBackgroundColor(Color.rgb(23, 23, 28));
-        cardView.setStrokeColor(ColorStateList.valueOf(Color.argb(46, 180, 175, 192)));
+        outRect.top = isFirstInGroup(adapter, position) ? gap * 3 : 0;
+        outRect.bottom = isLastInGroup(adapter, position) ? gap * 5 : gap;
+        cardView.setCardBackgroundColor(com.google.android.material.color.MaterialColors.getColor(parent,
+                com.google.android.material.R.attr.colorSurfaceContainerLow));
+        cardView.setStrokeColor(ColorStateList.valueOf(com.google.android.material.color.MaterialColors.getColor(parent,
+                com.google.android.material.R.attr.colorOutlineVariant)));
         cardView.setStrokeWidth(Math.max(1, Math.round(parent.getResources().getDisplayMetrics().density * 0.6f)));
         cardView.setCardElevation(0f);
 

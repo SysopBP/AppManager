@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat;
 import java.util.concurrent.Future;
 
 import io.github.muntashirakon.AppManager.BuildConfig;
-import io.github.muntashirakon.AppManager.DummyActivity;
 import io.github.muntashirakon.AppManager.R;
 import io.github.muntashirakon.AppManager.misc.ScreenLockChecker;
 import io.github.muntashirakon.AppManager.settings.Prefs;
@@ -37,6 +36,7 @@ public class SessionMonitoringService extends Service {
     public static final String STOP_ACTION = BuildConfig.APPLICATION_ID + ".action.STOP_SESSION_MONITOR";
 
     private boolean mIsWorking;
+    private boolean mDestroyed;
     @Nullable
     private Future<?> mCheckLockResult;
     private ScreenLockChecker mScreenLockChecker;
@@ -50,10 +50,13 @@ public class SessionMonitoringService extends Service {
                     mCheckLockResult.cancel(true);
                 }
                 mCheckLockResult = ThreadUtils.postOnBackgroundThread(() -> {
-                    if (mScreenLockChecker == null) {
-                        mScreenLockChecker = new ScreenLockChecker(SessionMonitoringService.this, () -> lockScreen());
+                    synchronized (SessionMonitoringService.this) {
+                        if (mDestroyed) return;
+                        if (mScreenLockChecker == null) {
+                            mScreenLockChecker = new ScreenLockChecker(SessionMonitoringService.this, () -> lockScreen());
+                        }
+                        mScreenLockChecker.checkLock();
                     }
-                    mScreenLockChecker.checkLock();
                 });
             } catch (Throwable th) {
                 th.printStackTrace();
@@ -97,8 +100,7 @@ public class SessionMonitoringService extends Service {
                 .setContentIntent(defaultIntent)
                 .addAction(stopServiceAction);
         ForegroundService.start(this, NotificationUtils.nextNotificationId(null), builder.build(),
-                ForegroundService.FOREGROUND_SERVICE_TYPE_DATA_SYNC
-                        | ForegroundService.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+                ForegroundService.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
         if (screenLockEnabled && Prefs.Privacy.isAutoLockEnabled()) {
             IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
             filter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -117,14 +119,17 @@ public class SessionMonitoringService extends Service {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        // https://issuetracker.google.com/issues/36967794
-        Intent intent = new Intent(this, DummyActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        // Honor the user's session preference without relaunching an activity in the background.
+        if (!Prefs.Privacy.isPersistentSessionAllowed()) stopSelf();
     }
 
     @Override
     public void onDestroy() {
+        synchronized (this) {
+            mDestroyed = true;
+            if (mCheckLockResult != null) mCheckLockResult.cancel(true);
+            if (mScreenLockChecker != null) mScreenLockChecker.close();
+        }
         if (mScreenLockedReceiverRegistered) {
             unregisterReceiver(mScreenLockedReceiver);
             mScreenLockedReceiverRegistered = false;

@@ -57,12 +57,12 @@ public abstract class PreferenceFragment extends PreferenceFragmentCompat {
         if (requireContext().getTheme().resolveAttribute(io.github.muntashirakon.ui.R.attr.listItemCornerRadius, typedValue, true)) {
             m3CornerRadius = typedValue.getDimension(getResources().getDisplayMetrics());
         } else {
-            throw new RuntimeException("?attr/listItemCornerRadius not defined.");
+            m3CornerRadius = 24 * getResources().getDisplayMetrics().density;
         }
         if (requireContext().getTheme().resolveAttribute(io.github.muntashirakon.ui.R.attr.listItemCornerRadiusInner, typedValue, true)) {
             m3CornerRadiusInner = typedValue.getDimension(getResources().getDisplayMetrics());
         } else {
-            throw new RuntimeException("?attr/listItemCornerRadiusInner not defined.");
+            m3CornerRadiusInner = 6 * getResources().getDisplayMetrics().density;
         }
 
         // Apply the decorator with the specific radius

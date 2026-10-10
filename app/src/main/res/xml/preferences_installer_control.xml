@@ -1,0 +1,29 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="@string/sphere_routing_module" app:layout="@layout/m3_preference_category">
+        <Preference app:key="route_status" app:title="@string/sphere_routing_inactive" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_inactive_summary" />
+        <SwitchPreferenceCompat app:key="routing_enabled" app:title="@string/sphere_routing_enable" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_enable_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/sphere_routing_general" app:layout="@layout/m3_preference_category">
+        <Preference app:key="selected_installer_package" app:title="@string/sphere_routing_installer" app:iconSpaceReserved="false" app:persistent="false" />
+        <Preference app:key="forced_activity" app:title="@string/sphere_routing_activity" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_activity_summary" />
+        <Preference app:key="install_apk" app:title="@string/sphere_install_apk" app:iconSpaceReserved="false" app:persistent="false" />
+        <Preference app:key="selected_uninstaller_package" app:title="@string/sphere_routing_uninstaller" app:iconSpaceReserved="false" app:persistent="false" />
+        <SwitchPreferenceCompat app:key="follow_uninstall_with_installer" app:title="@string/sphere_routing_follow" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_follow_summary" />
+        <Preference app:key="advanced_installer" app:title="@string/sphere_installer_advanced" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_installer_advanced_summary" android:fragment="io.github.muntashirakon.AppManager.settings.InstallerPreferences" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/sphere_routing_system" app:layout="@layout/m3_preference_category">
+        <SwitchPreferenceCompat app:key="intercept_uninstall" app:title="@string/sphere_routing_intercept_uninstall" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_uninstall_summary" />
+        <SwitchPreferenceCompat app:key="intercept_session_install" app:title="@string/sphere_routing_sessions" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_sessions_summary" />
+        <Preference app:key="forced_sources" app:title="@string/sphere_routing_sources" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_sources_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/sphere_routing_experimental" app:layout="@layout/m3_preference_category">
+        <SwitchPreferenceCompat app:key="fix_permissions" app:title="@string/sphere_routing_permissions" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_permissions_summary" />
+        <SwitchPreferenceCompat app:key="bypass_coloros_adb_intercept" app:title="@string/sphere_routing_coloros" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_coloros_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/sphere_routing_module" app:layout="@layout/m3_preference_category">
+        <SwitchPreferenceCompat app:key="enable_debug_log" app:title="@string/sphere_routing_logs" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_logs_summary" />
+        <SwitchPreferenceCompat app:key="hide_launcher_icon" app:title="@string/sphere_routing_hide" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_hide_summary" />
+        <Preference app:key="hot_reload" app:title="@string/sphere_routing_reload" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_reload_summary" />
+        <Preference app:key="reset_routes" app:title="@string/sphere_routing_reset" app:iconSpaceReserved="false" app:persistent="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

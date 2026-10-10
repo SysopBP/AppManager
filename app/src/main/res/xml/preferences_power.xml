@@ -1,0 +1,12 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="@string/sphere_power_battery" app:layout="@layout/m3_preference_category">
+        <Preference app:key="battery_status" app:title="@string/sphere_power_battery" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_power_optimized" app:selectable="false" />
+        <Preference app:key="battery_settings" app:title="@string/sphere_power_battery_settings" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_power_battery_settings_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/sphere_power_background" app:layout="@layout/m3_preference_category">
+        <SwitchPreferenceCompat app:key="keep_session" app:title="@string/sphere_power_session" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_power_session_summary" />
+        <Preference app:key="privacy_settings" app:title="@string/sphere_power_privacy" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_power_privacy_summary" />
+        <Preference app:key="backend_settings" app:title="@string/sphere_power_backend" app:iconSpaceReserved="false" app:persistent="false" />
+    </PreferenceCategory>
+        <Preference app:key="power_info" app:title="@string/sphere_power" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_power_info" app:selectable="false" />
+</PreferenceScreen>
