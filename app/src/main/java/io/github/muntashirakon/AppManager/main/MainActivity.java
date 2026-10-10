@@ -635,10 +635,48 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
      * Safe installer management entry point. This does not install Xposed hooks or
      * intercept PackageInstaller sessions; interception must remain opt-in.
      */
+    private final androidx.activity.result.ActivityResultLauncher<String[]> appSphereApkPicker =
+            registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.OpenDocument(),
+                    uri -> {
+                        if (uri != null) dispatchAppSphereApk(uri);
+                    });
+
+    private void dispatchAppSphereApk(@NonNull android.net.Uri uri) {
+        String preferred = getSharedPreferences("appsphere_installer_control", MODE_PRIVATE)
+                .getString("preferred_installer", "");
+        Intent install = new Intent(Intent.ACTION_VIEW);
+        install.setDataAndType(uri, "application/vnd.android.package-archive");
+        install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (!preferred.isEmpty()) {
+            install.setPackage(preferred);
+        }
+        try {
+            startActivity(install);
+        } catch (android.content.ActivityNotFoundException | SecurityException ex) {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("Installer unavailable")
+                    .setMessage("The selected installer cannot open this APK. Use Android's installer instead?")
+                    .setPositiveButton("Use system installer", (dialog, which) -> {
+                        Intent fallback = new Intent(Intent.ACTION_VIEW);
+                        fallback.setDataAndType(uri, "application/vnd.android.package-archive");
+                        fallback.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        try {
+                            startActivity(Intent.createChooser(fallback, "Install APK with"));
+                        } catch (Exception ignored) {
+                            new MaterialAlertDialogBuilder(this)
+                                    .setMessage("No compatible APK installer is available.")
+                                    .setPositiveButton(android.R.string.ok, null).show();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, null).show();
+        }
+    }
+
     private void showAppSphereInstallerControl() {
         final android.content.SharedPreferences prefs = getSharedPreferences(
                 "appsphere_installer_control", MODE_PRIVATE);
         final String[] actions = {
+                "Install APK from storage",
                 "Select preferred APK installer",
                 "Open Android default app settings",
                 "Open InxLocker if installed",
@@ -646,20 +684,23 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         };
         final String selected = prefs.getString("preferred_installer", "");
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Installer Control · Experimental")
+                .setTitle("Installer Control")
                 .setMessage("Preferred installer: " + (selected.isEmpty() ? "System default" : selected)
-                        + "\nAppSphere does not currently intercept install or uninstall "
-                        + "requests. LSPosed hooks are not enabled by this screen.")
+                        + "\\nAPK opening is supported here. System-wide install/uninstall redirection "
+                        + "and LSPosed interception are not enabled.")
                 .setItems(actions, (dialog, which) -> {
-                    if (which == 0) chooseAppSphereInstaller();
-                    else if (which == 1) startActivity(new Intent(
+                    if (which == 0) appSphereApkPicker.launch(new String[]{
+                            "application/vnd.android.package-archive", "application/octet-stream"
+                    });
+                    else if (which == 1) chooseAppSphereInstaller();
+                    else if (which == 2) startActivity(new Intent(
                             android.provider.Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS));
-                    else if (which == 2) {
+                    else if (which == 3) {
                         Intent launch = getPackageManager().getLaunchIntentForPackage(
                                 "com.chimioo.inxlocker");
                         if (launch != null) startActivity(launch);
                         else new MaterialAlertDialogBuilder(this)
-                                .setMessage("InxLocker is not available under the expected package name. Install or open it from your LSPosed manager.")
+                                .setMessage("InxLocker is not available under the expected package name.")
                                 .setPositiveButton(android.R.string.ok, null).show();
                     } else {
                         prefs.edit().remove("preferred_installer").apply();
@@ -692,7 +733,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         final String[] packages = candidates.keySet().toArray(new String[0]);
         final String[] labels = candidates.values().toArray(new String[0]);
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Preferred installer (saved only)")
+                .setTitle("Preferred installer")
                 .setItems(labels, (dialog, which) -> {
                     getSharedPreferences("appsphere_installer_control", MODE_PRIVATE)
                             .edit().putString("preferred_installer", packages[which]).apply();
@@ -701,7 +742,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 .setNegativeButton(android.R.string.cancel, null).show();
     }
 
-    private void updateAppSphereSystemActivity() {
+        private void updateAppSphereSystemActivity() {
         android.widget.TextView stats = findViewById(R.id.appsphere_activity_stats);
         if (stats == null) return;
         android.app.ActivityManager manager = (android.app.ActivityManager)
