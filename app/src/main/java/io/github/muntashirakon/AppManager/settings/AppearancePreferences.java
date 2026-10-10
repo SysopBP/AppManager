@@ -104,8 +104,8 @@ public class AppearancePreferences extends PreferenceFragment {
                     .show();
             return true;
         });
-        Objects.requireNonNull(findPreference("sphere_wallpaper"))
-                .setOnPreferenceClickListener(preference -> {
+        Preference wallpaper = Objects.requireNonNull(findPreference("sphere_wallpaper"));
+        wallpaper.setOnPreferenceClickListener(preference -> {
                     new WallpaperDialogFragment().show(getParentFragmentManager(), "sphere_wallpaper");
                     return true;
                 });
