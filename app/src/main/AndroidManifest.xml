@@ -171,6 +171,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute">
+        <!-- LSPosed loads hooks only for packages explicitly selected in its scope UI. -->
+        <meta-data android:name="xposedmodule" android:value="true" />
+        <meta-data android:name="xposeddescription" android:value="AppSphere optional scoped APK installer routing" />
+        <meta-data android:name="xposedminversion" android:value="82" />
+
         <activity
             android:name=".filters.FinderActivity"
             android:enableOnBackInvokedCallback="true"
