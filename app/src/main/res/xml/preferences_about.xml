@@ -3,6 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:title="AppSphere"
+            app:summary="@string/appsphere_about_description"
+            app:selectable="false" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:title="Project and attribution"
+            app:summary="@string/appsphere_fork_credit"
+            app:selectable="false" />
+
         <io.github.muntashirakon.preference.HyperlinkPreference
             app:iconSpaceReserved="false"
             app:summary="@string/copyright_message"
