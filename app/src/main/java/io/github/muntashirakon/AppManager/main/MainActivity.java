@@ -290,6 +290,8 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 UiUtils.showKeyboard(mSearchView);
             }
         });
+        findViewById(R.id.appsphere_installer_control).setOnClickListener(v ->
+                showAppSphereInstallerControl());
         findViewById(R.id.appsphere_command_tools).setOnClickListener(v ->
                 startActivity(new Intent(this, SettingsActivity.class)));
         findViewById(R.id.appsphere_nav_running).setOnClickListener(v ->
@@ -609,6 +611,76 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                     })
                     .show();
         }
+    }
+
+    /**
+     * Safe installer management entry point. This does not install Xposed hooks or
+     * intercept PackageInstaller sessions; interception must remain opt-in.
+     */
+    private void showAppSphereInstallerControl() {
+        final android.content.SharedPreferences prefs = getSharedPreferences(
+                "appsphere_installer_control", MODE_PRIVATE);
+        final String[] actions = {
+                "Select preferred APK installer",
+                "Open Android default app settings",
+                "Open InxLocker if installed",
+                "Reset installer preference"
+        };
+        final String selected = prefs.getString("preferred_installer", "");
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Installer Control · Experimental")
+                .setMessage("Preferred installer: " + (selected.isEmpty() ? "System default" : selected)
+                        + "\\nAppSphere does not currently intercept install or uninstall "
+                        + "requests. LSPosed hooks are not enabled by this screen.")
+                .setItems(actions, (dialog, which) -> {
+                    if (which == 0) chooseAppSphereInstaller();
+                    else if (which == 1) startActivity(new Intent(
+                            android.provider.Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS));
+                    else if (which == 2) {
+                        Intent launch = getPackageManager().getLaunchIntentForPackage(
+                                "com.chimioo.inxlocker");
+                        if (launch != null) startActivity(launch);
+                        else new MaterialAlertDialogBuilder(this)
+                                .setMessage("InxLocker is not available under the expected package name. Install or open it from your LSPosed manager.")
+                                .setPositiveButton(android.R.string.ok, null).show();
+                    } else {
+                        prefs.edit().remove("preferred_installer").apply();
+                        showAppSphereInstallerControl();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void chooseAppSphereInstaller() {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(android.net.Uri.parse("content://appsphere.invalid/sample.apk"),
+                "application/vnd.android.package-archive");
+        java.util.List<android.content.pm.ResolveInfo> handlers =
+                getPackageManager().queryIntentActivities(intent, 0);
+        java.util.LinkedHashMap<String, String> candidates = new java.util.LinkedHashMap<>();
+        for (android.content.pm.ResolveInfo handler : handlers) {
+            if (handler.activityInfo == null) continue;
+            String pkg = handler.activityInfo.packageName;
+            CharSequence label = handler.loadLabel(getPackageManager());
+            candidates.put(pkg, label + " (" + pkg + ")");
+        }
+        if (candidates.isEmpty()) {
+            new MaterialAlertDialogBuilder(this)
+                    .setMessage("No APK installer activities were visible. Android may restrict package visibility.")
+                    .setPositiveButton(android.R.string.ok, null).show();
+            return;
+        }
+        final String[] packages = candidates.keySet().toArray(new String[0]);
+        final String[] labels = candidates.values().toArray(new String[0]);
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Preferred installer (saved only)")
+                .setItems(labels, (dialog, which) -> {
+                    getSharedPreferences("appsphere_installer_control", MODE_PRIVATE)
+                            .edit().putString("preferred_installer", packages[which]).apply();
+                    showAppSphereInstallerControl();
+                })
+                .setNegativeButton(android.R.string.cancel, null).show();
     }
 
     private void updateAppSphereSystemActivity() {
