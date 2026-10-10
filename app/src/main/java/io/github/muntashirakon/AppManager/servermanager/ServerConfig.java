@@ -66,7 +66,8 @@ public final class ServerConfig {
             FileUtils.chmod644(externalCacheAmJar);
             FileUtils.chmod644(externalCacheMainJar);
         } catch (Exception e) {
-            throw new IllegalStateException("External directory unavailable.", e);
+            // Private server assets are already prepared; external cache is optional.
+            android.util.Log.w(TAG, "External server cache unavailable; using private assets", e);
         }
 
         try {
