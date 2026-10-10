@@ -242,10 +242,34 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         recyclerView.setAdapter(mAdapter);
         // AppSphere floating bar: scroll down to hide, scroll up to reveal.
         final View floatingBar = findViewById(R.id.appsphere_floating_bar);
+        final View dashboard = findViewById(R.id.appsphere_dashboard);
+        final View appList = findViewById(R.id.swipe_refresh);
+        findViewById(R.id.appsphere_nav_home).setOnClickListener(v -> {
+            dashboard.setVisibility(View.VISIBLE);
+            appList.setVisibility(View.GONE);
+            updateAppSphereBackendStatus();
+            floatingBar.animate().translationY(0f).alpha(1f).setDuration(180).start();
+        });
         findViewById(R.id.appsphere_nav_apps).setOnClickListener(v -> {
+            dashboard.setVisibility(View.GONE);
+            appList.setVisibility(View.VISIBLE);
             recyclerView.smoothScrollToPosition(0);
             floatingBar.animate().translationY(0f).alpha(1f).setDuration(180).start();
         });
+        findViewById(R.id.appsphere_dashboard_apps).setOnClickListener(v ->
+                findViewById(R.id.appsphere_nav_apps).performClick());
+        findViewById(R.id.appsphere_dashboard_filters).setOnClickListener(v -> {
+            findViewById(R.id.appsphere_nav_apps).performClick();
+            MainListOptions options = new MainListOptions();
+            options.setListOptionActions(viewModel);
+            options.show(getSupportFragmentManager(), MainListOptions.TAG);
+        });
+        findViewById(R.id.appsphere_dashboard_running).setOnClickListener(v ->
+                startActivity(new Intent(this, RunningAppsActivity.class)));
+        findViewById(R.id.appsphere_backend_settings).setOnClickListener(v ->
+                startActivity(new Intent(this, SettingsActivity.class)));
+        findViewById(R.id.appsphere_backend_refresh).setOnClickListener(v ->
+                updateAppSphereBackendStatus());
         findViewById(R.id.appsphere_nav_running).setOnClickListener(v ->
                 startActivity(new Intent(this, RunningAppsActivity.class)));
         findViewById(R.id.appsphere_nav_settings).setOnClickListener(v ->
@@ -565,6 +589,17 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         }
     }
 
+    private void updateAppSphereBackendStatus() {
+        android.widget.TextView status = findViewById(R.id.appsphere_backend_status);
+        if (status == null) return;
+        int uid = Ops.getWorkingUid();
+        String route = Ops.isDirectRoot() ? "Root" : Ops.isAdb() ? "ADB" :
+                Ops.isSystem() ? "System" : "Unprivileged";
+        status.setText("Active route: " + route + "\\nWorking UID: " + uid
+                + "\\nRoot available: " + (Ops.hasRoot() ? "Yes" : "No")
+                + "\\nConfigured mode: " + Ops.getMode());
+    }
+
     private void applyAppSphereInterfaceStyle() {
         String style = getSharedPreferences("appsphere_appearance", MODE_PRIVATE)
                 .getString("interface_style", "glass");
@@ -596,6 +631,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     protected void onResume() {
         super.onResume();
         applyAppSphereInterfaceStyle();
+        updateAppSphereBackendStatus();
         if (viewModel != null) viewModel.onResume();
         if (mAdapter != null && mBatchOpsHandler != null && mAdapter.isInSelectionMode()) {
             mBatchOpsHandler.updateConstraints();
