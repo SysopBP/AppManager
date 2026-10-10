@@ -11,7 +11,7 @@ android {
     buildToolsVersion = build_tools
 
     defaultConfig {
-        applicationId 'io.github.muntashirakon.AppManager'
+        applicationId 'io.github.sysopbp.sphere'
         minSdk Math.max(min_sdk, 26)
         targetSdk target_sdk
         versionCode 452

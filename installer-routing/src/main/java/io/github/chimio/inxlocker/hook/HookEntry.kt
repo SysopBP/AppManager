@@ -53,7 +53,10 @@ class HookEntry : XposedModule() {
     }
 
     override fun onPackageReady(param: XposedModuleInterface.PackageReadyParam) {
-        if (!param.isFirstPackage || param.packageName.startsWith("io.github.muntashirakon.AppManager")) return
+        if (!param.isFirstPackage
+            || param.packageName == "io.github.sysopbp.sphere"
+            || param.packageName == "io.github.sysopbp.sphere.debug"
+            || param.packageName.startsWith("io.github.muntashirakon.AppManager")) return
         appProcessClassLoader = param.classLoader
         hookAppProcess(param.classLoader)
     }
