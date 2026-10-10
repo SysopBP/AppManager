@@ -1,4 +1,4 @@
-name: AppSphere Android 17 Debug APK
+name: Sphere Android 17 Debug APK
 
 on:
   push:
@@ -45,10 +45,17 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew :app:assembleDebug --stacktrace
-      - name: Upload AppSphere debug APK
+      - name: Verify Sphere package and branding
+        run: |
+          APK_PATH=$(find app/build/outputs/apk/debug -name '*.apk' -print -quit)
+          test -n "$APK_PATH"
+          "$ANDROID_HOME/build-tools/37.0.0/aapt2" dump badging "$APK_PATH" > apk-badging.txt
+          grep -F "package: name='io.github.sysopbp.sphere.debug' versionCode='452' versionName='4.2.0'" apk-badging.txt
+          grep -F "application-label:'Sphere'" apk-badging.txt
+      - name: Upload Sphere debug APK
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: AppSphere-Android17-debug
+          name: Sphere-Android17-debug
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
