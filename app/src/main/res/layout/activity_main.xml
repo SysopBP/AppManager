@@ -64,6 +64,98 @@
         app:menu="@menu/activity_main_selection_actions" />
 
 
+    <!-- AppSphere dashboard: isolated from the existing RecyclerView and selection state. -->
+    <ScrollView
+        android:id="@+id/appsphere_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:fillViewport="true"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:paddingBottom="108dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="AppSphere"
+                android:textColor="#F8F5FF"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="22dp"
+                android:text="Device overview and quick controls"
+                android:textColor="#BDB8CC"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/appsphere_glass_bar"
+                android:orientation="vertical"
+                android:padding="20dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Backend control center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/appsphere_backend_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Checking current session…"
+                    android:textColor="#E4DFF1"
+                    android:textSize="14sp" />
+                <Button
+                    android:id="@+id/appsphere_backend_refresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Refresh status"
+                    android:textAllCaps="false" />
+                <Button
+                    android:id="@+id/appsphere_backend_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Connection settings"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"
+                android:text="Quick access"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/appsphere_dashboard_apps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Browse installed apps"
+                android:textAllCaps="false" />
+            <Button
+                android:id="@+id/appsphere_dashboard_filters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="App filters and sorting"
+                android:textAllCaps="false" />
+            <Button
+                android:id="@+id/appsphere_dashboard_running"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Running applications"
+                android:textAllCaps="false" />
+        </LinearLayout>
+    </ScrollView>
+
     <!-- AppSphere: floating navigation, independent of the scrolling app list. -->
     <LinearLayout
         android:id="@+id/appsphere_floating_bar"
@@ -78,9 +170,17 @@
         android:paddingHorizontal="8dp">
 
         <Button
+            android:id="@+id/appsphere_nav_home"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:text="Home"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/appsphere_nav_apps"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="84dp"
+            android:layout_width="72dp"
             android:layout_height="match_parent"
             android:text="Apps"
             android:textAllCaps="false" />
@@ -88,7 +188,7 @@
         <Button
             android:id="@+id/appsphere_nav_running"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="84dp"
+            android:layout_width="72dp"
             android:layout_height="match_parent"
             android:text="Running"
             android:textAllCaps="false" />
@@ -96,7 +196,7 @@
         <Button
             android:id="@+id/appsphere_nav_settings"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="84dp"
+            android:layout_width="72dp"
             android:layout_height="match_parent"
             android:text="Settings"
             android:textAllCaps="false" />
