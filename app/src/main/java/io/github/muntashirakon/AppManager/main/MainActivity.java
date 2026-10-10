@@ -786,13 +786,12 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         }
         Snackbar.make(findViewById(android.R.id.content), R.string.view_changelog, 3 * 60 * 1000)
                 .setAction(R.string.ok, v -> {
-                    long lastVersion = AppPref.getLong(AppPref.PrefKey.PREF_DISPLAY_CHANGELOG_LAST_VERSION_LONG);
                     AppPref.set(AppPref.PrefKey.PREF_DISPLAY_CHANGELOG_BOOL, false);
                     AppPref.set(AppPref.PrefKey.PREF_DISPLAY_CHANGELOG_LAST_VERSION_LONG, (long) BuildConfig.VERSION_CODE);
                     viewModel.executor.submit(() -> {
                         Changelog changelog;
                         try {
-                            changelog = new ChangelogParser(getApplication(), R.raw.changelog, lastVersion).parse();
+                            changelog = new ChangelogParser(getApplication(), R.raw.changelog, BuildConfig.VERSION_CODE).parse();
                         } catch (IOException | XmlPullParserException e) {
                             return;
                         }
