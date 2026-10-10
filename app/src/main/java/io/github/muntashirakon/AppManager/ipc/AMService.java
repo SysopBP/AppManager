@@ -98,8 +98,11 @@ public class AMService extends RootService {
             try {
                 newData.appendFrom(data, data.dataPosition(), data.dataAvail());
                 long id = Binder.clearCallingIdentity();
-                targetBinder.transact(targetCode, newData, reply, targetFlags);
-                Binder.restoreCallingIdentity(id);
+                try {
+                    targetBinder.transact(targetCode, newData, reply, targetFlags);
+                } finally {
+                    Binder.restoreCallingIdentity(id);
+                }
             } catch (RemoteException e) {
                 throw e;
             } catch (Throwable th) {

@@ -63,6 +63,7 @@ public class LocalServices {
                 Ops.setWorkingUid(getAmService().getUid());
                 // A reconnect can follow a phone restart that cleared volatile firewall rules.
                 PermissionOverrideManager.reconcileAll();
+                android.util.Log.i("SphereRootBinding", "BACKEND_READY uid=" + getAmService().getUid());
                 sState.postValue(true);
             } catch (RemoteException | RuntimeException e) {
                 stopServices();
@@ -77,7 +78,12 @@ public class LocalServices {
     }
 
     private static void onServiceBinderDied() {
-        ThreadUtils.postOnBackgroundThread(LocalServices::stopServices);
+        ThreadUtils.postOnBackgroundThread(() -> {
+            synchronized (sBindLock) {
+                // A replacement bind may have completed before this death callback ran.
+                if (!alive()) stopServices();
+            }
+        });
     }
 
     @WorkerThread
@@ -158,7 +164,7 @@ public class LocalServices {
     }
 
     @WorkerThread
-    private static void unbindServicesIfRunning() {
+    private static void unbindServicesIfRunning() throws RemoteException {
         // Basically unregister the services so that we can open another connection
         CountDownLatch unbindWatcher = new CountDownLatch(1);
         ThreadUtils.postOnMainThread(() -> {
@@ -171,8 +177,12 @@ public class LocalServices {
             }
         });
         try {
-            unbindWatcher.await(30, TimeUnit.SECONDS);
-        } catch (InterruptedException ignore) {
+            if (!unbindWatcher.await(12, TimeUnit.SECONDS)) {
+                throw new RemoteException("UI thread did not complete privileged service cleanup");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RemoteException("Privileged service cleanup interrupted");
         }
     }
 }

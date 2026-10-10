@@ -223,7 +223,8 @@ public class RootServiceManager implements Handler.Callback {
         @SuppressLint("RestrictedApi")
         String execFile = "/system/bin/app_process" + (Utils.isProcess64Bit() ? "64" : "32");
         env.append(CLASSPATH_ENV).append("=");
-        if (Ops.hasRoot()) {
+        if (Ops.getWorkingUidOrRoot() == Process.ROOT_UID || Ops.isDirectRoot()) {
+            // Use the active transport identity, including a manually started root server.
             // Avoid using the package staging directory
             env.append(mainJar);
         } else if (!Ops.isSystem()) {
@@ -300,7 +301,7 @@ public class RootServiceManager implements Handler.Callback {
     public Shell.Task createBindTask(Intent intent, Executor executor, ServiceConnection conn) {
         ServiceKey key = bindInternal(intent, executor, conn);
         if (key != null) {
-            mPendingTasks.add(() -> bindInternal(intent, executor, conn) == null);
+            mPendingTasks.add(new BindTask(key, conn, () -> bindInternal(intent, executor, conn) == null));
             int mask = key.isDaemon() ? DAEMON_EN_ROUTE : REMOTE_EN_ROUTE;
             if ((mFlags & mask) == 0) {
                 mFlags |= mask;
@@ -314,6 +315,11 @@ public class RootServiceManager implements Handler.Callback {
     public void unbind(@NonNull ServiceConnection conn) {
         enforceMainThread();
 
+        // Cancel requests which have not received a Binder yet. A timeout must not
+        // leave EN_ROUTE set forever and prevent all subsequent launches.
+        mPendingTasks.removeIf(task -> task.connection == conn);
+        if (mPendingTasks.stream().noneMatch(task -> !task.key.isDaemon())) mFlags &= ~REMOTE_EN_ROUTE;
+        if (mPendingTasks.stream().noneMatch(task -> task.key.isDaemon())) mFlags &= ~DAEMON_EN_ROUTE;
         ConnectionRecord r = mConnections.remove(conn);
         if (r != null) {
             RemoteServiceRecord s = r.getService();
@@ -465,6 +471,7 @@ public class RootServiceManager implements Handler.Callback {
             if (binder == null)
                 return;
 
+            Log.i(TAG, "ROOT_MANAGER_HANDOFF received");
             IRootServiceManager mgr = IRootServiceManager.Stub.asInterface(binder);
             try {
                 mgr.connect(m.getBinder());
@@ -487,8 +494,16 @@ public class RootServiceManager implements Handler.Callback {
         }
     }
 
-    private interface BindTask {
-        boolean run();
+    private static final class BindTask {
+        final ServiceKey key;
+        final ServiceConnection connection;
+        final java.util.function.BooleanSupplier operation;
+        BindTask(ServiceKey key, ServiceConnection connection, java.util.function.BooleanSupplier operation) {
+            this.key = key;
+            this.connection = connection;
+            this.operation = operation;
+        }
+        boolean run() { return operation.getAsBoolean(); }
     }
 
     private interface Predicate {

@@ -1,3 +1,4 @@
 Sphere 4.2.4 (456)
 Eclipse Core launcher refresh and automatic own-icon cache invalidation.
 Includes all 4.2.3 two-tone app icons.
+Privileged backend lifecycle rebuilt: cancellable binds, fresh retries, stale-callback protection, bounded connections and Root routing preserved during reconnect. Added detailed startup diagnostics.

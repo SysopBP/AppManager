@@ -45,6 +45,10 @@ jobs:
             ln -s "$ANDROID_HOME/platforms/android-37.0" "$ANDROID_HOME/platforms/android-37"
           fi
           test -f "$ANDROID_HOME/platforms/android-37/android.jar"
+      - name: Test privileged backend lifecycle
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:testDebugUnitTest --tests '*ServiceConnectionWrapperTest' --tests '*LocalServerManagerTest' --tests '*ServerStatusChangeReceiverTest' --stacktrace
       - name: Build debug APK
         run: |
           chmod +x gradlew
