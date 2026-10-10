@@ -66,7 +66,7 @@ class LocalServerManager {
     @NonNull
     private final Context mContext;
     @Nullable
-    private ClientSession mSession;
+    private volatile ClientSession mSession;
 
     @AnyThread
     private LocalServerManager(@NonNull Context context) {
@@ -408,13 +408,20 @@ class LocalServerManager {
         }
         String host = ServerConfig.getLocalServerHost(mContext);
         int port = ServerConfig.getLocalServerPort();
-        Socket socket = new Socket(host, port);
-        socket.setSoTimeout(10_000);
-        OutputStream os = socket.getOutputStream();
-        InputStream is = socket.getInputStream();
-        DataTransmission transfer = new DataTransmission(os, is, false);
-        transfer.shakeHands(ServerConfig.getLocalToken(), DataTransmission.Role.Client);
-        return new ClientSession(socket, transfer);
+        Socket socket = new Socket();
+        try {
+            socket.connect(new java.net.InetSocketAddress(host, port), 5_000);
+            socket.setSoTimeout(10_000);
+            OutputStream os = socket.getOutputStream();
+            InputStream is = socket.getInputStream();
+            DataTransmission transfer = new DataTransmission(os, is, false);
+            transfer.shakeHands(ServerConfig.getLocalToken(), DataTransmission.Role.Client);
+            android.util.Log.i("SphereRootTransport", "SERVER_AUTHENTICATED");
+            return new ClientSession(socket, transfer);
+        } catch (IOException | RuntimeException e) {
+            IoUtils.closeQuietly(socket);
+            throw e;
+        }
     }
 
     /**

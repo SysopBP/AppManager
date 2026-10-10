@@ -32,7 +32,7 @@ public class LocalServer {
 
     @SuppressLint("StaticFieldLeak")
     @Nullable
-    private static LocalServer sLocalServer;
+    private static volatile LocalServer sLocalServer;
     private static final Object sRestartLock = new Object();
 
     @GuardedBy("lockObject")
@@ -42,6 +42,7 @@ public class LocalServer {
         // Non-null check must be done outside the synchronised block to prevent deadlock on ADB over TCP mode.
         if (sLocalServer != null) return sLocalServer;
         synchronized (sLock) {
+            if (sLocalServer != null) return sLocalServer;
             try {
                 Log.d("IPC", "Init: Local server");
                 sLocalServer = new LocalServer();
