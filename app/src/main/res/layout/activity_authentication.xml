@@ -24,7 +24,7 @@
             android:layout_width="148dp"
             android:layout_height="148dp"
             android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/appsphere_splash" />
+            app:srcCompat="@mipmap/ic_launcher_round" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
