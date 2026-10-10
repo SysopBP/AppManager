@@ -18,7 +18,7 @@ public class ScreenLockCheckerTest {
   Context context = RuntimeEnvironment.getApplication();
   KeyguardManager keyguard = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
   shadowOf(keyguard).setIsKeyguardSecure(true);
-  shadowOf(keyguard).setIsKeyguardLocked(true);
+  shadowOf(keyguard).setKeyguardLocked(true);
   AtomicInteger calls = new AtomicInteger();
   ScreenLockChecker checker = new ScreenLockChecker(context, calls::incrementAndGet);
   checker.checkLock();
