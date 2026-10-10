@@ -5,6 +5,7 @@
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#0D0C12"
     tools:context="io.github.muntashirakon.AppManager.main.MainActivity">
 
     <io.github.muntashirakon.widget.AppBarLayout
@@ -19,6 +20,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="#D91C1A25"
             app:navigationIcon="@null"
             tools:menu="@menu/activity_main_actions" />
 
@@ -45,7 +47,8 @@
             android:scrollbars="none"
             android:focusable="false"
             android:clipToPadding="false"
-            android:paddingBottom="84dp"
+            android:paddingBottom="88dp"
+            android:paddingTop="6dp"
             android:fitsSystemWindows="true"
             app:fastScrollerEnabled="true"
             tools:listitem="@layout/item_main" />
