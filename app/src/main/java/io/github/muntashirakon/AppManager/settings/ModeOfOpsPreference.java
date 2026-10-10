@@ -61,6 +61,7 @@ public class ModeOfOpsPreference extends Fragment {
     private boolean mConnecting;
     private boolean mServerHealth;
     private boolean mServerHealthCheckStarted;
+    private int mServerHealthGeneration;
     @Nullable
     private ColorStateList mColorActive;
     @Nullable
@@ -199,7 +200,7 @@ public class ModeOfOpsPreference extends Fragment {
                     break;
             }
         });
-        LocalServices.state().observe(getViewLifecycleOwner(), ignored -> updateViews());
+        LocalServices.state().observe(getViewLifecycleOwner(), ignored -> refreshServerHealth());
         mModel.getCustomCommand0().observe(getViewLifecycleOwner(), customCommand0::setText);
     }
 
@@ -209,24 +210,50 @@ public class ModeOfOpsPreference extends Fragment {
         requireActivity().setTitle(R.string.pref_mode_of_operations);
     }
 
-    private void completeModeOperation() {
-        mConnecting = false;
-        mModeOfOpsAlertDialog.dismiss();
+    @Override
+    public void onResume() {
+        super.onResume();
+        // A server may have been started externally while this screen was paused.
         mCurrentMode = Ops.getMode();
+        mConnecting = mModel.isModeOperationPending();
+        refreshServerHealth();
+    }
+
+    @Override
+    public void onDestroyView() {
+        // Discard health results belonging to the destroyed view.
+        ++mServerHealthGeneration;
+        mServerHealthCheckStarted = false;
+        super.onDestroyView();
+    }
+
+    private void refreshServerHealth() {
+        ++mServerHealthGeneration;
         mServerHealthCheckStarted = false;
         updateViews();
     }
 
+    private void completeModeOperation() {
+        mConnecting = false;
+        mModeOfOpsAlertDialog.dismiss();
+        mCurrentMode = Ops.getMode();
+        refreshServerHealth();
+    }
+
     private void updateViews() {
+        View currentView = getView();
+        if (currentView == null) return;
         boolean serverActive = mServerHealth;
         if (!mServerHealthCheckStarted) {
-            mServerHealthCheckStarted = true;
             android.content.Context context = getContext();
             if (context == null) return;
+            mServerHealthCheckStarted = true;
+            int generation = mServerHealthGeneration;
             ThreadUtils.postOnBackgroundThread(() -> {
                 boolean healthy = LocalServer.checkServerHealth(context);
                 ThreadUtils.postOnMainThread(() -> {
-                    if (!isAdded()) return;
+                    if (!isAdded() || getView() != currentView
+                            || generation != mServerHealthGeneration) return;
                     mServerHealth = healthy;
                     updateViews();
                 });
