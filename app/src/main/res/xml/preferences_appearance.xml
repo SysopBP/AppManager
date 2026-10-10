@@ -16,6 +16,12 @@
             app:title="Interface style"
             app:summary="AMOLED Glass" />
 
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="appsphere_appearance_studio"
+            app:title="Appearance Studio"
+            app:summary="Customize accent, motion and touch feedback" />
+
         <SwitchPreferenceCompat
             app:iconSpaceReserved="false"
             app:key="app_theme_pure_black"
