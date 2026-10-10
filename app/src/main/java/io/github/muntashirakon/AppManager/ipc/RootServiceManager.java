@@ -43,9 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -141,7 +139,7 @@ public class RootServiceManager implements Handler.Callback {
 
     private int mFlags = 0;
 
-    private final List<BindTask> mPendingTasks = new ArrayList<>();
+    private final Map<ServiceConnection, BindTask> mPendingTasks = new ArrayMap<>();
     private final Map<ServiceKey, RemoteServiceRecord> mServices = new ArrayMap<>();
     private final Map<ServiceConnection, ConnectionRecord> mConnections = new ArrayMap<>();
 
@@ -169,7 +167,9 @@ public class RootServiceManager implements Handler.Callback {
             }
 
             ServerConfig.init(context);
-            File extMainJar = new File(FileUtils.getExternalCachePath(context), Constants.MAIN_JAR_NAME);
+            File extMainJar = Ops.isDirectRoot()
+                    ? new File(new File(context.getFilesDir(), "server"), Constants.MAIN_JAR_NAME)
+                    : new File(FileUtils.getExternalCachePath(context), Constants.MAIN_JAR_NAME);
             File stagingMainJar = new File(PACKAGE_STAGING_DIRECTORY, Constants.MAIN_JAR_NAME);
 
             StringBuilder env = new StringBuilder();
@@ -222,20 +222,22 @@ public class RootServiceManager implements Handler.Callback {
         // We cannot readlink /proc/self/exe on old kernels
         @SuppressLint("RestrictedApi")
         String execFile = "/system/bin/app_process" + (Utils.isProcess64Bit() ? "64" : "32");
-        env.append(CLASSPATH_ENV).append("=");
-        if (Ops.hasRoot()) {
-            // Avoid using the package staging directory
-            env.append(mainJar);
-        } else if (!Ops.isSystem()) {
-            // Use package staging directory
-            // Already copied by the server
-            env.append(stagingMainJar);
+        String prepare = "";
+        File selectedJar;
+        if (Ops.isDirectRoot()) {
+            // Root-owned, read-only dex: never execute from emulated storage.
+            File rootJar = new File(PACKAGE_STAGING_DIRECTORY,
+                    BuildConfig.APPLICATION_ID + "-" + (Process.myUid() / 100000) + "-root-main.jar");
+            String target = shellQuote(rootJar.getAbsolutePath());
+            String temporary = shellQuote(rootJar.getAbsolutePath() + ".tmp");
+            prepare = "umask 077; rm -f " + temporary + " && cp " + shellQuote(mainJar.getAbsolutePath()) + " " + temporary
+                    + " && chmod 400 " + temporary + " && mv -f " + temporary + " " + target + " && ";
+            selectedJar = rootJar;
         } else {
-            // System can't use package staging directory
-            env.append(mainJar);
+            selectedJar = Ops.isSystem() ? mainJar : stagingMainJar;
         }
-        env.append(" ");
-        return String.format(Locale.ROOT, "(%s %s %s /system/bin %s %s '%s' %d %s 2>&1)&",
+        env.append(CLASSPATH_ENV).append("=").append(shellQuote(selectedJar.getAbsolutePath())).append(" ");
+        return prepare + String.format(Locale.ROOT, "( %s %s %s /system/bin %s %s '%s' %d %s 2>&1 & )",
                 env,                            // Environments
                 execFile,                       // Executable
                 debugParams,                    // Debug parameters
@@ -244,6 +246,10 @@ public class RootServiceManager implements Handler.Callback {
                 serviceName.flattenToString(),  // args[0]
                 Process.myUid(),                // args[1]
                 action);                       // args[2]
+    }
+
+    static String shellQuote(@NonNull String value) {
+        return "'" + value.replace("'", "'\"'\"'") + "'";
     }
 
     @NonNull
@@ -300,7 +306,7 @@ public class RootServiceManager implements Handler.Callback {
     public Shell.Task createBindTask(Intent intent, Executor executor, ServiceConnection conn) {
         ServiceKey key = bindInternal(intent, executor, conn);
         if (key != null) {
-            mPendingTasks.add(() -> bindInternal(intent, executor, conn) == null);
+            mPendingTasks.put(conn, () -> bindInternal(intent, executor, conn) == null);
             int mask = key.isDaemon() ? DAEMON_EN_ROUTE : REMOTE_EN_ROUTE;
             if ((mFlags & mask) == 0) {
                 mFlags |= mask;
@@ -314,6 +320,12 @@ public class RootServiceManager implements Handler.Callback {
     public void unbind(@NonNull ServiceConnection conn) {
         enforceMainThread();
 
+        mPendingTasks.remove(conn);
+        // A timed-out launch must not suppress the next explicit bind attempt.
+        if (mPendingTasks.isEmpty()) {
+            if (mRemote == null) mFlags &= ~REMOTE_EN_ROUTE;
+            if (mDaemon == null) mFlags &= ~DAEMON_EN_ROUTE;
+        }
         ConnectionRecord r = mConnections.remove(conn);
         if (r != null) {
             RemoteServiceRecord s = r.getService();
@@ -476,10 +488,9 @@ public class RootServiceManager implements Handler.Callback {
                     mRemote = p;
                     mFlags &= ~REMOTE_EN_ROUTE;
                 }
-                for (int i = mPendingTasks.size() - 1; i >= 0; --i) {
-                    if (mPendingTasks.get(i).run()) {
-                        mPendingTasks.remove(i);
-                    }
+                Iterator<Map.Entry<ServiceConnection, BindTask>> pending = mPendingTasks.entrySet().iterator();
+                while (pending.hasNext()) {
+                    if (pending.next().getValue().run()) pending.remove();
                 }
             } catch (RemoteException e) {
                 Log.e(TAG, e.getMessage(), e);

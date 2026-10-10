@@ -41,6 +41,12 @@ jobs:
             ln -s "$ANDROID_HOME/platforms/android-37.0" "$ANDROID_HOME/platforms/android-37"
           fi
           test -f "$ANDROID_HOME/platforms/android-37/android.jar"
+      - name: Verify native root launcher
+        run: python3 scripts/test_root_launcher.py
+      - name: Verify root Binder retry regression
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:testDebugUnitTest --tests 'io.github.muntashirakon.AppManager.ipc.RootServiceManagerTest' --stacktrace
       - name: Build debug APK
         run: |
           chmod +x gradlew

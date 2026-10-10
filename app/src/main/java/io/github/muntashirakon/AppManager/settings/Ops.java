@@ -441,7 +441,7 @@ public class Ops {
             // freezing the working-mode screen. Explicit ADB modes remain available.
             Log.e(TAG, "Root Binder unavailable; skipping automatic ADB fallback.");
             fallbackToNoRoot(context);
-            setMode(MODE_NO_ROOT);
+            // Keep Auto selected so a transient Binder failure can be retried.
             return;
         } else {
             try {
