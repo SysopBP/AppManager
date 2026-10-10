@@ -565,11 +565,37 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         }
     }
 
+    private void applyAppSphereInterfaceStyle() {
+        String style = getSharedPreferences("appsphere_appearance", MODE_PRIVATE)
+                .getString("interface_style", "glass");
+        View root = findViewById(R.id.coordinator_layout);
+        View bar = findViewById(R.id.appsphere_floating_bar);
+        View toolbar = findViewById(R.id.toolbar);
+        if (root == null || bar == null || toolbar == null) return;
+        if ("material".equals(style)) {
+            android.util.TypedValue value = new android.util.TypedValue();
+            getTheme().resolveAttribute(com.google.android.material.R.attr.colorSurface, value, true);
+            root.setBackgroundColor(value.data);
+            toolbar.setBackgroundColor(value.data);
+            bar.setBackgroundTintList(android.content.res.ColorStateList.valueOf(value.data));
+        } else if ("miuix".equals(style)) {
+            root.setBackgroundColor(android.graphics.Color.rgb(17, 18, 24));
+            toolbar.setBackgroundColor(android.graphics.Color.rgb(34, 36, 47));
+            bar.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                    android.graphics.Color.rgb(49, 52, 68)));
+        } else {
+            root.setBackgroundColor(android.graphics.Color.rgb(13, 12, 18));
+            toolbar.setBackgroundColor(android.graphics.Color.argb(217, 28, 26, 37));
+            bar.setBackgroundTintList(null);
+        }
+    }
+
     private boolean mImsVisibleBeforeLeave = false;
 
     @Override
     protected void onResume() {
         super.onResume();
+        applyAppSphereInterfaceStyle();
         if (viewModel != null) viewModel.onResume();
         if (mAdapter != null && mBatchOpsHandler != null && mAdapter.isInSelectionMode()) {
             mBatchOpsHandler.updateConstraints();
