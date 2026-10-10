@@ -595,9 +595,9 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         int uid = Ops.getWorkingUid();
         String route = Ops.isDirectRoot() ? "Root" : Ops.isAdb() ? "ADB" :
                 Ops.isSystem() ? "System" : "Unprivileged";
-        status.setText("Active route: " + route + "\\nWorking UID: " + uid
-                + "\\nRoot available: " + (Ops.hasRoot() ? "Yes" : "No")
-                + "\\nConfigured mode: " + Ops.getMode());
+        status.setText("Active route: " + route + "\nWorking UID: " + uid
+                + "\nRoot available: " + (Ops.hasRoot() ? "Yes" : "No")
+                + "\nConfigured mode: " + Ops.getMode());
     }
 
     private void applyAppSphereInterfaceStyle() {
