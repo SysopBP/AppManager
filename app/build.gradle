@@ -111,6 +111,8 @@ android {
 
 dependencies {
     compileOnly project(path: ':hiddenapi')
+    // Legacy Xposed API supplied at runtime by LSPosed (never packaged into APK).
+    compileOnly "de.robv.android.xposed:api:82"
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:${desugar_jdk_version}"
 
     // Core Libraries
