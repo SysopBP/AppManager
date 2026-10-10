@@ -62,7 +62,7 @@ public final class ThemeEngine {
             foreground = MaterialColors.getColor(context, com.google.android.material.R.attr.colorOnSurface, Color.WHITE);
             int[] colors = accentResources(prefs.getString(ACCENT, "system"));
             accent = colors == null ? MaterialColors.getColor(context,
-                    com.google.android.material.R.attr.colorPrimary, Color.rgb(111, 77, 198)) : context.getColor(colors[0]);
+                    androidx.appcompat.R.attr.colorPrimary, Color.rgb(111, 77, 198)) : context.getColor(colors[0]);
             onAccent = colors == null ? MaterialColors.getColor(context,
                     com.google.android.material.R.attr.colorOnPrimary, Color.WHITE) : context.getColor(colors[1]);
         }

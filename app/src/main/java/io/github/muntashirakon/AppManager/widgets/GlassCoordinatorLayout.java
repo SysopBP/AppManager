@@ -39,7 +39,7 @@ public class GlassCoordinatorLayout extends CoordinatorLayout {
         super.draw(canvas);
     }
 
-    @Override protected void onAttachedToWindow() {
+    @Override public void onAttachedToWindow() {
         super.onAttachedToWindow();
         ContextCompat.registerReceiver(getContext(), powerChanges,
                 new IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED),
@@ -48,7 +48,7 @@ public class GlassCoordinatorLayout extends CoordinatorLayout {
         refreshTheme();
     }
 
-    @Override protected void onDetachedFromWindow() {
+    @Override public void onDetachedFromWindow() {
         if (receiverRegistered) {
             getContext().unregisterReceiver(powerChanges);
             receiverRegistered = false;

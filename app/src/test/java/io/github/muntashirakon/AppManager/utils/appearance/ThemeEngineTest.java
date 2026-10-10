@@ -69,7 +69,7 @@ public class ThemeEngineTest {
                 ThemeEngine.applyAccent(themed);
                 ThemeEngine.Config config = ThemeEngine.read(themed);
                 TypedValue primary = new TypedValue();
-                assertTrue(themed.getTheme().resolveAttribute(com.google.android.material.R.attr.colorPrimary, primary, true));
+                assertTrue(themed.getTheme().resolveAttribute(androidx.appcompat.R.attr.colorPrimary, primary, true));
                 assertEquals(config.accent, primary.data);
                 assertTrue(accent + " foreground contrast", ColorUtils.calculateContrast(config.onAccent, config.accent) >= 4.5);
             }
