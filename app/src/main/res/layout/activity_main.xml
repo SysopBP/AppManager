@@ -165,6 +165,12 @@
                 android:text="Search installed apps"
                 android:textAllCaps="false" />
             <Button
+                android:id="@+id/appsphere_installer_control"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Installer Control · Experimental"
+                android:textAllCaps="false" />
+            <Button
                 android:id="@+id/appsphere_command_tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
