@@ -46,6 +46,10 @@ AMOLED branding, customizable backgrounds and integrated installer controls.
 Soft contrast is the current name of the earlier MIUIX-inspired preset. The theme engine
 uses native Android rendering. Dashboard refresh controls read current metrics.
 
+### Prerelease preparation
+
+The Eclipse Core preview uses the verified 4.2.4 (456) debug APK. [Preview release notes](docs/releases/sphere-4.2.4-preview.md) cover installation, capabilities, validation and remaining device checks. The prepared release is a draft until published.
+
 ### Download and install
 
 1. Open [Sphere Android 17 Debug APK builds](https://github.com/SysopBP/AppManager/actions/workflows/appsphere-debug.yml).

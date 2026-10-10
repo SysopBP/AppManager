@@ -1,7 +1,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later OR CC-BY-SA-4.0 -->
 # Sphere Installer Control — integrated InxLocker engine
 
-Updated for **Sphere 4.2.2 (454)**. The earlier independent experimental dialog has been
+Updated for **Sphere 4.2.4 (456)**. The earlier independent experimental dialog has been
 replaced with native settings backed by integrated InxLocker-derived code. A separately
 installed InxLocker app is no longer required.
 
