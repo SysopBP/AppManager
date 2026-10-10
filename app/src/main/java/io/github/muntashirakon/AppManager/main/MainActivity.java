@@ -252,16 +252,26 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 startActivity(new Intent(this, SettingsActivity.class)));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private boolean hidden;
+            private int accumulatedScroll;
             @Override
             public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
                 super.onScrolled(rv, dx, dy);
-                if (Math.abs(dy) < 3 || (dy > 0) == hidden) return;
-                hidden = dy > 0;
+                if (dy == 0) return;
+                // Avoid flicker from tiny scroll movements and touch jitter.
+                if ((dy > 0 && accumulatedScroll < 0) || (dy < 0 && accumulatedScroll > 0)) {
+                    accumulatedScroll = 0;
+                }
+                accumulatedScroll += dy;
+                if (Math.abs(accumulatedScroll) < 18) return;
+                boolean shouldHide = accumulatedScroll > 0 && rv.canScrollVertically(1);
+                accumulatedScroll = 0;
+                if (shouldHide == hidden) return;
+                hidden = shouldHide;
                 floatingBar.animate().cancel();
                 floatingBar.animate()
-                        .translationY(hidden ? floatingBar.getHeight() + 80f : 0f)
+                        .translationY(hidden ? floatingBar.getHeight() + floatingBar.getBottom() - rv.getBottom() + 24f * getResources().getDisplayMetrics().density : 0f)
                         .alpha(hidden ? 0f : 1f)
-                        .setDuration(190).start();
+                        .setDuration(220).start();
             }
         });
 
