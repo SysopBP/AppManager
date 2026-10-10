@@ -20,6 +20,14 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        // Legacy Xposed API 82 is not published to Google Maven or Maven Central.
+        // Keep the API as compileOnly in app/build.gradle so it is not packaged.
+        maven {
+            url "https://repository-cdn.liferay.com/nexus/content/repositories/gradle-plugins/"
+            content {
+                includeGroup "de.robv.android.xposed"
+            }
+        }
         maven { url "https://jitpack.io" }
     }
     gradle.projectsEvaluated {
