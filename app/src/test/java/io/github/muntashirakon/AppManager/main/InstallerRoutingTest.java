@@ -39,6 +39,10 @@ public class InstallerRoutingTest {
   prefs.edit().putBoolean("routing_enabled", true).remove("selected_installer_package").commit();
   assertFalse(InstallerRouting.shouldRedirect(apk()));
  }
+ @Test public void explicitSystemFallbackDoesNotReturnToUnavailableInstaller() {
+  assertFalse(InstallerRouting.shouldRedirect(apk().putExtra(
+    io.github.chimio.inxlocker.util.IntentAnalyzer.EXTRA_BYPASS_ROUTING, true)));
+ }
  @Test public void explicitDestinationsCannotLoop() {
   assertFalse(InstallerRouting.shouldRedirect(apk().setPackage("custom.installer")));
   assertFalse(InstallerRouting.shouldRedirect(apk().setComponent(new ComponentName("custom.installer", "custom.installer.Install"))));

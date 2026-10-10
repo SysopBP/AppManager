@@ -221,6 +221,7 @@ public class InstallerControlPreferences extends PreferenceFragment {
 
     private void launchInstaller(Uri uri, boolean system) {
         Intent intent = new Intent(Intent.ACTION_VIEW).setDataAndType(uri, "application/vnd.android.package-archive");
+        if (system) intent.putExtra(io.github.chimio.inxlocker.util.IntentAnalyzer.EXTRA_BYPASS_ROUTING, true);
         intent.setClipData(ClipData.newRawUri("APK", uri));
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         String target = system ? "" : InstallerRouting.getString("selected_installer_package", "");

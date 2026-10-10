@@ -7,6 +7,7 @@ package io.github.chimio.inxlocker.util
 import android.content.Intent
 
 object IntentAnalyzer {
+    const val EXTRA_BYPASS_ROUTING = "io.github.muntashirakon.AppManager.extra.BYPASS_INSTALLER_ROUTING"
     private const val TAG = "IntentAnalyzer"
     private const val INTENT_ACTION_CONFIRM_INSTALL = "android.content.pm.action.CONFIRM_INSTALL"
     private const val INTENT_ACTION_CONFIRM_PERMISSIONS = "android.content.pm.action.CONFIRM_PERMISSIONS"
@@ -17,6 +18,7 @@ object IntentAnalyzer {
     }
 
     fun analyze(intent: Intent): Result = runCatching {
+        if (intent.getBooleanExtra(EXTRA_BYPASS_ROUTING, false)) return Result.ShouldNotRedirect
         if (!PrefsProvider.getBoolean("routing_enabled", false)) return Result.ShouldNotRedirect
         if (intent.action !in allowedActions) return Result.ShouldNotRedirect
         val target = if (intent.action == Intent.ACTION_DELETE || intent.action == Intent.ACTION_UNINSTALL_PACKAGE) {
