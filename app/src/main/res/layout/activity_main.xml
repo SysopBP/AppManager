@@ -45,7 +45,7 @@
             android:scrollbars="none"
             android:focusable="false"
             android:clipToPadding="false"
-            android:paddingBottom="92dp"
+            android:paddingBottom="84dp"
             android:fitsSystemWindows="true"
             app:fastScrollerEnabled="true"
             tools:listitem="@layout/item_main" />
@@ -65,19 +65,19 @@
     <LinearLayout
         android:id="@+id/appsphere_floating_bar"
         android:layout_width="wrap_content"
-        android:layout_height="64dp"
+        android:layout_height="54dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/appsphere_glass_bar"
-        android:elevation="14dp"
+        android:elevation="10dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingHorizontal="12dp">
+        android:paddingHorizontal="8dp">
 
         <Button
             android:id="@+id/appsphere_nav_apps"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="92dp"
+            android:layout_width="84dp"
             android:layout_height="match_parent"
             android:text="Apps"
             android:textAllCaps="false" />
@@ -85,7 +85,7 @@
         <Button
             android:id="@+id/appsphere_nav_running"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="92dp"
+            android:layout_width="84dp"
             android:layout_height="match_parent"
             android:text="Running"
             android:textAllCaps="false" />
@@ -93,7 +93,7 @@
         <Button
             android:id="@+id/appsphere_nav_settings"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="92dp"
+            android:layout_width="84dp"
             android:layout_height="match_parent"
             android:text="Settings"
             android:textAllCaps="false" />
