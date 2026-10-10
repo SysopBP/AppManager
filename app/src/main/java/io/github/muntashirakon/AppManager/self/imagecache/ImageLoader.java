@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Objects;
 
+import io.github.muntashirakon.AppManager.BuildConfig;
+import io.github.muntashirakon.AppManager.R;
 import io.github.muntashirakon.AppManager.utils.ContextUtils;
 import io.github.muntashirakon.AppManager.utils.ThreadUtils;
 import io.github.muntashirakon.AppManager.utils.UIUtils;
@@ -136,7 +138,10 @@ public class ImageLoader implements Closeable {
         @NonNull
         public ImageFetcherResult fetchImage(@NonNull String tag) {
             PackageManager pm = ContextUtils.getContext().getPackageManager();
-            Drawable drawable = mInfo != null ? mInfo.loadIcon(pm) : null;
+            // Resolve our own icon from this APK, avoiding stale PM icon caches.
+            Drawable drawable = mInfo != null && BuildConfig.APPLICATION_ID.equals(mInfo.packageName)
+                    ? ContextCompat.getDrawable(ContextUtils.getContext(), R.mipmap.eclipse_core_launcher)
+                    : mInfo != null ? mInfo.loadIcon(pm) : null;
             return new ImageFetcherResult(tag, drawable != null ? UIUtils.getBitmapFromDrawable(drawable) : null,
                     mInfo != null && tag.equals(mInfo.packageName), true,
                     new DefaultImageDrawable("android_default_icon", pm.getDefaultActivityIcon()));

@@ -1,6 +1,12 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later OR CC-BY-SA-4.0 -->
 # Sphere / AppSphere changelog
 
+## 4.2.4 (456) — 10 October 2026
+
+- Give Eclipse Core dedicated adaptive and legacy launcher resources and an explicit launcher alias icon.
+- Version Sphere’s own image cache and resolve its icon from the current APK.
+
+
 ## 4.2.3 (455) — 10 October 2026
 
 - Replace launcher and splash with the selected Eclipse Core artwork.

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import io.github.muntashirakon.AppManager.BuildConfig;
 import io.github.muntashirakon.AppManager.logs.Log;
 import io.github.muntashirakon.AppManager.utils.FileUtils;
 import io.github.muntashirakon.AppManager.utils.UIUtils;
@@ -82,7 +83,10 @@ class ImageFileCache {
 
     @NonNull
     private File getImageFile(@NonNull String name) {
-        return new File(mCacheDir, name + ".png");
+        // Own artwork must refresh immediately after an app update.
+        String cacheName = BuildConfig.APPLICATION_ID.equals(name)
+                ? name + "_" + BuildConfig.VERSION_CODE : name;
+        return new File(mCacheDir, cacheName + ".png");
     }
 
     public void clear() {

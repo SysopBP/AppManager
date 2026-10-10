@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Package the approved AMOLED artwork into Android launcher assets."""
 from pathlib import Path
+from shutil import copyfile
 from PIL import Image
 
 repo = Path(__file__).resolve().parents[1]
@@ -29,3 +30,10 @@ with Image.open(repo / "arts/sphere/amoled-master.png") as source:
     # Adaptive foreground is 108dp: keep the main artwork within its 72dp safe area.
     fitted(512, .66).save(directory / "appsphere_splash.png")
     fitted(512, .88).save(repo / "app/src/main/ic_launcher-playstore.png")
+
+# Dedicated Eclipse Core names prevent stale package/launcher resource caches.
+for density in ("mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"):
+    directory = res / ("mipmap-" + density)
+    for name in ("ic_launcher.png", "ic_launcher_round.png"):
+        copyfile(directory / name, directory / name.replace("ic_launcher", "eclipse_core_launcher"))
+copyfile(res / "drawable-nodpi/appsphere_splash.png", res / "drawable-nodpi/eclipse_core_foreground.png")

@@ -14,8 +14,8 @@ android {
         applicationId 'io.github.sysopbp.sphere'
         minSdk Math.max(min_sdk, 26)
         targetSdk target_sdk
-        versionCode 455
-        versionName "4.2.3"
+        versionCode 456
+        versionName "4.2.4"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += [

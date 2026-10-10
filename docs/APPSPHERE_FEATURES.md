@@ -135,3 +135,6 @@ Existing copyright and third-party credits remain in the repository and About sc
 ### Eclipse Core icons — 4.2.3
 
 The selected Eclipse Core design replaces the gold globe: a dark sphere, silver crescent and wine-red app tiles. Launcher, splash and themed launcher assets match this identity. 24 two-tone vector icons are wired into navigation, dashboard shortcuts, main settings, appearance, theme, power and installer controls. The dock preserves the silver/wine-red palette while selected labels retain theme accents. Third-party package artwork is unchanged.
+
+
+4.2.4 refreshes Eclipse Core launcher resources and versions Sphere’s own icon cache so old gold artwork is not reused after updating.
