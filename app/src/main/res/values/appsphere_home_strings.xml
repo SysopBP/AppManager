@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="appsphere_home_1">AppSphere</string>
+    <string name="appsphere_home_2">Device overview and quick controls</string>
+    <string name="appsphere_home_3">Connection</string>
+    <string name="appsphere_home_4">Checking current session…</string>
+    <string name="appsphere_home_5">Refresh status</string>
+    <string name="appsphere_home_6">Connection settings</string>
+    <string name="appsphere_home_7">Device health</string>
+    <string name="appsphere_home_8">Tap refresh to read device memory and storage</string>
+    <string name="appsphere_home_9">Refresh device metrics</string>
+    <string name="appsphere_home_10">Tools</string>
+    <string name="appsphere_home_11">Search installed apps</string>
+    <string name="appsphere_home_12">Installer Control · Experimental</string>
+    <string name="appsphere_home_13">Open tools and settings</string>
+    <string name="appsphere_home_14">Quick access</string>
+    <string name="appsphere_home_15">Browse installed apps</string>
+    <string name="appsphere_home_16">App filters and sorting</string>
+    <string name="appsphere_home_17">Running applications</string>
+    <string name="appsphere_home_18">Home</string>
+    <string name="appsphere_home_19">Apps</string>
+    <string name="appsphere_home_20">Installer</string>
+    <string name="appsphere_home_21">Running</string>
+    <string name="appsphere_home_22">Settings</string>
+</resources>

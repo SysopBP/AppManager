@@ -47,7 +47,7 @@
             android:scrollbars="none"
             android:focusable="false"
             android:clipToPadding="false"
-            android:paddingBottom="144dp"
+            android:paddingBottom="96dp"
             android:paddingTop="6dp"
             android:fitsSystemWindows="true"
             app:fastScrollerEnabled="true"
@@ -73,26 +73,25 @@
         android:fillViewport="true"
         android:clipToPadding="false"
         android:paddingTop="24dp"
-        android:paddingBottom="116dp"
+        android:paddingBottom="96dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:paddingBottom="112dp">
+            android:padding="16dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="AppSphere"
+                android:text="@string/appsphere_home_1"
                 android:textColor="#F8F5FF"
-                android:textSize="26sp"
+                android:textSize="32sp"
                 android:textStyle="bold" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="Device overview and quick controls"
+                android:text="@string/appsphere_home_2"
                 android:textColor="#BDB8CC"
                 android:textSize="14sp" />
             <LinearLayout
@@ -104,7 +103,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Backend control center"
+                    android:text="@string/appsphere_home_3"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -113,20 +112,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Checking current session…"
+                    android:text="@string/appsphere_home_4"
                     android:textColor="#E4DFF1"
                     android:textSize="14sp" />
                 <Button
                     android:id="@+id/appsphere_backend_refresh"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Refresh status"
+                    android:text="@string/appsphere_home_5"
                     android:textAllCaps="false" />
                 <Button
                     android:id="@+id/appsphere_backend_settings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Connection settings"
+                    android:text="@string/appsphere_home_6"
                     android:textAllCaps="false" />
             </LinearLayout>
             <TextView
@@ -134,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="10dp"
-                android:text="Live system activity"
+                android:text="@string/appsphere_home_7"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -144,20 +143,27 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/appsphere_glass_bar"
                 android:padding="16dp"
-                android:text="Tap refresh to read device memory and storage"
+                android:text="@string/appsphere_home_8"
                 android:textColor="#E4DFF1"
                 android:textSize="14sp" />
             <Button
                 android:id="@+id/appsphere_activity_refresh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Refresh device metrics"
+                android:text="@string/appsphere_home_9"
                 android:textAllCaps="false" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:background="@drawable/appsphere_glass_bar"
+                android:padding="16dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Command center"
+                android:text="@string/appsphere_home_10"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -165,26 +171,34 @@
                 android:id="@+id/appsphere_command_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Search installed apps"
+                android:text="@string/appsphere_home_11"
                 android:textAllCaps="false" />
             <Button
                 android:id="@+id/appsphere_installer_control"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Installer Control · Experimental"
+                android:text="@string/appsphere_home_12"
                 android:textAllCaps="false" />
             <Button
                 android:id="@+id/appsphere_command_tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Open tools and settings"
+                android:text="@string/appsphere_home_13"
                 android:textAllCaps="false" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:background="@drawable/appsphere_glass_bar"
+                android:padding="16dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="10dp"
-                android:text="Quick access"
+                android:text="@string/appsphere_home_14"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -192,28 +206,30 @@
                 android:id="@+id/appsphere_dashboard_apps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Browse installed apps"
+                android:text="@string/appsphere_home_15"
                 android:textAllCaps="false" />
             <Button
                 android:id="@+id/appsphere_dashboard_filters"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="App filters and sorting"
+                android:text="@string/appsphere_home_16"
                 android:textAllCaps="false" />
             <Button
                 android:id="@+id/appsphere_dashboard_running"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Running applications"
+                android:text="@string/appsphere_home_17"
                 android:textAllCaps="false" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
     <!-- AppSphere: floating navigation, independent of the scrolling app list. -->
     <LinearLayout
         android:id="@+id/appsphere_floating_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="52dp"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="14dp"
         android:background="@drawable/appsphere_glass_bar"
@@ -225,10 +241,13 @@
         <Button
             android:id="@+id/appsphere_nav_home"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="62dp"
+            android:background="@drawable/appsphere_nav_item"
+            android:minHeight="48dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="Home"
-            android:textSize="10sp"
+            android:text="@string/appsphere_home_18"
+            android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
             android:textAllCaps="false" />
@@ -236,10 +255,13 @@
         <Button
             android:id="@+id/appsphere_nav_apps"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="62dp"
+            android:background="@drawable/appsphere_nav_item"
+            android:minHeight="48dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="Apps"
-            android:textSize="10sp"
+            android:text="@string/appsphere_home_19"
+            android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
             android:textAllCaps="false" />
@@ -247,10 +269,13 @@
         <Button
             android:id="@+id/appsphere_nav_installer"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="62dp"
+            android:background="@drawable/appsphere_nav_item"
+            android:minHeight="48dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="Installer"
-            android:textSize="10sp"
+            android:text="@string/appsphere_home_20"
+            android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
             android:textAllCaps="false" />
@@ -258,10 +283,13 @@
         <Button
             android:id="@+id/appsphere_nav_running"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="62dp"
+            android:background="@drawable/appsphere_nav_item"
+            android:minHeight="48dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="Running"
-            android:textSize="10sp"
+            android:text="@string/appsphere_home_21"
+            android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
             android:textAllCaps="false" />
@@ -269,10 +297,13 @@
         <Button
             android:id="@+id/appsphere_nav_settings"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="62dp"
+            android:background="@drawable/appsphere_nav_item"
+            android:minHeight="48dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="Settings"
-            android:textSize="10sp"
+            android:text="@string/appsphere_home_22"
+            android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
             android:textAllCaps="false" />

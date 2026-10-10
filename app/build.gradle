@@ -52,7 +52,7 @@ android {
             applicationIdSuffix '.debug'
             versionNameSuffix '-DEBUG'
             signingConfig signingConfigs.debug
-            resValue "string", "app_name", "AM Debug"
+            resValue "string", "app_name", "Sphere"
         }
     }
     lint {
