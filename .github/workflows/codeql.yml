@@ -34,6 +34,25 @@ jobs:
           distribution: 'zulu'
           java-version: '21'
           cache: 'gradle'
+      - name: Locate Android SDK command-line tools
+        run: |
+          echo "ANDROID_HOME=${ANDROID_HOME:-/usr/local/lib/android/sdk}" >> "$GITHUB_ENV"
+          SDK_ROOT="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          find "$SDK_ROOT/cmdline-tools" -maxdepth 3 -name sdkmanager -type f -print
+          test -x "$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" || test -x "$SDK_ROOT/cmdline-tools/16.0/bin/sdkmanager"
+      - name: Install Android 17 SDK (preview channel)
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --channel=3 --list | grep -E "platforms;android-37|build-tools;37" || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --channel=3 "platforms;android-37.0" "platform-tools"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --channel=3 "build-tools;37.0.0"
+      - name: Map Android 17 SDK platform to API 37 path
+        run: |
+          test -f "$ANDROID_HOME/platforms/android-37.0/android.jar"
+          if [ ! -e "$ANDROID_HOME/platforms/android-37" ]; then
+            ln -s "$ANDROID_HOME/platforms/android-37.0" "$ANDROID_HOME/platforms/android-37"
+          fi
+          test -f "$ANDROID_HOME/platforms/android-37/android.jar"
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
