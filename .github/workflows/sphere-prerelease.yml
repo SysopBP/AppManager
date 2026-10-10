@@ -22,8 +22,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      SOURCE_SHA: 52ced6ed9487a2fd7215056be850977672e7af11
-      APK_RUN: '38053334533'
+      SOURCE_SHA: 5dad8b4323e14b516bb9f2b9af958367a1483c61
+      APK_RUN: '38061080558'
       RELEASE_TAG: v4.2.4-preview.1
     steps:
       - uses: actions/checkout@v4
@@ -36,27 +36,45 @@ jobs:
           gh run download "$APK_RUN" --name Sphere-Android17-debug --dir dist
           test -s dist/app-debug.apk
           mv dist/app-debug.apk dist/Sphere-4.2.4-Eclipse-Core-preview.apk
-      - name: Prepare guides and checksums
+      - name: Verify APK identity and hotfix source
         shell: bash
         run: |
           set -euo pipefail
-          cp docs/APPSPHERE_FEATURES.md dist/Sphere-4.2.4-Setup-Guide.md
-          cp docs/appsphere-installer-control.md dist/Sphere-Installer-Control-Guide.md
-          cp docs/releases/sphere-4.2.4-preview.md dist/Sphere-4.2.4-Release-Notes.md
-          cd dist
-          sha256sum *.apk *.md > SHA256SUMS.txt
-      - name: Create unpublished draft prerelease
+          AAPT=$(find "$ANDROID_HOME/build-tools" -name aapt2 -type f | sort -V | tail -1)
+          "$AAPT" dump badging dist/Sphere-4.2.4-Eclipse-Core-preview.apk > badging.txt
+          grep -F "package: name='io.github.sysopbp.sphere.debug' versionCode='456' versionName='4.2.4'" badging.txt
+          gh api "repos/$GH_REPO/contents/app/src/main/java/io/github/muntashirakon/AppManager/settings/ModeOfOpsPreference.java?ref=$SOURCE_SHA" --jq .content | base64 -d > mode.java
+          grep -F 'private void refreshServerHealth()' mode.java
+          grep -F 'generation != mServerHealthGeneration' mode.java
+          gh api "repos/$GH_REPO/contents/app/src/main/res/raw/changelog.xml?ref=$SOURCE_SHA" --jq .content | base64 -d > changelog.xml
+          grep -F 'Root connection hotfix' changelog.xml
+      - name: Update existing prerelease and preserve other assets
         shell: bash
         run: |
           set -euo pipefail
-          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            echo "Release already exists; preserving it without changes."
-            gh release view "$RELEASE_TAG" --json url,isDraft,isPrerelease
-            exit 0
+          gh release view "$RELEASE_TAG" --json body,url,isDraft,isPrerelease > release-before.json
+          mkdir existing
+          gh release download "$RELEASE_TAG" --dir existing
+          cp dist/Sphere-4.2.4-Eclipse-Core-preview.apk existing/
+          jq -r .body release-before.json > release-body.md
+          if ! grep -q 'Root server status hotfix — 10 October 2026' release-body.md; then
+            cat >> release-body.md <<'NOTES'
+
+          ## Root server status hotfix — 10 October 2026
+
+          - Refresh server health when returning from Termux after manually starting the server, and when remote services change state.
+          - Discard outdated health checks after mode changes or screen recreation.
+          - Updated in-app What's New includes both fixes.
+          - APK built successfully from commit 5dad8b4323e14b516bb9f2b9af958367a1483c61 in run 38061080558. Package/version verified: io.github.sysopbp.sphere.debug, 4.2.4 (456).
+          - This hotfix has not yet been validated on a device. Earlier validation statements above describe the original preview.
+
+          Build: https://github.com/SysopBP/AppManager/actions/runs/38061080558
+          NOTES
           fi
-          gh release create "$RELEASE_TAG" dist/* \
-            --target "$SOURCE_SHA" \
-            --title "Sphere 4.2.4 — Eclipse Core Preview" \
-            --notes-file docs/releases/sphere-4.2.4-preview.md \
-            --draft --prerelease
-          gh release view "$RELEASE_TAG" --json url,isDraft,isPrerelease
+          cp release-body.md existing/Sphere-4.2.4-Release-Notes.md
+          (cd existing && find . -maxdepth 1 -type f ! -name SHA256SUMS.txt -printf '%f\n' | sort | xargs -d '\n' sha256sum > SHA256SUMS.txt)
+          gh release upload "$RELEASE_TAG" existing/Sphere-4.2.4-Eclipse-Core-preview.apk existing/Sphere-4.2.4-Release-Notes.md existing/SHA256SUMS.txt --clobber
+          gh release edit "$RELEASE_TAG" --notes-file release-body.md
+          gh release view "$RELEASE_TAG" --json url,isDraft,isPrerelease > release-after.json
+          jq -e --slurp '.[0].isDraft == .[1].isDraft and .[0].isPrerelease == .[1].isPrerelease' release-before.json release-after.json
+          cat release-after.json
