@@ -4,6 +4,7 @@ package io.github.muntashirakon.AppManager.settings;
 
 import android.app.Application;
 import android.os.Build;
+import android.os.SystemClock;
 
 import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
@@ -57,6 +58,7 @@ public class SecurityAndOpsViewModel extends AndroidViewModel implements Ops.Adb
     @AnyThread
     public void setModeOfOps() {
         submitStatusOperation("Ops::init", () -> {
+            android.util.Log.i(TAG, "AppSphere startup: migration check begin");
             // Migration
             long thisVersion = BuildConfig.VERSION_CODE;
             long lastVersion = AppPref.getLong(AppPref.PrefKey.PREF_LAST_VERSION_CODE_LONG);
@@ -74,9 +76,11 @@ public class SecurityAndOpsViewModel extends AndroidViewModel implements Ops.Adb
                 AppPref.set(AppPref.PrefKey.PREF_LAST_VERSION_CODE_LONG, (long) BuildConfig.VERSION_CODE);
                 Log.d(TAG, "End migration");
             }
+            android.util.Log.i(TAG, "AppSphere startup: migration complete; Ops.init begin");
             // Ops
             Log.d(TAG, "Before Ops::init");
             int status = Ops.init(getApplication(), false);
+            android.util.Log.i(TAG, "AppSphere startup: Ops.init returned status=" + status);
             Log.d(TAG, "After Ops::init");
             return status;
         });
@@ -127,12 +131,16 @@ public class SecurityAndOpsViewModel extends AndroidViewModel implements Ops.Adb
             Log.w(TAG, "Ignoring duplicate operation while another is pending: %s", name);
             return;
         }
+        android.util.Log.i(TAG, "AppSphere startup: queued " + name);
         try {
             mExecutor.submit(() -> {
+                final long startedAt = SystemClock.elapsedRealtime();
+                android.util.Log.i(TAG, "AppSphere startup: begin " + name);
                 int status;
                 try {
                     status = operation.run();
                 } catch (Throwable e) {
+                    android.util.Log.e(TAG, "AppSphere startup: failure in " + name, e);
                     Log.e(TAG, "Unexpected failure in " + name, e);
                     try {
                         Ops.fallbackToNoRoot(getApplication());
@@ -141,6 +149,7 @@ public class SecurityAndOpsViewModel extends AndroidViewModel implements Ops.Adb
                     }
                     status = Ops.STATUS_FAILURE;
                 }
+                android.util.Log.i(TAG, "AppSphere startup: completed " + name + " status=" + status + " durationMs=" + (SystemClock.elapsedRealtime() - startedAt));
                 int finalStatus = status;
                 // Keep the operation marked pending until the new state reaches the main thread.
                 // This closes the rotation window where LiveData could replay the previous action.
