@@ -139,14 +139,21 @@ public class LocalServices {
 
     @MainThread
     public static void unbindServices() {
+        unbindServices(true);
+    }
+
+    @MainThread
+    private static void unbindServices(boolean invalidateBackend) {
         synchronized (sAMServiceConnectionWrapper) {
             sAMServiceConnectionWrapper.unbindService();
         }
         synchronized (sFileSystemServiceConnectionWrapper) {
             sFileSystemServiceConnectionWrapper.unbindService();
         }
-        Ops.setWorkingUid(Process.myUid());
-        Ops.invalidateRuntimeBackend();
+        if (invalidateBackend) {
+            Ops.setWorkingUid(Process.myUid());
+            Ops.invalidateRuntimeBackend();
+        }
         sState.postValue(false);
     }
 
@@ -156,7 +163,9 @@ public class LocalServices {
         CountDownLatch unbindWatcher = new CountDownLatch(1);
         ThreadUtils.postOnMainThread(() -> {
             try {
-                unbindServices();
+                // Keep the selected launch route while replacing service connections.
+                // RootService and RootServiceManager consult Ops during startup.
+                unbindServices(false);
             } finally {
                 unbindWatcher.countDown();
             }
