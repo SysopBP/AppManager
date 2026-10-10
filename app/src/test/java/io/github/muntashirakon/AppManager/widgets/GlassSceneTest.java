@@ -4,6 +4,7 @@ package io.github.muntashirakon.AppManager.widgets;
 import static org.junit.Assert.*;
 
 import android.app.Application;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.view.View;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.annotation.GraphicsMode;
@@ -26,8 +28,10 @@ import io.github.muntashirakon.AppManager.R;
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 public class GlassSceneTest {
     private GlassCoordinatorLayout root() {
+        Activity activity = Robolectric.buildActivity(Activity.class).setup().get();
         GlassCoordinatorLayout root = new GlassCoordinatorLayout(new ContextThemeWrapper(
-                RuntimeEnvironment.getApplication(), io.github.muntashirakon.ui.R.style.AppTheme), null);
+                activity, io.github.muntashirakon.ui.R.style.AppTheme), null);
+        activity.setContentView(root);
         root.layout(0, 0, 1080, 2400);
         return root;
     }
