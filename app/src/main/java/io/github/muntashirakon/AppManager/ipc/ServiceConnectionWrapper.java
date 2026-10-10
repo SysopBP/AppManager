@@ -38,7 +38,7 @@ class ServiceConnectionWrapper {
             synchronized (this) {
                 // The callback may arrive after stopDaemon() cancelled the bind.
                 if (mServiceBoundWatcher == null) {
-                    RootService.stop(new Intent().setComponent(mComponentName));
+                    Log.w(TAG, "Ignoring late service connection after cancellation: %s", name);
                     return;
                 }
                 mIBinder = service;
@@ -132,7 +132,7 @@ class ServiceConnectionWrapper {
     @NonNull
     public IBinder getService() throws RemoteException {
         if (!isBinderActive()) {
-            throw new RemoteException("Binder not running.");
+            throw new RemoteException("Binder not running for " + mComponentName.flattenToShortString());
         }
         return Objects.requireNonNull(mIBinder);
     }
@@ -170,7 +170,7 @@ class ServiceConnectionWrapper {
                 intent.setComponent(mComponentName);
                 ThreadUtils.postOnMainThread(() -> {
                     if (mIBinder != null) {
-                        RootService.stop(intent);
+                        RootService.unbind(mServiceConnection);
                     }
                     RootService.bind(intent, mServiceConnection);
                 });
@@ -179,7 +179,9 @@ class ServiceConnectionWrapper {
         // Wait for service to be bound without holding mServiceConnection. The stop path may
         // need the same lock to cancel a bind that never receives a callback.
         try {
-            serviceBoundWatcher.await(45, TimeUnit.SECONDS);
+            if (!serviceBoundWatcher.await(12, TimeUnit.SECONDS)) {
+                Log.e(TAG, "Timed out binding root service: %s", mComponentName);
+            }
         } catch (InterruptedException e) {
             Log.e(TAG, "Service watcher interrupted.");
         } finally {
@@ -204,7 +206,7 @@ class ServiceConnectionWrapper {
         if (serviceBoundWatcher != null) {
             serviceBoundWatcher.countDown();
         }
-        ThreadUtils.postOnMainThread(() -> RootService.stop(intent));
+        ThreadUtils.postOnMainThread(() -> RootService.unbind(mServiceConnection));
     }
 
     boolean isBinderActive() {
