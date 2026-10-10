@@ -2,10 +2,10 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <PreferenceCategory app:title="AppSphere identity" app:layout="@layout/m3_preference_category_empty">
+    <PreferenceCategory app:title="Sphere identity" app:layout="@layout/m3_preference_category_empty">
         <Preference
             app:iconSpaceReserved="false"
-            app:title="AppSphere · Application management"
+            app:title="Sphere · Application management"
             app:summary="@string/appsphere_about_description"
             app:selectable="false" />
         <Preference

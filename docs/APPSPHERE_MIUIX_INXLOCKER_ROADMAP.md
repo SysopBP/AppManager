@@ -1,31 +1,40 @@
-# AppSphere — MIUIX themes and Installer Control
+<!-- SPDX-License-Identifier: GPL-3.0-or-later OR CC-BY-SA-4.0 -->
+# Sphere appearance and installer status
 
-## Scope
-Implement a selectable multi-theme system modeled after TokenX, and integrate installer-routing capabilities inspired by [Chimioo/InxLocker](https://github.com/Chimioo/InxLocker).
+Current baseline: **4.2.2 (454)**. This supersedes the early MIUIX/InxLocker foundation plan.
 
-## Theme variants
-- One UI 9 Glass (default): translucent cards, compact floating navigation, rounded controls.
-- MIUIX: Xiaomi-inspired cards, switches, dialogs and settings layout.
-- Material You: Android dynamic colors and Material components.
-- AMOLED Black: true black surfaces and AppSphere gold accent.
+## Implemented
 
-Keep theme selection persistent; use safe activity recreation where immediate live restyling is not supported. Apply themes across dashboard, application details, Installer Control, settings and dialogs. Preserve accessibility, contrast and upstream functionality.
+- AMOLED edition of the uploaded gold globe, five-density icons, black launcher background,
+  themed vector globe and Sphere splash branding.
+- Five labelled navigation icons with scrolling hide/show and long-press shortcuts.
+- Wallpaper selection, persistent access, dimming/brightness controls and live preview.
+- Shared Material, True glass and Soft contrast theme engine with accents and day/night colours.
+- Bounded backdrop rendering, Android 12+ blur, opacity, reduced transparency and solid fallbacks.
+- Grouped settings, single/tablet panes, navigation animation and haptic controls.
+- Integrated InxLocker engine with native installer/uninstaller and activity/source controls.
+- Opt-in session/uninstall routing, module-service status, API 102 hot reload, reset and logging.
+- Power/session controls, lifecycle cleanup and Android 17 navigation drawable crash repair.
+- Separate Sphere package IDs and current cumulative release notes.
 
-## Installer Control
-1. Display selected installer and discover installed eligible handlers.
-2. Allow installation intent redirection and separate uninstall intent redirection.
-3. Support confirmation interception for session-based installs where hooks support it.
-4. Support an optional explicit target Activity (forced component routing).
-5. Show LSPosed activation, module scope and hook availability; do not claim hooks are active based on Root alone.
-6. Provide per-feature switches, status, diagnostics and reset to system defaults.
-7. Expose Android 14+ permission-path compatibility only as experimental, opt-in functionality.
-8. Never bypass user confirmation or silently install/uninstall packages.
+The earlier MIUIX preset is now named **Soft contrast**. This remains native styling,
+not a dependency on the full MIUIX framework. Full InxLocker UI parity is not implied.
 
-## Architecture
-Keep the Xposed hook implementation as a separate module from AppSphere's ordinary UI, with a versioned configuration interface and safe defaults. AppSphere must continue to function when LSPosed or hooks are unavailable. Avoid modifying system_server unless explicitly needed and tested. Test Android 17 Samsung compatibility.
+## Device verification
+
+- Launcher masks/themed icons, first splash, large fonts, landscape and tablet layout.
+- Wallpaper persistence and visual dimming/brightness after recreation and reboot.
+- True glass scrolling and solid fallbacks during Battery Saver or reduced transparency.
+- Root/ADB startup, session shutdown, auto-lock and measured battery use on Samsung Android 17.
+- Module activation/scope, handler availability, session/uninstall routing and hot reload.
+- Experimental Android 14+ path access and OEM-specific ColorOS methods only where supported.
+
+Use the [feature guide](APPSPHERE_FEATURES.md) and
+[Installer Control setup](appsphere-installer-control.md) for current capabilities.
 
 ## Attribution
-InxLocker by Chimioo: GPLv3; retain original copyright/license notices and attribution when reusing code. AppSphere derives from App Manager; preserve existing upstream license and credits. MIUIX is a descriptive style option, not an assertion of affiliation with Xiaomi.
 
-## Verification
-Compile debug APK; test theme persistence and recreation; confirm original package operations; verify redirect behavior for APK intents, uninstall intents and session confirmation; verify missing/disabled Xposed module behavior; validate on Android 17.
+Sphere derives from [App Manager](https://github.com/MuntashirAkon/AppManager) by
+Muntashir Al-Islam and contributors. The integrated engine derives from
+[InxLocker](https://github.com/Chimioo/InxLocker) by Chimioo and contributors;
+its GPL-3.0 licence and source notices are retained. Sphere modifications are by SysopBP.

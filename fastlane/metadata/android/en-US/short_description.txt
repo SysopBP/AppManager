@@ -1,1 +1,1 @@
-A fully-featured package manager for android.
+Sphere: AMOLED app management, glass themes, wallpapers and installer controls.

@@ -5,3 +5,15 @@ Derived from https://github.com/Chimioo/InxLocker at b783e91447005b9d2d6922670bd
 The upstream hook engine, intent policy, redirection and hot-reload code are retained. Compose-specific preferences and UI are replaced by event-driven SharedPreferences and Sphere's native settings. Debug intent logging is off by default. No monitoring service or polling timer is required for installer routing.
 
 Enable Sphere in a modern LSPosed manager supporting libxposed API 101 or newer, scope System Framework and the source apps, then restart scoped processes. API 102 additionally supports hot reload. Settings are shared through libxposed's remote-preferences service. A missing service is shown as inactive, never as working global routing. Experimental path-permission and ColorOS controls are disabled by default.
+
+## Native Sphere controls
+
+Sphere 4.2.2 (454) provides installer/uninstaller selection, forced target activities,
+explicit-source components, opt-in session/uninstall controls, activation status,
+launcher visibility, reset and capability-gated hot reload. APK picker system fallback
+uses a bypass marker to avoid being redirected again. Sphere release/debug processes
+are excluded from hooks. See [setup and limitations](../docs/appsphere-installer-control.md).
+
+Service connection is not proof of every OEM hook working. Experimental permission-path
+and ColorOS methods require compatible devices and verification. System-wide routing
+does not follow merely from granting root or selecting a preferred installer.

@@ -1,3 +1,13 @@
+<b>Sphere (AppSphere) — a SysopBP fork of App Manager</b>
+
+Sphere 4.2.2 adds AMOLED gold-globe branding, five labelled floating navigation icons, a device dashboard, compact app/settings cards, wallpaper dimming and brightness, and a shared theme engine. Material, True glass and Soft contrast presets support System/Violet/Blue/Mint/Amber accents, preview, blur, opacity and reduced transparency. Live glass requires Android 12+ with hardware rendering; Battery Saver and unsupported rendering use solid fallbacks.
+
+Integrated InxLocker controls include installer/uninstaller choices, activity/source overrides and optional scoped session/uninstall routing. Global routing requires a compatible modern libxposed/LSPosed service, activation and scope. Root alone is insufficient. Hot reload requires API 102 capability; path-access and ColorOS options remain experimental. Power settings control persistent sessions and show requested versus detected backend mode. Root/ADB startup and private server-JAR extraction have been improved.
+
+Minimum Android 8/API 26; target Android 17/API 37. Sphere uses separate release/debug package IDs. Original App Manager authorship, licences and credits remain; integrated InxLocker code retains Chimioo/contributor GPL-3.0 notices. Phone verification is needed for appearance, battery use and OEM hook support.
+
+<b>Inherited App Manager features</b>
+
 <i>App Manager</i> began by merging the features of <i>App_packages Info</i> (formerly <i>Application Info</i>), <i>ClassyShark3xodus</i>, <i>Activity Launcher</i> and <i>Watt</i> into a single app with material design and dark mode to give a modern look and feel.
 
 <b>General features</b>

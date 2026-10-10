@@ -6,3 +6,4 @@ Theme engine: Material, True glass, Soft contrast and accent colors.
 Modern grouped settings and InxLocker installer controls.
 Android 17 startup fix and improved session cleanup.
 Live blur needs Android 12+; system-wide installer routing needs a compatible Xposed setup.
+Updated documentation and complete What's New.

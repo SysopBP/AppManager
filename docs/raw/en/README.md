@@ -1,4 +1,12 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later OR CC-BY-SA-4.0 -->
+## Sphere fork notes
+
+This generated manual primarily covers inherited App Manager functionality. For current
+Sphere features, use [the setup guide](../../APPSPHERE_FEATURES.md),
+[Installer Control](../../appsphere-installer-control.md) and
+[the fork changelog](../../../CHANGELOG.md). Sphere 4.2.2 includes wallpapers, a shared
+theme engine and integrated InxLocker routing; the old foundation roadmap is superseded.
+
 ## Usage
 
 ```

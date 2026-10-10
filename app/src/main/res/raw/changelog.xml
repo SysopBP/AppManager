@@ -24,6 +24,14 @@
         <new>Power settings for persistent sessions, system battery settings and clearer requested versus detected operation modes.</new>
         <fix>Session monitoring now cleans up background tasks when stopped and avoids relaunching an activity from the background.</fix>
         <improve>Wallpaper decoding is bounded and runs in the background. Glass rendering uses bounded reusable buffers and falls back safely when unavailable.</improve>
+        <title type="large">Earlier AppSphere repairs included</title>
+        <improve>Compact app cards, clearer metadata and UID spacing, refreshed app-details headers/tabs, dashboard status/metrics and long-press filters/refresh.</improve>
+        <improve>Persistent navigation animation/haptic controls remain available under Motion and feedback.</improve>
+        <fix>Improve Root/ADB startup log checkpoints, failed-bind handling, service cleanup and required-Binder validation.</fix>
+        <fix>Stage local-server JARs privately with absolute launcher paths, compressed-asset support, atomic refresh and missing-external-cache handling.</fix>
+        <fix>Use the Sphere artwork for the initial Android splash as well as the authentication screen.</fix>
+        <improve>Updated documentation, About credits and current cumulative release notes cover the new modifications.</improve>
+        <note>Original App Manager: Muntashir Al-Islam (@MuntashirAkon) and contributors. Integrated InxLocker: Chimioo and contributors, with GPL v3 notices retained. Sphere modifications: SysopBP.</note>
         <title type="large">Updating</title>
         <note>Sphere debug builds use [tt]io.github.sysopbp.sphere.debug[/tt]. They update earlier Sphere builds with that package. The old App Manager debug package remains a separate installation; export settings or backups before moving to Sphere.</note>
     </release>
