@@ -630,7 +630,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         new MaterialAlertDialogBuilder(this)
                 .setTitle("Installer Control · Experimental")
                 .setMessage("Preferred installer: " + (selected.isEmpty() ? "System default" : selected)
-                        + "\\nAppSphere does not currently intercept install or uninstall "
+                        + "\nAppSphere does not currently intercept install or uninstall "
                         + "requests. LSPosed hooks are not enabled by this screen.")
                 .setItems(actions, (dialog, which) -> {
                     if (which == 0) chooseAppSphereInstaller();
