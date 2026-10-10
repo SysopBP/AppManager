@@ -22,8 +22,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      SOURCE_SHA: 5dad8b4323e14b516bb9f2b9af958367a1483c61
-      APK_RUN: '38061080558'
+      SOURCE_SHA: 107185f72fe9a08e241019a61213ef2cb7deebbc
+      APK_RUN: '38063802872'
       RELEASE_TAG: v4.2.4-preview.1
     steps:
       - uses: actions/checkout@v4
@@ -57,20 +57,30 @@ jobs:
           gh release download "$RELEASE_TAG" --dir existing
           cp dist/Sphere-4.2.4-Eclipse-Core-preview.apk existing/
           jq -r .body release-before.json > release-body.md
-          if ! grep -q 'Root server status hotfix — 10 October 2026' release-body.md; then
-            cat >> release-body.md <<'NOTES'
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("release-body.md")
+          body = p.read_text()
+          marker = "## Root server status hotfix — 10 October 2026"
+          body = body.split(marker, 1)[0].rstrip()
+          body += """
 
-          ## Root server status hotfix — 10 October 2026
+          ## Root connection hotfix — 10 October 2026
 
-          - Refresh server health when returning from Termux after manually starting the server, and when remote services change state.
-          - Discard outdated health checks after mode changes or screen recreation.
-          - Updated in-app What's New includes both fixes.
-          - APK built successfully from commit 5dad8b4323e14b516bb9f2b9af958367a1483c61 in run 38061080558. Package/version verified: io.github.sysopbp.sphere.debug, 4.2.4 (456).
-          - This hotfix has not yet been validated on a device. Earlier validation statements above describe the original preview.
+          - Fix native server startup rejecting Sphere's generated private JAR paths.
+          - Keep the Root route selected while reconnecting privileged services.
+          - Refresh server health after returning from Termux and discard stale health checks.
+          - Root connection confirmed by the tester both before and after reboot on SM-S948U1, Android 17 / One UI 9.
+          - Includes the existing in-app What's New root connection notes.
+          - Published APK: 4.2.4 (456), package io.github.sysopbp.sphere.debug.
+          - Source: 107185f72fe9a08e241019a61213ef2cb7deebbc.
+          - APK build, tests, lint and CodeQL passed for this source.
+          - Reboot confirmation validates the tested root connection; broader device/OEM behavior still requires testing.
 
-          Build: https://github.com/SysopBP/AppManager/actions/runs/38061080558
-          NOTES
-          fi
+          Build: https://github.com/SysopBP/AppManager/actions/runs/38063802872
+          """
+          p.write_text(body)
+          PY
           cp release-body.md existing/Sphere-4.2.4-Release-Notes.md
           (cd existing && find . -maxdepth 1 -type f ! -name SHA256SUMS.txt -printf '%f\n' | sort | xargs -d '\n' sha256sum > SHA256SUMS.txt)
           gh release upload "$RELEASE_TAG" existing/Sphere-4.2.4-Eclipse-Core-preview.apk existing/Sphere-4.2.4-Release-Notes.md existing/SHA256SUMS.txt --clobber
