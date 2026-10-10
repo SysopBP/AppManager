@@ -44,6 +44,19 @@ public final class ServerConfig {
     public static void init(@NonNull Context context) throws IOException {
         // Setup paths
         boolean force = BuildConfig.DEBUG;
+        // Always prepare a private copy before attempting to start the local server.
+        // External storage may be scoped, inaccessible, or owned by a different UID.
+        File serverDir = new File(context.getFilesDir(), "server");
+        if (!serverDir.isDirectory() && !serverDir.mkdirs() && !serverDir.isDirectory()) {
+            throw new IOException("Cannot create private server directory: " + serverDir);
+        }
+        File privateAmJar = new File(serverDir, Constants.JAR_NAME);
+        File privateMainJar = new File(serverDir, Constants.MAIN_JAR_NAME);
+        AssetsUtils.copyFile(context, Constants.JAR_NAME, privateAmJar, true);
+        AssetsUtils.copyFile(context, Constants.MAIN_JAR_NAME, privateMainJar, true);
+        FileUtils.chmod644(privateAmJar);
+        FileUtils.chmod644(privateMainJar);
+
         try {
             File externalCachePath = FileUtils.getExternalCachePath(context);
             File externalCacheAmJar = new File(externalCachePath, Constants.JAR_NAME);
@@ -89,8 +102,12 @@ public final class ServerConfig {
         if (executable.exists()) {
             int port = getLocalServerPort();
             String token = getLocalToken();
-            String amJarName = Constants.JAR_NAME;
-            String mainJarName = Constants.MAIN_JAR_NAME;
+            // Use private, app-owned server assets rather than shared /sdcard/AppManager.
+            // The native launcher receives absolute paths so it does not depend on
+            // Termux's working directory or shared-storage ownership.
+            File serverDir = new File(ContextUtils.getContext().getFilesDir(), "server");
+            String amJarName = new File(serverDir, Constants.JAR_NAME).getAbsolutePath();
+            String mainJarName = new File(serverDir, Constants.MAIN_JAR_NAME).getAbsolutePath();
             String appId = BuildConfig.APPLICATION_ID;
             int currentUserId = UserHandleHidden.myUserId();
             int debug = BuildConfig.DEBUG ? 1 : 0;
