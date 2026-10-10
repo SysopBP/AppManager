@@ -68,5 +68,7 @@
     <string name="sphere_power_backend">Backend connection</string>
     <string name="sphere_power_backend_status">Requested: %1$s · Connected: %2$s</string>
     <string name="sphere_power_background">Background session</string>
-    <string name="sphere_power_info">Routing has no polling service. Wallpaper loads only when needed. Battery usage must be measured on the device after installing the crash fix.</string>
+    <string name="sphere_power_info">Choose Optimized battery use unless you need a persistent background session. Turning off persistent sessions stops background screen-lock monitoring.</string>
+    <string name="sphere_routing_credit">InxLocker by Chimioo</string>
+    <string name="sphere_routing_credit_summary">Integrated installer routing engine · GPL v3 · View source</string>
 </resources>

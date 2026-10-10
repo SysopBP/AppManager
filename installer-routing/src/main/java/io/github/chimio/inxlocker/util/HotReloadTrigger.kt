@@ -43,6 +43,7 @@ object HotReloadTrigger {
         return if (ok) Capability.Available else Capability.Unsupported
     }
 
+    @Synchronized
     fun reloadAllStale(
         onlyStale: Boolean = true,
         onProgress: ((Outcome.Line) -> Unit)? = null,

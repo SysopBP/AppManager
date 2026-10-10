@@ -29,6 +29,7 @@ object IntentAnalyzer {
             return Result.ShouldNotRedirect
         val original = IntentSnapshot.capture(intent)
 
+        if (PrefsProvider.getBoolean("enable_debug_log", false)) {
         d(TAG, "Intent action: ${original.action}")
         d(TAG, "Intent component: ${original.component}")
         d(TAG, "package: ${original.packageName}")
@@ -36,6 +37,7 @@ object IntentAnalyzer {
         d(TAG, "Intent data: ${intent.data}")
         d(TAG, "Intent clipData: ${intent.clipData}")
         d(TAG, "Intent extras: ${formatExtras(intent)}")
+        }
 
         if (intent.action !in allowedActions) return Result.ShouldNotRedirect
 

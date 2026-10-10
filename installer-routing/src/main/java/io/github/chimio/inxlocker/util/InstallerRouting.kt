@@ -15,6 +15,10 @@ object InstallerRouting {
     @Volatile private var remote: SharedPreferences? = null
     @Volatile private var initialized = false
     private val main = Handler(Looper.getMainLooper())
+    private val listeners = java.util.concurrent.CopyOnWriteArrayList<Runnable>()
+    @JvmStatic fun addStateListener(listener: Runnable) { listeners.addIfAbsent(listener) }
+    @JvmStatic fun removeStateListener(listener: Runnable) { listeners.remove(listener) }
+    private fun notifyState() { main.post { listeners.forEach { it.run() } } }
     interface ReloadCallback { fun onResult(message: String) }
 
     @JvmStatic @Synchronized fun initialize(context: Context) {
@@ -43,16 +47,19 @@ object InstallerRouting {
                     remote = shared
                     PrefsProvider.init(shared)
                     XposedServiceHolder.set(service)
+                    notifyState()
                 } catch (_: Exception) {
                     remote = null
                     XposedServiceHolder.set(null)
                     PrefsProvider.init(local)
+                    notifyState()
                 }
             }
             override fun onServiceDied(service: XposedService) {
                 remote = null
                 XposedServiceHolder.set(null)
                 PrefsProvider.init(local)
+                notifyState()
             }
         })
     }

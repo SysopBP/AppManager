@@ -28,6 +28,9 @@ import io.github.muntashirakon.AppManager.R;
 
 /** Native controls for the integrated InxLocker engine; no external companion required. */
 public class InstallerControlPreferences extends PreferenceFragment {
+    private final Runnable stateListener = () -> { if (isAdded()) updateStatus(); };
+    @Override public void onStart() { super.onStart(); InstallerRouting.addStateListener(stateListener); updateStatus(); }
+    @Override public void onStop() { InstallerRouting.removeStateListener(stateListener); super.onStop(); }
     private final ActivityResultLauncher<String[]> picker = registerForActivityResult(
             new ActivityResultContracts.OpenDocument(), uri -> { if (uri != null) launchInstaller(uri, false); });
 
@@ -85,6 +88,11 @@ public class InstallerControlPreferences extends PreferenceFragment {
                         InstallerRouting.reset();
                         updateStatus();
                     }).show();
+            return true;
+        });
+        requirePreference("inxlocker_credit").setOnPreferenceClickListener(p -> {
+            try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Chimioo/InxLocker"))); }
+            catch (android.content.ActivityNotFoundException e) { showMessage(getString(R.string.sphere_routing_credit_summary)); }
             return true;
         });
         updateStatus();
@@ -231,7 +239,7 @@ public class InstallerControlPreferences extends PreferenceFragment {
     }
 
     private void showMessage(String message) {
-        if (!isAdded()) return;
+        if (!isAdded() || !isResumed() || requireActivity().isFinishing()) return;
         new MaterialAlertDialogBuilder(requireContext()).setMessage(message)
                 .setPositiveButton(android.R.string.ok, null).show();
     }

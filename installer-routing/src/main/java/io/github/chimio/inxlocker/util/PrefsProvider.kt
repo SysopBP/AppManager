@@ -9,7 +9,10 @@ object PrefsProvider {
     private var prefs: SharedPreferences? = null
     private val cache = ConcurrentHashMap<String, Any>()
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
-        key?.let {
+        if (key == null) {
+            cache.clear()
+            prefs.all.forEach { (name, value) -> if (value != null) cache[name] = value }
+        } else key.let {
             val value = prefs.all[it]
             if (value == null) cache.remove(it) else cache[it] = value
         }

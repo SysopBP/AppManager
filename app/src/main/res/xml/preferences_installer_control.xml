@@ -26,4 +26,5 @@
         <Preference app:key="hot_reload" app:title="@string/sphere_routing_reload" app:iconSpaceReserved="false" app:persistent="false" app:summary="@string/sphere_routing_reload_summary" />
         <Preference app:key="reset_routes" app:title="@string/sphere_routing_reset" app:iconSpaceReserved="false" app:persistent="false" />
     </PreferenceCategory>
+<Preference app:key="inxlocker_credit" app:title="@string/sphere_routing_credit" app:summary="@string/sphere_routing_credit_summary" app:iconSpaceReserved="false" app:persistent="false" />
 </PreferenceScreen>
