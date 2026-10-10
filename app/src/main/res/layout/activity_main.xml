@@ -131,6 +131,50 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="10dp"
+                android:text="Live system activity"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/appsphere_activity_stats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/appsphere_glass_bar"
+                android:padding="18dp"
+                android:text="Tap refresh to read device memory and storage"
+                android:textColor="#E4DFF1"
+                android:textSize="14sp" />
+            <Button
+                android:id="@+id/appsphere_activity_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Refresh device metrics"
+                android:textAllCaps="false" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Command center"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/appsphere_command_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Search installed apps"
+                android:textAllCaps="false" />
+            <Button
+                android:id="@+id/appsphere_command_tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Open tools and settings"
+                android:textAllCaps="false" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"
                 android:text="Quick access"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
