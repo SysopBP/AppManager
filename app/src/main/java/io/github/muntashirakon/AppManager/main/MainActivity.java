@@ -104,6 +104,8 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     private static boolean SHOW_DISCLAIMER = true;
     private static final String STATE_APPSPHERE_HOME = "appsphere.home";
     private boolean mAppSphereHome;
+    private boolean mFloatingNavigationHidden;
+    private int mFloatingNavigationScroll;
 
     MainViewModel viewModel;
 
@@ -247,8 +249,18 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         mAdapter.setHasStableIds(true);
         recyclerView.setLayoutManager(UIUtils.getGridLayoutAt450Dp(this));
         recyclerView.setAdapter(mAdapter);
-        // Keep navigation available while browsing the app list.
-        final View floatingBar = findViewById(R.id.appsphere_floating_bar);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView view, int dx, int dy) {
+                if (!mAppSphereHome) {
+                    updateFloatingNavigationForScroll(dy, !view.canScrollVertically(-1));
+                }
+            }
+        });
+        findViewById(R.id.appsphere_dashboard).setOnScrollChangeListener(
+                (view, x, y, oldX, oldY) -> {
+                    if (mAppSphereHome) updateFloatingNavigationForScroll(y - oldY, y == 0);
+                });
         final android.content.SharedPreferences appearance = getSharedPreferences(
                 "appsphere_appearance", MODE_PRIVATE);
         if (appearance.getBoolean("haptics", true)) {
@@ -266,14 +278,13 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             updateAppSphereBackendStatus();
             updateAppSphereSystemActivity();
             if (appearance.getBoolean("haptics", true)) v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
-            if (appearance.getBoolean("animations", true)) floatingBar.animate().translationY(0f).alpha(1f).setDuration(180).start();
-            else { floatingBar.setTranslationY(0f); floatingBar.setAlpha(1f); }
+
         });
         findViewById(R.id.appsphere_nav_apps).setOnClickListener(v -> {
             dashboard.setVisibility(View.GONE);
             updateAppSphereNavigation(false);
             appList.setVisibility(View.VISIBLE);
-            floatingBar.animate().translationY(0f).alpha(1f).setDuration(180).start();
+
         });
         findViewById(R.id.appsphere_dashboard_apps).setOnClickListener(v ->
                 findViewById(R.id.appsphere_nav_apps).performClick());
@@ -454,13 +465,16 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
     @Override
     public void onSelectionModeEnabled() {
-        findViewById(R.id.appsphere_floating_bar).setVisibility(View.GONE);
+        View bar = findViewById(R.id.appsphere_floating_bar);
+        bar.animate().cancel();
+        bar.animate().withEndAction(null);
+        bar.setVisibility(View.GONE);
         mOnBackPressedCallback.setEnabled(true);
     }
 
     @Override
     public void onSelectionModeDisabled() {
-        findViewById(R.id.appsphere_floating_bar).setVisibility(View.VISIBLE);
+        setFloatingNavigationHidden(false, false);
         mOnBackPressedCallback.setEnabled(mAppSphereHome);
     }
 
@@ -662,9 +676,51 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
     private void updateAppSphereNavigation(boolean home) {
         mAppSphereHome = home;
+        setFloatingNavigationHidden(false, false);
         mOnBackPressedCallback.setEnabled(home || (mAdapter != null && mAdapter.isInSelectionMode()));
         findViewById(R.id.appsphere_nav_home).setSelected(home);
         findViewById(R.id.appsphere_nav_apps).setSelected(!home);
+    }
+
+    private void updateFloatingNavigationForScroll(int dy, boolean atTop) {
+        if (mAdapter != null && mAdapter.isInSelectionMode()) return;
+        if (atTop) {
+            setFloatingNavigationHidden(false, true);
+            return;
+        }
+        if (dy == 0) return;
+        if ((dy > 0) != (mFloatingNavigationScroll > 0)) mFloatingNavigationScroll = 0;
+        mFloatingNavigationScroll += dy;
+        if (Math.abs(mFloatingNavigationScroll) >= getResources().getDisplayMetrics().density * 8) {
+            setFloatingNavigationHidden(dy > 0, true);
+        }
+    }
+
+    private void setFloatingNavigationHidden(boolean hidden, boolean animate) {
+        View bar = findViewById(R.id.appsphere_floating_bar);
+        if (bar == null || (mAdapter != null && mAdapter.isInSelectionMode())) return;
+        if (animate && mFloatingNavigationHidden == hidden) return;
+        mFloatingNavigationHidden = hidden;
+        mFloatingNavigationScroll = 0;
+        bar.animate().cancel();
+        bar.animate().withEndAction(null);
+        bar.setVisibility(View.VISIBLE);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) bar.getLayoutParams();
+        float translation = hidden ? bar.getHeight() + params.bottomMargin : 0f;
+        boolean animations = getSharedPreferences("appsphere_appearance", MODE_PRIVATE)
+                .getBoolean("animations", true);
+        if (animate && animations) {
+            bar.animate().translationY(translation).alpha(hidden ? 0f : 1f)
+                    .setDuration(180).withEndAction(() -> {
+                        if (mFloatingNavigationHidden && bar.getVisibility() != View.GONE) {
+                            bar.setVisibility(View.INVISIBLE);
+                        }
+                    }).start();
+        } else {
+            bar.setTranslationY(translation);
+            bar.setAlpha(hidden ? 0f : 1f);
+            bar.setVisibility(hidden ? View.INVISIBLE : View.VISIBLE);
+        }
     }
 
     private void applyAppSphereDashboardColors(View view, int textColor, int surfaceColor) {
@@ -704,7 +760,9 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 dashboardText, dashboardSurface);
         for (int id : new int[]{R.id.appsphere_nav_home, R.id.appsphere_nav_apps,
                 R.id.appsphere_nav_installer, R.id.appsphere_nav_running, R.id.appsphere_nav_settings}) {
-            ((android.widget.TextView) findViewById(id)).setTextColor(dashboardText);
+            android.widget.TextView item = findViewById(id);
+            item.setTextColor(dashboardText);
+            item.setCompoundDrawableTintList(android.content.res.ColorStateList.valueOf(dashboardText));
         }
         if ("material".equals(style)) {
             android.util.TypedValue value = new android.util.TypedValue();
@@ -730,6 +788,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     protected void onResume() {
         super.onResume();
         applyAppSphereInterfaceStyle();
+        setFloatingNavigationHidden(false, false);
         updateAppSphereBackendStatus();
         if (viewModel != null) viewModel.onResume();
         if (mAdapter != null && mBatchOpsHandler != null && mAdapter.isInSelectionMode()) {

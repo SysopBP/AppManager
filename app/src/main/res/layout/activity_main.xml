@@ -243,9 +243,8 @@
         android:orientation="horizontal"
         android:paddingHorizontal="5dp">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appsphere_nav_home"
-            style="?attr/borderlessButtonStyle"
             android:background="@drawable/appsphere_nav_item"
             android:minHeight="48dp"
             android:layout_width="0dp"
@@ -255,11 +254,16 @@
             android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
+            android:paddingVertical="6dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableTop="@drawable/ic_home_outlined"
+            android:drawablePadding="3dp"
             android:textAllCaps="false" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appsphere_nav_apps"
-            style="?attr/borderlessButtonStyle"
             android:background="@drawable/appsphere_nav_item"
             android:minHeight="48dp"
             android:layout_width="0dp"
@@ -269,11 +273,16 @@
             android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
+            android:paddingVertical="6dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableTop="@drawable/ic_view_list"
+            android:drawablePadding="3dp"
             android:textAllCaps="false" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appsphere_nav_installer"
-            style="?attr/borderlessButtonStyle"
             android:background="@drawable/appsphere_nav_item"
             android:minHeight="48dp"
             android:layout_width="0dp"
@@ -283,11 +292,16 @@
             android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
+            android:paddingVertical="6dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableTop="@drawable/ic_get_app"
+            android:drawablePadding="3dp"
             android:textAllCaps="false" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appsphere_nav_running"
-            style="?attr/borderlessButtonStyle"
             android:background="@drawable/appsphere_nav_item"
             android:minHeight="48dp"
             android:layout_width="0dp"
@@ -297,11 +311,16 @@
             android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
+            android:paddingVertical="6dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableTop="@drawable/ic_run_fast"
+            android:drawablePadding="3dp"
             android:textAllCaps="false" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appsphere_nav_settings"
-            style="?attr/borderlessButtonStyle"
             android:background="@drawable/appsphere_nav_item"
             android:minHeight="48dp"
             android:layout_width="0dp"
@@ -311,6 +330,12 @@
             android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
+            android:paddingVertical="6dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableTop="@drawable/ic_settings"
+            android:drawablePadding="3dp"
             android:textAllCaps="false" />
     </LinearLayout>
 
