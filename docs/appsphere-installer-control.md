@@ -25,3 +25,11 @@ This screen is an **opt-in installer-management UI**, not an InxLocker port and 
 
 Source inspiration: https://github.com/Chimioo/InxLocker (GPL-3.0).
 Attribution: Chimioo and InxLocker contributors. Retain upstream notices if code is incorporated.
+
+## Credits and licenses
+
+App Manager: Muntashir Al-Islam and contributors (https://github.com/MuntashirAkon/AppManager). AppSphere modifications: SysopBP.
+
+InxLocker: Chimioo and contributors (https://github.com/Chimioo/InxLocker). Original InxLocker license: GPL-3.0 (https://github.com/Chimioo/InxLocker/blob/main/LICENSE).
+
+Current Installer Control is an independent experimental UI, not a copy of InxLocker hooks. Preserve original copyright and license notices if upstream code is later incorporated.
