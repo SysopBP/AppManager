@@ -181,6 +181,7 @@ class ServiceConnectionWrapper {
         try {
             if (!serviceBoundWatcher.await(12, TimeUnit.SECONDS)) {
                 Log.e(TAG, "Timed out binding root service: %s", mComponentName);
+                ThreadUtils.postOnMainThread(() -> RootService.unbind(mServiceConnection));
             }
         } catch (InterruptedException e) {
             Log.e(TAG, "Service watcher interrupted.");

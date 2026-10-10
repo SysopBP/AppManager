@@ -45,7 +45,7 @@ int copy_file(const char *src, const char *dst) {
     // Remove any existing file at destination to prevent symlink following
     unlink(dst);
 
-    int fd_dst = open(dst, O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, 0755);
+    int fd_dst = open(dst, O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, 0400);
     if (fd_dst < 0) {
         close(fd_src);
         return -1;
@@ -86,12 +86,29 @@ int main(int argc, char *argv[]) {
     const char *debug = argv[7];
     const char *bgrun = "1";
 
-    // Validate Paths
-    if (!is_safe_string(am_jar_name) || !is_safe_string(main_jar_name) || !is_safe_string(app_id) ||
-        !is_safe_string(user_id)) {
+    // The Java caller supplies private absolute paths. Legacy callers supply names.
+    // Accept only these two exact assets, never arbitrary paths or traversal.
+    if (!is_safe_string(app_id) || !is_safe_string(user_id) ||
+        !is_safe_string(token)) {
         fprintf(stderr, "Error! Invalid characters in arguments.\n");
         return 1;
     }
+    char private_am[512], private_main[512];
+    if (snprintf(private_am, sizeof(private_am), "/data/user/%s/%s/files/server/am.jar",
+                 user_id, app_id) >= sizeof(private_am) ||
+        snprintf(private_main, sizeof(private_main), "/data/user/%s/%s/files/server/main.jar",
+                 user_id, app_id) >= sizeof(private_main)) {
+        fprintf(stderr, "Error! Asset path too long.\n");
+        return 1;
+    }
+    if ((strcmp(am_jar_name, "am.jar") != 0 && strcmp(am_jar_name, private_am) != 0) ||
+        (strcmp(main_jar_name, "main.jar") != 0 && strcmp(main_jar_name, private_main) != 0)) {
+        fprintf(stderr, "Error! Invalid server asset paths.\n");
+        return 1;
+    }
+    // Retain external fallbacks for shell/ADB, which cannot read private app data.
+    am_jar_name = "am.jar";
+    main_jar_name = "main.jar";
 
     // Validate debug and bgrun
     if ((strcmp(debug, "0") != 0 && strcmp(debug, "1") != 0)) {
@@ -147,8 +164,8 @@ int main(int argc, char *argv[]) {
     printf("Starting %s as %d:%d...\n", SERVER_NAME, uid, gid);
 
     // Copy am.jar as /data/local/tmp/am.jar
-    const char *resolved_am_jar_path = NULL;
-    for (int i = 0; i < 4; i++) {
+    const char *resolved_am_jar_path = copy_file(private_am, exec_jar_path) == 0 ? private_am : NULL;
+    for (int i = 0; resolved_am_jar_path == NULL && i < 4; i++) {
         if (copy_file(am_jar_fallbacks[i], exec_jar_path) == 0) {
             resolved_am_jar_path = am_jar_fallbacks[i];
             break;
@@ -165,8 +182,8 @@ int main(int argc, char *argv[]) {
     }
 
     // Copy main.jar as /data/local/tmp/main.jar
-    const char *resolved_main_jar_path = NULL;
-    for (int i = 0; i < 4; i++) {
+    const char *resolved_main_jar_path = copy_file(private_main, main_jar_path) == 0 ? private_main : NULL;
+    for (int i = 0; resolved_main_jar_path == NULL && i < 4; i++) {
         if (copy_file(main_jar_fallbacks[i], main_jar_path) == 0) {
             resolved_main_jar_path = main_jar_fallbacks[i];
             break;
