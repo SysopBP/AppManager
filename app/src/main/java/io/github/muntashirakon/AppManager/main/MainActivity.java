@@ -624,9 +624,9 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         long gib = 1024L * 1024L * 1024L;
         stats.setText("Available RAM: " + (memory.availMem / gib) + " GiB / "
                 + (memory.totalMem / gib) + " GiB"
-                + "\\nFree internal storage: " + (storage.getAvailableBytes() / gib)
+                + "\nFree internal storage: " + (storage.getAvailableBytes() / gib)
                 + " GiB / " + (storage.getTotalBytes() / gib) + " GiB"
-                + "\\nUpdated: " + java.text.DateFormat.getTimeInstance().format(
+                + "\nUpdated: " + java.text.DateFormat.getTimeInstance().format(
                         new java.util.Date()));
     }
 
