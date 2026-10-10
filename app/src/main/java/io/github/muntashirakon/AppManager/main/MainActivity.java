@@ -240,6 +240,31 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         mAdapter.setHasStableIds(true);
         recyclerView.setLayoutManager(UIUtils.getGridLayoutAt450Dp(this));
         recyclerView.setAdapter(mAdapter);
+        // AppSphere floating bar: scroll down to hide, scroll up to reveal.
+        final View floatingBar = findViewById(R.id.appsphere_floating_bar);
+        findViewById(R.id.appsphere_nav_apps).setOnClickListener(v -> {
+            recyclerView.smoothScrollToPosition(0);
+            floatingBar.animate().translationY(0f).alpha(1f).setDuration(180).start();
+        });
+        findViewById(R.id.appsphere_nav_running).setOnClickListener(v ->
+                startActivity(new Intent(this, RunningAppsActivity.class)));
+        findViewById(R.id.appsphere_nav_settings).setOnClickListener(v ->
+                startActivity(new Intent(this, SettingsActivity.class)));
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private boolean hidden;
+            @Override
+            public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
+                super.onScrolled(rv, dx, dy);
+                if (Math.abs(dy) < 3 || (dy > 0) == hidden) return;
+                hidden = dy > 0;
+                floatingBar.animate().cancel();
+                floatingBar.animate()
+                        .translationY(hidden ? floatingBar.getHeight() + 80f : 0f)
+                        .alpha(hidden ? 0f : 1f)
+                        .setDuration(190).start();
+            }
+        });
+
         mMultiSelectionView = findViewById(R.id.selection_view);
         mMultiSelectionView.setOnItemSelectedListener(this);
         mMultiSelectionView.setOnSelectionModeChangeListener(this);
