@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><!DOCTYPE changelog SYSTEM "https://raw.githubusercontent.com/MuntashirAkon/AppManager/master/schema/changlelog.dtd">
 <changelog>
+    <release type="release" version="4.2.2" code="454" date="10 October 2026">
+        <note>Welcome to Sphere 4.2.2. This release brings together the new Sphere experience and fixes from the recent development builds.</note>
+        <title type="large">Sphere identity and navigation</title>
+        <new>AMOLED launcher and splash artwork based on the original gold globe icon, with a pure-black background and matching themed icon.</new>
+        <improve>The app is now named Sphere. About, Android app information and these release notes show version 4.2.2 (454).</improve>
+        <new>Floating navigation with labeled icons for Home, Apps, Installer, Running and Settings.</new>
+        <improve>The floating bar hides while scrolling down and returns when scrolling up or reaching the top.</improve>
+        <new>A Home dashboard with shortcuts to everyday app-management tools.</new>
+        <title type="large">Wallpapers and theme engine</title>
+        <new>Choose a wallpaper image from storage and adjust its dimming and image brightness.</new>
+        <new>Theme engine with Material, True glass and Soft contrast presets, plus System, Violet, Blue, Mint and Amber accents.</new>
+        <new>Live theme preview, glass blur and opacity sliders, reduced transparency, and theme reset that keeps your wallpaper.</new>
+        <improve>Glass surfaces on the dashboard, floating bar and grouped settings keep text and controls sharp.</improve>
+        <note subtext="true">Live glass blur requires Android 12 or newer and hardware acceleration. Battery Saver and reduced transparency use opaque surfaces. Image brightness changes the wallpaper, not the display brightness.</note>
+        <title type="large">Settings and installer control</title>
+        <improve>Modern grouped settings, theme-aware cards and support for single-pane and tablet layouts.</improve>
+        <new>Installer control powered by the integrated InxLocker engine: choose installer and uninstaller apps, activity overrides and source-app routing.</new>
+        <new>Optional installation-session and uninstall routing, launcher visibility, hot reload and module logging controls.</new>
+        <note subtext="true">System-wide routing requires a compatible libxposed/LSPosed setup, enabling Sphere as a module and selecting its scope. Choosing an installer alone does not enable hooks. ColorOS permission routing is experimental.</note>
+        <title type="large">Stability and power</title>
+        <fix>Fixed the Android 17 startup crash caused by the floating-bar navigation drawable.</fix>
+        <new>Power settings for persistent sessions, system battery settings and clearer requested versus detected operation modes.</new>
+        <fix>Session monitoring now cleans up background tasks when stopped and avoids relaunching an activity from the background.</fix>
+        <improve>Wallpaper decoding is bounded and runs in the background. Glass rendering uses bounded reusable buffers and falls back safely when unavailable.</improve>
+        <title type="large">Updating</title>
+        <note>Sphere debug builds use [tt]io.github.sysopbp.sphere.debug[/tt]. They update earlier Sphere builds with that package. The old App Manager debug package remains a separate installation; export settings or backups before moving to Sphere.</note>
+    </release>
+
     <release
         type="release"
         version="v4.1.1"
