@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
+    <PreferenceCategory app:title="Theme and interface" app:layout="@layout/m3_preference_category_empty">
         <Preference
             app:iconSpaceReserved="false"
             app:key="app_theme"
@@ -36,7 +36,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
+    <PreferenceCategory app:title="Personalization and features" app:layout="@layout/m3_preference_category_empty">
         <Preference
             android:fragment="io.github.muntashirakon.AppManager.settings.AppDetailsTabsPreferences"
             app:iconSpaceReserved="false"
@@ -45,7 +45,7 @@
             app:title="@string/pref_app_details_tabs" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
+    <PreferenceCategory app:title="Personalization and features" app:layout="@layout/m3_preference_category_empty">
         <Preference
             app:iconSpaceReserved="false"
             app:key="enabled_features"
