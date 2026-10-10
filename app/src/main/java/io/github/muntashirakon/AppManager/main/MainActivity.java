@@ -295,6 +295,17 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 showAppSphereInstallerControl());
         findViewById(R.id.appsphere_command_tools).setOnClickListener(v ->
                 startActivity(new Intent(this, SettingsActivity.class)));
+        // Long-press dock shortcuts reuse existing, working AppSphere screens.
+        findViewById(R.id.appsphere_nav_apps).setOnLongClickListener(v -> {
+            findViewById(R.id.appsphere_dashboard_filters).performClick();
+            return true;
+        });
+        findViewById(R.id.appsphere_nav_home).setOnLongClickListener(v -> {
+            findViewById(R.id.appsphere_nav_home).performClick();
+            updateAppSphereBackendStatus();
+            updateAppSphereSystemActivity();
+            return true;
+        });
         findViewById(R.id.appsphere_nav_installer).setOnClickListener(v ->
                 showAppSphereInstallerControl());
         findViewById(R.id.appsphere_nav_installer).setOnLongClickListener(v -> {
