@@ -51,7 +51,7 @@
     <string name="data_received">Data received</string>
     <string name="data_transmitted">Data transmitted</string>
     <string name="data_usage_msg">Data usage</string>
-    <string name="about">About</string>
+    <string name="about">About AppSphere</string>
     <string name="data_size">Data</string>
     <string name="cache_size">Cache</string>
     <string name="obb_size">Obb</string>
@@ -86,6 +86,8 @@
     <string name="package_name">Package name</string>
     <string name="class_name">Class name</string>
     <string name="icon_picker">Icon picker</string>
+    <string name="appsphere_about_description">AppSphere is a customized App Manager fork featuring AMOLED Glass and MIUIX-inspired interface styles, a compact floating navigation bar, and Root/ADB backend improvements.</string>
+    <string name="appsphere_fork_credit">AppSphere customization: SysopBP. Based on App Manager by Muntashir Al-Islam and contributors. Original licenses and third-party credits remain applicable.</string>
     <string name="license">License</string>
     <string name="license_message" translatable="false"><a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General
         Public License v3.0</a></string>
@@ -379,7 +381,7 @@
     <string name="install">Install</string>
     <string name="update">Update</string>
     <string name="source_code">Source code</string>
-    <string name="source_code_links" translatable="false"><a href="https://github.com/MuntashirAkon/AppManager">GitHub</a> •
+    <string name="source_code_links" translatable="false"><a href="https://github.com/SysopBP/AppManager">AppSphere fork</a> • <a href="https://github.com/MuntashirAkon/AppManager">GitHub</a> •
         <a href="https://codeberg.org/muntashir/AppManager">Codeberg</a> •
         <a href="https://gitlab.com/muntashir/AppManager">GitLab</a> •
         <a href="https://0xacab.org/muntashir/AppManager">Riseup</a> •
