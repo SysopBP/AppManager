@@ -1650,4 +1650,7 @@
     <string name="manual_wireless_debugging_title">Connect using Wireless Debugging</string>
     <string name="launch_activity_dialog_title">Launch activity: action required</string>
     <string name="launch_activity_dialog_message">Android 5.x cannot trigger the <b>Search assistant</b> automatically. To open the activity, activate the Search assistant manually (usually by long-pressing the Home button). Tap <b>Close</b> after the activity opens to restore the original assistant.</string>
+    <string name="appsphere_upstream_appmanager_credit" translatable="false">App Manager — originally developed by Muntashir Al-Islam (@MuntashirAkon) and contributors. AppSphere is a customization by SysopBP. Original authorship, copyright notices, licenses, and contributor credits are retained.</string>
+    <string name="appsphere_inxlocker_credit" translatable="false">InxLocker — developed by Chimioo (@Chimioo) and contributors. Project: https://github.com/Chimioo/InxLocker. Licensed under GNU GPL v3. AppSphere Installer Control is currently an independent experimental management interface inspired by InxLocker; InxLocker hook code has not yet been integrated.</string>
+    <string name="appsphere_licenses_notice" translatable="false">AppSphere retains the original App Manager license and applicable third-party notices. InxLocker is distributed under GNU GPL v3; its license and original copyright notices must be preserved if its source is incorporated. See the original projects and repository license files for complete terms.</string>
 </resources>
