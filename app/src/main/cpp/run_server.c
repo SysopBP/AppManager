@@ -36,6 +36,30 @@ int is_safe_string(const char *str) {
     return 1;
 }
 
+// Accept absolute asset paths without allowing traversal or shell syntax.
+int is_safe_jar_path(const char *path) {
+    if (!path || !*path) return 0;
+    if (*path != '/') return is_safe_string(path);
+    const char *component = path + 1;
+    for (const char *p = component; ; ++p) {
+        if (*p == '/' || *p == '\0') {
+            size_t length = (size_t) (p - component);
+            if (length == 0 || (length == 1 && component[0] == '.') ||
+                (length == 2 && component[0] == '.' && component[1] == '.')) return 0;
+            if (*p == '\0') return 1;
+            component = p + 1;
+        } else if (!((*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z') ||
+                     (*p >= '0' && *p <= '9') || *p == '.' || *p == '_' || *p == '-')) {
+            return 0;
+        }
+    }
+}
+
+const char *jar_basename(const char *path) {
+    const char *slash = strrchr(path, '/');
+    return slash ? slash + 1 : path;
+}
+
 int copy_file(const char *src, const char *dst) {
     int fd_src = open(src, O_RDONLY | O_CLOEXEC);
     if (fd_src < 0) {
@@ -87,11 +111,16 @@ int main(int argc, char *argv[]) {
     const char *bgrun = "1";
 
     // Validate Paths
-    if (!is_safe_string(am_jar_name) || !is_safe_string(main_jar_name) || !is_safe_string(app_id) ||
+    if (!is_safe_jar_path(am_jar_name) || !is_safe_jar_path(main_jar_name) || !is_safe_string(app_id) ||
         !is_safe_string(user_id)) {
         fprintf(stderr, "Error! Invalid characters in arguments.\n");
         return 1;
     }
+
+    const char *am_jar_source = am_jar_name;
+    const char *main_jar_source = main_jar_name;
+    am_jar_name = jar_basename(am_jar_source);
+    main_jar_name = jar_basename(main_jar_source);
 
     // Validate debug and bgrun
     if ((strcmp(debug, "0") != 0 && strcmp(debug, "1") != 0)) {
@@ -148,7 +177,10 @@ int main(int argc, char *argv[]) {
 
     // Copy am.jar as /data/local/tmp/am.jar
     const char *resolved_am_jar_path = NULL;
-    for (int i = 0; i < 4; i++) {
+    if (am_jar_source[0] == '/' && copy_file(am_jar_source, exec_jar_path) == 0) {
+        resolved_am_jar_path = am_jar_source;
+    }
+    for (int i = 0; resolved_am_jar_path == NULL && i < 4; i++) {
         if (copy_file(am_jar_fallbacks[i], exec_jar_path) == 0) {
             resolved_am_jar_path = am_jar_fallbacks[i];
             break;
@@ -166,7 +198,10 @@ int main(int argc, char *argv[]) {
 
     // Copy main.jar as /data/local/tmp/main.jar
     const char *resolved_main_jar_path = NULL;
-    for (int i = 0; i < 4; i++) {
+    if (main_jar_source[0] == '/' && copy_file(main_jar_source, main_jar_path) == 0) {
+        resolved_main_jar_path = main_jar_source;
+    }
+    for (int i = 0; resolved_main_jar_path == NULL && i < 4; i++) {
         if (copy_file(main_jar_fallbacks[i], main_jar_path) == 0) {
             resolved_main_jar_path = main_jar_fallbacks[i];
             break;
