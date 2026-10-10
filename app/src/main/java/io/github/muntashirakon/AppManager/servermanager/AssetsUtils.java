@@ -28,14 +28,6 @@ class AssetsUtils {
         // Some build variants package jar assets compressed. openFd() only works
         // with uncompressed assets; AssetManager.open() supports either form.
         try (java.io.InputStream source = context.getAssets().open(fileName)) {
-            if (force && destFile.exists() && !destFile.delete()) {
-                throw new IOException("Cannot replace local server asset: " + destFile);
-            }
-            if (!force && destFile.isFile() && destFile.length() > 0) {
-                // Preserve existing extracted assets; ServerConfig controls refresh
-                // on debug builds. Avoid accepting an empty truncated file.
-                return;
-            }
             File temp = new File(parent, destFile.getName() + ".tmp");
             try {
                 try (FileOutputStream fos = new FileOutputStream(temp)) {
@@ -49,6 +41,9 @@ class AssetsUtils {
                 }
                 if (temp.length() == 0) {
                     throw new IOException("Empty local server asset: " + fileName);
+                }
+                if (destFile.exists() && !destFile.delete()) {
+                    throw new IOException("Cannot replace local server asset: " + destFile);
                 }
                 if (!temp.renameTo(destFile)) {
                     throw new IOException("Cannot finalize local server asset: " + destFile);
