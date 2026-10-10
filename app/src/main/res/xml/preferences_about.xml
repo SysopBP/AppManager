@@ -60,6 +60,24 @@
             app:title="@string/get_help" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="Original developers and licensing" app:layout="@layout/m3_preference_category_empty">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:title="App Manager · Original project"
+            app:summary="@string/appsphere_upstream_appmanager_credit"
+            app:selectable="false" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:title="InxLocker · Original project"
+            app:summary="@string/appsphere_inxlocker_credit"
+            app:selectable="false" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="appsphere_license_details"
+            app:title="Open-source licenses and attribution"
+            app:summary="@string/appsphere_licenses_notice" />
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="Open-source acknowledgments" app:layout="@layout/m3_preference_category_empty">
         <Preference
             app:iconSpaceReserved="false"
