@@ -248,6 +248,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             dashboard.setVisibility(View.VISIBLE);
             appList.setVisibility(View.GONE);
             updateAppSphereBackendStatus();
+            updateAppSphereSystemActivity();
             floatingBar.animate().translationY(0f).alpha(1f).setDuration(180).start();
         });
         findViewById(R.id.appsphere_nav_apps).setOnClickListener(v -> {
@@ -270,6 +271,17 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 startActivity(new Intent(this, SettingsActivity.class)));
         findViewById(R.id.appsphere_backend_refresh).setOnClickListener(v ->
                 updateAppSphereBackendStatus());
+        findViewById(R.id.appsphere_activity_refresh).setOnClickListener(v ->
+                updateAppSphereSystemActivity());
+        findViewById(R.id.appsphere_command_search).setOnClickListener(v -> {
+            findViewById(R.id.appsphere_nav_apps).performClick();
+            if (mSearchView != null) {
+                mSearchView.requestFocus();
+                UiUtils.showKeyboard(mSearchView);
+            }
+        });
+        findViewById(R.id.appsphere_command_tools).setOnClickListener(v ->
+                startActivity(new Intent(this, SettingsActivity.class)));
         findViewById(R.id.appsphere_nav_running).setOnClickListener(v ->
                 startActivity(new Intent(this, RunningAppsActivity.class)));
         findViewById(R.id.appsphere_nav_settings).setOnClickListener(v ->
@@ -587,6 +599,25 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                     })
                     .show();
         }
+    }
+
+    private void updateAppSphereSystemActivity() {
+        android.widget.TextView stats = findViewById(R.id.appsphere_activity_stats);
+        if (stats == null) return;
+        android.app.ActivityManager manager = (android.app.ActivityManager)
+                getSystemService(ACTIVITY_SERVICE);
+        android.app.ActivityManager.MemoryInfo memory =
+                new android.app.ActivityManager.MemoryInfo();
+        manager.getMemoryInfo(memory);
+        android.os.StatFs storage = new android.os.StatFs(
+                android.os.Environment.getDataDirectory().getAbsolutePath());
+        long gib = 1024L * 1024L * 1024L;
+        stats.setText("Available RAM: " + (memory.availMem / gib) + " GiB / "
+                + (memory.totalMem / gib) + " GiB"
+                + "\\nFree internal storage: " + (storage.getAvailableBytes() / gib)
+                + " GiB / " + (storage.getTotalBytes() / gib) + " GiB"
+                + "\\nUpdated: " + java.text.DateFormat.getTimeInstance().format(
+                        new java.util.Date()));
     }
 
     private void updateAppSphereBackendStatus() {
