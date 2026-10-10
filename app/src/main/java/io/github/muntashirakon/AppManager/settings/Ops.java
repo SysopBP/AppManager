@@ -436,17 +436,13 @@ public class Ops {
             } catch (RemoteException e) {
                 Log.e(TAG, e);
             }
-            // Root is granted but Binder communication cannot be initiated
-            Log.e(TAG, "Root granted but could not use root to initiate a connection. Trying ADB...");
-            if (AdbUtils.startAdb(AdbUtils.getAdbPortOrDefault())) {
-                Log.i(TAG, "Started ADB over TCP via root.");
-            } else {
-                Log.w(TAG, "Could not start ADB over TCP via root.");
-            }
-            // Root was granted but could not provide a usable root session
-            sDirectRoot = false;
-            sIsRoot = false;
-            // Fall-through, in case we can use other options
+            // A failed root Binder startup must not force an automatic ADB startup.
+            // The latter can wait indefinitely in LocalServerManager.executeAdbCommand,
+            // freezing the working-mode screen. Explicit ADB modes remain available.
+            Log.e(TAG, "Root Binder unavailable; skipping automatic ADB fallback.");
+            fallbackToNoRoot(context);
+            setMode(MODE_NO_ROOT);
+            return;
         } else {
             try {
                 if (reuseRunningAdbServer(context)) {
