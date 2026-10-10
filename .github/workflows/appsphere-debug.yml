@@ -20,8 +20,12 @@ jobs:
         with:
           distribution: zulu
           java-version: '21'
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Locate Android SDK command-line tools
+        run: |
+          echo "ANDROID_HOME=${ANDROID_HOME:-/usr/local/lib/android/sdk}" >> "$GITHUB_ENV"
+          SDK_ROOT="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          find "$SDK_ROOT/cmdline-tools" -maxdepth 3 -name sdkmanager -type f -print
+          test -x "$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" || test -x "$SDK_ROOT/cmdline-tools/16.0/bin/sdkmanager"
       - name: Install Android 17 SDK
         run: |
           yes | sdkmanager --licenses >/dev/null || true
