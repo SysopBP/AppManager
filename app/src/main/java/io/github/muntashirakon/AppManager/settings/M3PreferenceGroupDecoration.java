@@ -2,7 +2,9 @@ package io.github.muntashirakon.AppManager.settings;
 
 import android.annotation.SuppressLint;
 import android.graphics.Rect;
+import android.graphics.Color;
 import android.view.View;
+import android.content.res.ColorStateList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Px;
 import androidx.preference.PreferenceCategory;
@@ -46,6 +48,17 @@ public class M3PreferenceGroupDecoration extends RecyclerView.ItemDecoration {
         if (isCategoryHeader(adapter, position)) {
             return;
         }
+
+        // Restrained AppSphere settings surface: charcoal rows, gentle border,
+        // and a narrow gap so grouped preferences remain visually distinct.
+        int gap = Math.round(parent.getResources().getDisplayMetrics().density * 2);
+        outRect.left = Math.round(parent.getResources().getDisplayMetrics().density * 12);
+        outRect.right = outRect.left;
+        outRect.bottom = gap;
+        cardView.setCardBackgroundColor(Color.rgb(23, 23, 28));
+        cardView.setStrokeColor(ColorStateList.valueOf(Color.argb(46, 180, 175, 192)));
+        cardView.setStrokeWidth(Math.max(1, Math.round(parent.getResources().getDisplayMetrics().density * 0.6f)));
+        cardView.setCardElevation(0f);
 
         boolean isFirst = isFirstInGroup(adapter, position);
         boolean isLast = isLastInGroup(adapter, position);
