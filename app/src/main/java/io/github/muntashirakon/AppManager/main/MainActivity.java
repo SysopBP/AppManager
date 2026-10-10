@@ -675,40 +675,76 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     private void showAppSphereInstallerControl() {
         final android.content.SharedPreferences prefs = getSharedPreferences(
                 "appsphere_installer_control", MODE_PRIVATE);
+        final String selected = prefs.getString("preferred_installer", "");
+        final android.widget.LinearLayout panel = new android.widget.LinearLayout(this);
+        panel.setOrientation(android.widget.LinearLayout.VERTICAL);
+        final int pad = (int) (20 * getResources().getDisplayMetrics().density);
+        panel.setPadding(pad, pad / 2, pad, pad / 2);
+
+        final android.widget.TextView status = new android.widget.TextView(this);
+        status.setText("Preferred installer: " + (selected.isEmpty() ? "System default" : selected)
+                + "\\nAPK files can be opened here. System-wide redirection and LSPosed hooks are not active.");
+        status.setTextSize(14);
+        status.setPadding(0, 0, 0, pad / 2);
+        panel.addView(status);
+
         final String[] actions = {
                 "Install APK from storage",
-                "Select preferred APK installer",
-                "Open Android default app settings",
-                "Open InxLocker if installed",
+                "Choose preferred installer",
+                "Android default app settings",
+                "Open InxLocker",
                 "Reset installer preference"
         };
-        final String selected = prefs.getString("preferred_installer", "");
-        new MaterialAlertDialogBuilder(this)
+        final android.widget.LinearLayout actionList = new android.widget.LinearLayout(this);
+        actionList.setOrientation(android.widget.LinearLayout.VERTICAL);
+        panel.addView(actionList);
+        final androidx.appcompat.app.AlertDialog dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle("Installer Control")
-                .setMessage("Preferred installer: " + (selected.isEmpty() ? "System default" : selected)
-                        + "\\nAPK opening is supported here. System-wide install/uninstall redirection "
-                        + "and LSPosed interception are not enabled.")
-                .setItems(actions, (dialog, which) -> {
-                    if (which == 0) appSphereApkPicker.launch(new String[]{
+                .setView(panel)
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
+
+        for (int i = 0; i < actions.length; i++) {
+            final int action = i;
+            final com.google.android.material.button.MaterialButton button =
+                    new com.google.android.material.button.MaterialButton(this);
+            button.setText(actions[i]);
+            button.setAllCaps(false);
+            button.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+            actionList.addView(button, new android.widget.LinearLayout.LayoutParams(
+                    android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
+            button.setOnClickListener(v -> {
+                dialog.dismiss();
+                if (action == 0) {
+                    appSphereApkPicker.launch(new String[]{
                             "application/vnd.android.package-archive", "application/octet-stream"
                     });
-                    else if (which == 1) chooseAppSphereInstaller();
-                    else if (which == 2) startActivity(new Intent(
-                            android.provider.Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS));
-                    else if (which == 3) {
-                        Intent launch = getPackageManager().getLaunchIntentForPackage(
-                                "com.chimioo.inxlocker");
-                        if (launch != null) startActivity(launch);
-                        else new MaterialAlertDialogBuilder(this)
-                                .setMessage("InxLocker is not available under the expected package name.")
+                } else if (action == 1) {
+                    chooseAppSphereInstaller();
+                } else if (action == 2) {
+                    try {
+                        startActivity(new Intent(
+                                android.provider.Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS));
+                    } catch (android.content.ActivityNotFoundException ex) {
+                        new MaterialAlertDialogBuilder(this)
+                                .setMessage("Default app settings are not available on this device.")
                                 .setPositiveButton(android.R.string.ok, null).show();
-                    } else {
-                        prefs.edit().remove("preferred_installer").apply();
-                        showAppSphereInstallerControl();
                     }
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .show();
+                } else if (action == 3) {
+                    Intent launch = getPackageManager().getLaunchIntentForPackage(
+                            "com.chimioo.inxlocker");
+                    if (launch != null) startActivity(launch);
+                    else new MaterialAlertDialogBuilder(this)
+                            .setMessage("InxLocker is not available under the expected package name.")
+                            .setPositiveButton(android.R.string.ok, null).show();
+                } else {
+                    prefs.edit().remove("preferred_installer").apply();
+                    showAppSphereInstallerControl();
+                }
+            });
+        }
+        dialog.show();
     }
 
     private void chooseAppSphereInstaller() {
