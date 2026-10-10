@@ -31,7 +31,7 @@
 
     <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
         <io.github.muntashirakon.preference.DefaultAlertPreference
-            app:icon="@drawable/ic_information_circle"
+            app:icon="@drawable/sphere_ic_info"
             app:iconSpaceReserved="false"
             app:key="info"
             app:selectable="false"

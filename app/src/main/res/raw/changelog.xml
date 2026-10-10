@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><!DOCTYPE changelog SYSTEM "https://raw.githubusercontent.com/MuntashirAkon/AppManager/master/schema/changlelog.dtd">
 <changelog>
+    <release type="release" version="4.2.3" code="455" date="10 October 2026">
+        <note>Sphere Eclipse Core brings the selected black, silver and wine-red identity into the app.</note>
+        <new>Eclipse Core launcher and splash: a dark sphere, silver crescent and wine-red app-management tiles in orbit.</new>
+        <new>24 matching silver and wine-red vector icons, used in floating navigation, dashboard shortcuts, grouped settings, appearance, themes, power and installer controls.</new>
+        <fix>Navigation preserves the two-tone icon colors instead of tinting them a single accent color. Selected labels and backgrounds still indicate the active tab.</fix>
+        <improve>Android themed launcher icon now follows the Eclipse Core crescent and app-orbit design.</improve>
+        <note>AMOLED branding retains True glass themes, InxLocker controls and the Android 17 startup crash fix. This update keeps the existing Sphere package and all 4.2.2 functionality. Installed third-party app icons remain their own artwork.</note>
+    </release>
     <release type="release" version="4.2.2" code="454" date="10 October 2026">
         <note>Welcome to Sphere 4.2.2. This release brings together the new Sphere experience and fixes from the recent development builds.</note>
         <title type="large">Sphere identity and navigation</title>

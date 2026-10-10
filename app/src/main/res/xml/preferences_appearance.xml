@@ -5,45 +5,45 @@
 
     <PreferenceCategory app:title="Theme and interface" app:layout="@layout/m3_preference_category_empty">
         <Preference
-            app:iconSpaceReserved="false"
-            app:key="app_theme"
+            app:iconSpaceReserved="true"
+            app:icon="@drawable/sphere_ic_themes" app:key="app_theme"
             app:title="@string/pref_app_theme"
             tools:summary="Follow system" />
 
         <Preference
             android:fragment="io.github.muntashirakon.AppManager.settings.ThemePreferences"
-            app:iconSpaceReserved="false"
-            app:key="sphere_theme_engine"
+            app:iconSpaceReserved="true"
+            app:icon="@drawable/sphere_ic_themes" app:key="sphere_theme_engine"
             app:title="@string/sphere_theme_engine"
             app:summary="@string/sphere_theme_engine_summary" />
 
         <Preference
-            app:iconSpaceReserved="false"
-            app:key="appsphere_appearance_studio"
+            app:iconSpaceReserved="true"
+            app:icon="@drawable/sphere_ic_tune" app:key="appsphere_appearance_studio"
             app:title="@string/sphere_motion_feedback"
             app:summary="@string/sphere_motion_feedback_summary" />
 
         <Preference
-            app:iconSpaceReserved="false"
-            app:key="sphere_wallpaper"
+            app:iconSpaceReserved="true"
+            app:icon="@drawable/sphere_ic_themes" app:key="sphere_wallpaper"
             app:title="@string/sphere_wallpaper_title"
             app:summary="@string/sphere_wallpaper_summary" />
 
         <SwitchPreferenceCompat
-            app:iconSpaceReserved="false"
-            app:key="app_theme_pure_black"
+            app:iconSpaceReserved="true"
+            app:icon="@drawable/sphere_ic_themes" app:key="app_theme_pure_black"
             app:summary="@string/pref_pure_black_theme_msg"
             app:title="@string/pref_pure_black_theme" />
 
         <SwitchPreferenceCompat
-            app:iconSpaceReserved="false"
-            app:key="use_system_font"
+            app:iconSpaceReserved="true"
+            app:icon="@drawable/sphere_ic_tune" app:key="use_system_font"
             app:summary="@string/pref_use_system_font_msg"
             app:title="@string/pref_use_system_font" />
 
         <Preference
-            app:iconSpaceReserved="false"
-            app:key="layout_orientation"
+            app:iconSpaceReserved="true"
+            app:icon="@drawable/sphere_ic_tune" app:key="layout_orientation"
             app:title="@string/pref_layout_direction"
             tools:summary="Left to right" />
 
@@ -52,16 +52,16 @@
     <PreferenceCategory app:title="Personalization and features" app:layout="@layout/m3_preference_category_empty">
         <Preference
             android:fragment="io.github.muntashirakon.AppManager.settings.AppDetailsTabsPreferences"
-            app:iconSpaceReserved="false"
-            app:key="app_details_tabs"
+            app:iconSpaceReserved="true"
+            app:icon="@drawable/sphere_ic_tune" app:key="app_details_tabs"
             app:summary="@string/pref_app_details_tabs_description"
             app:title="@string/pref_app_details_tabs" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Personalization and features" app:layout="@layout/m3_preference_category_empty">
         <Preference
-            app:iconSpaceReserved="false"
-            app:key="enabled_features"
+            app:iconSpaceReserved="true"
+            app:icon="@drawable/sphere_ic_tune" app:key="enabled_features"
             app:summary="@string/pref_enable_disable_features_msg"
             app:title="@string/enable_disable_features" />
     </PreferenceCategory>

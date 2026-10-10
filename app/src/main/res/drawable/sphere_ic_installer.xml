@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="@color/sphere_icon_silver" android:fillType="evenOdd" android:pathData="M3,6 L12,2 L21,6 L12,10 Z M3,8 L11,12 V22 L3,18 Z M13,12 L21,8 V18 L13,22 Z" />
+    <path android:fillColor="@color/sphere_icon_wine" android:pathData="M11,10 H14 V15 H17 L12.5,20 L8,15 H11 Z" />
+</vector>

@@ -1,6 +1,14 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later OR CC-BY-SA-4.0 -->
 # Sphere / AppSphere changelog
 
+## 4.2.3 (455) — 10 October 2026
+
+- Replace launcher and splash with the selected Eclipse Core artwork.
+- Add 24 silver/wine-red vector icons to navigation, dashboard and settings controls.
+- Preserve two-tone navigation colors and update Android themed icon.
+- Update README, feature guide, store metadata and in-app What’s New.
+
+
 ## 4.2.2 (454) — 10 October 2026
 
 This consolidates the fork modifications, including earlier AppSphere work.

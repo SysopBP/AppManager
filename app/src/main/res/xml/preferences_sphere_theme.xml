@@ -6,31 +6,31 @@
         app:key="sphere_theme_preview" app:iconSpaceReserved="false" />
 
     <PreferenceCategory app:title="@string/sphere_theme_colors">
-        <ListPreference app:key="interface_style" app:title="@string/sphere_theme_preset"
+        <ListPreference app:icon="@drawable/sphere_ic_tune" app:key="interface_style" app:title="@string/sphere_theme_preset"
             app:entries="@array/sphere_theme_presets" app:entryValues="@array/sphere_theme_preset_values"
-            app:defaultValue="glass" app:useSimpleSummaryProvider="true" app:iconSpaceReserved="false" />
-        <ListPreference app:key="theme_accent" app:title="@string/sphere_theme_accent"
+            app:defaultValue="glass" app:useSimpleSummaryProvider="true" app:iconSpaceReserved="true" />
+        <ListPreference app:icon="@drawable/sphere_ic_themes" app:key="theme_accent" app:title="@string/sphere_theme_accent"
             app:entries="@array/sphere_theme_accents" app:entryValues="@array/sphere_theme_accent_values"
-            app:defaultValue="system" app:useSimpleSummaryProvider="true" app:iconSpaceReserved="false" />
-        <Preference app:key="sphere_theme_wallpaper" app:title="@string/sphere_wallpaper_title"
-            app:summary="@string/sphere_wallpaper_summary" app:iconSpaceReserved="false" />
+            app:defaultValue="system" app:useSimpleSummaryProvider="true" app:iconSpaceReserved="true" />
+        <Preference app:icon="@drawable/sphere_ic_themes" app:key="sphere_theme_wallpaper" app:title="@string/sphere_wallpaper_title"
+            app:summary="@string/sphere_wallpaper_summary" app:iconSpaceReserved="true" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/sphere_theme_glass">
-        <SeekBarPreference app:key="glass_blur" app:title="@string/sphere_theme_blur"
+        <SeekBarPreference app:icon="@drawable/sphere_ic_tune" app:key="glass_blur" app:title="@string/sphere_theme_blur"
             app:summary="@string/sphere_theme_blur_summary" app:min="0" android:max="40"
-            app:defaultValue="18" app:showSeekBarValue="true" app:iconSpaceReserved="false" />
-        <SeekBarPreference app:key="glass_opacity" app:title="@string/sphere_theme_opacity"
+            app:defaultValue="18" app:showSeekBarValue="true" app:iconSpaceReserved="true" />
+        <SeekBarPreference app:icon="@drawable/sphere_ic_tune" app:key="glass_opacity" app:title="@string/sphere_theme_opacity"
             app:summary="@string/sphere_theme_opacity_summary" app:min="40" android:max="90"
-            app:defaultValue="64" app:showSeekBarValue="true" app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat app:key="reduce_transparency" app:title="@string/sphere_theme_reduce"
-            app:summary="@string/sphere_theme_reduce_summary" app:defaultValue="false" app:iconSpaceReserved="false" />
-        <Preference app:key="sphere_theme_rendering" app:title="@string/sphere_theme_rendering"
-            app:selectable="false" app:iconSpaceReserved="false" />
+            app:defaultValue="64" app:showSeekBarValue="true" app:iconSpaceReserved="true" />
+        <SwitchPreferenceCompat app:icon="@drawable/sphere_ic_tune" app:key="reduce_transparency" app:title="@string/sphere_theme_reduce"
+            app:summary="@string/sphere_theme_reduce_summary" app:defaultValue="false" app:iconSpaceReserved="true" />
+        <Preference app:icon="@drawable/sphere_ic_themes" app:key="sphere_theme_rendering" app:title="@string/sphere_theme_rendering"
+            app:selectable="false" app:iconSpaceReserved="true" />
     </PreferenceCategory>
 
-    <Preference app:key="sphere_theme_apply" app:title="@string/sphere_theme_apply"
-        app:summary="@string/sphere_theme_apply_summary" app:iconSpaceReserved="false" />
-    <Preference app:key="sphere_theme_reset" app:title="@string/sphere_theme_reset"
-        app:summary="@string/sphere_theme_reset_summary" app:iconSpaceReserved="false" />
+    <Preference app:icon="@drawable/sphere_ic_themes" app:key="sphere_theme_apply" app:title="@string/sphere_theme_apply"
+        app:summary="@string/sphere_theme_apply_summary" app:iconSpaceReserved="true" />
+    <Preference app:icon="@drawable/sphere_ic_themes" app:key="sphere_theme_reset" app:title="@string/sphere_theme_reset"
+        app:summary="@string/sphere_theme_reset_summary" app:iconSpaceReserved="true" />
 </PreferenceScreen>

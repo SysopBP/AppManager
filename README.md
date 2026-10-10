@@ -1,7 +1,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later OR CC-BY-SA-4.0 -->
 
 <p align="center">
-  <img src="arts/sphere/amoled-master.png" alt="Sphere AMOLED gold globe" height="150">
+  <img src="arts/sphere/amoled-master.png" alt="Sphere Eclipse Core" height="150">
 </p>
 
 <h1 align="center">Sphere</h1>
@@ -22,7 +22,7 @@ AppSphere is based on [App Manager by Muntashir Al-Islam and contributors](https
 
 ---
 
-## Sphere 4.2.2 (454)
+## Sphere 4.2.3 (455)
 
 Sphere combines App Manager's package-management tools with a refreshed dashboard,
 AMOLED branding, customizable backgrounds and integrated installer controls.
@@ -31,7 +31,7 @@ AMOLED branding, customizable backgrounds and integrated installer controls.
 
 | Area | Sphere changes |
 | --- | --- |
-| AMOLED identity | Gold-globe launcher artwork with pure-black surroundings, adaptive/themed icons and matching Android/authentication splash screens. |
+| AMOLED identity | Eclipse Core silver-crescent and wine-red app-orbit launcher artwork with pure-black surroundings, adaptive/themed icons and matching Android/authentication splash screens. |
 | Home dashboard | Device and backend summaries, memory/storage metrics, search, filters and tool shortcuts. |
 | Floating navigation | Labelled Home, Apps, Installer, Running and Settings icons; hides when scrolling down and returns when scrolling up. |
 | App pages | Compact app cards, refreshed detail headers/tabs and clearer metadata. Installed apps keep their own icons. |
@@ -215,3 +215,8 @@ affiliated with this project in any way.
 A list of credits and libraries is available in **About**. App Manager: Muntashir Al-Islam
 (@MuntashirAkon) and contributors. InxLocker: Chimioo and contributors, with integrated
 GPL-3.0 source notices and licence retained. Sphere modifications: SysopBP.
+
+
+### Eclipse Core icons — 4.2.3
+
+The selected Eclipse Core design replaces the gold globe: a dark sphere, silver crescent and wine-red app tiles. Launcher, splash and themed launcher assets match this identity. 24 two-tone vector icons are wired into navigation, dashboard shortcuts, main settings, appearance, theme, power and installer controls. The dock preserves the silver/wine-red palette while selected labels retain theme accents. Third-party package artwork is unchanged.

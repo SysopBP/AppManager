@@ -179,7 +179,8 @@ public final class ThemeEngine {
             if (item == null) continue;
             int color = item.isSelected() ? config.accent : config.foreground;
             item.setTextColor(color);
-            item.setCompoundDrawableTintList(ColorStateList.valueOf(color));
+            // Eclipse Core icons carry their own silver / wine-red palette.
+            item.setCompoundDrawableTintList(null);
         }
     }
 }

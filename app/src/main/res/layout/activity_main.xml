@@ -122,12 +122,18 @@
                     android:textSize="14sp" />
                 <Button
                     android:id="@+id/appsphere_backend_refresh"
+                android:drawableStart="@drawable/sphere_ic_updates"
+                android:drawablePadding="12dp"
+                android:drawableTint="@null"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/appsphere_home_5"
                     android:textAllCaps="false" />
                 <Button
                     android:id="@+id/appsphere_backend_settings"
+                android:drawableStart="@drawable/sphere_ic_system"
+                android:drawablePadding="12dp"
+                android:drawableTint="@null"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/appsphere_home_6"
@@ -153,6 +159,9 @@
                 android:textSize="14sp" />
             <Button
                 android:id="@+id/appsphere_activity_refresh"
+                android:drawableStart="@drawable/sphere_ic_updates"
+                android:drawablePadding="12dp"
+                android:drawableTint="@null"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/appsphere_home_9"
@@ -174,18 +183,27 @@
                 android:textStyle="bold" />
             <Button
                 android:id="@+id/appsphere_command_search"
+                android:drawableStart="@drawable/sphere_ic_search"
+                android:drawablePadding="12dp"
+                android:drawableTint="@null"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/appsphere_home_11"
                 android:textAllCaps="false" />
             <Button
                 android:id="@+id/appsphere_installer_control"
+                android:drawableStart="@drawable/sphere_ic_installer"
+                android:drawablePadding="12dp"
+                android:drawableTint="@null"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/appsphere_home_12"
                 android:textAllCaps="false" />
             <Button
                 android:id="@+id/appsphere_command_tools"
+                android:drawableStart="@drawable/sphere_ic_tune"
+                android:drawablePadding="12dp"
+                android:drawableTint="@null"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/appsphere_home_13"
@@ -209,18 +227,27 @@
                 android:textStyle="bold" />
             <Button
                 android:id="@+id/appsphere_dashboard_apps"
+                android:drawableStart="@drawable/sphere_ic_apps"
+                android:drawablePadding="12dp"
+                android:drawableTint="@null"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/appsphere_home_15"
                 android:textAllCaps="false" />
             <Button
                 android:id="@+id/appsphere_dashboard_filters"
+                android:drawableStart="@drawable/sphere_ic_tune"
+                android:drawablePadding="12dp"
+                android:drawableTint="@null"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/appsphere_home_16"
                 android:textAllCaps="false" />
             <Button
                 android:id="@+id/appsphere_dashboard_running"
+                android:drawableStart="@drawable/sphere_ic_running"
+                android:drawablePadding="12dp"
+                android:drawableTint="@null"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/appsphere_home_17"
@@ -258,7 +285,7 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:drawableTop="@drawable/ic_home_outlined"
+            android:drawableTop="@drawable/sphere_ic_home"
             android:drawablePadding="3dp"
             android:textAllCaps="false" />
 
@@ -277,7 +304,7 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:drawableTop="@drawable/ic_view_list"
+            android:drawableTop="@drawable/sphere_ic_apps"
             android:drawablePadding="3dp"
             android:textAllCaps="false" />
 
@@ -296,7 +323,7 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:drawableTop="@drawable/ic_get_app"
+            android:drawableTop="@drawable/sphere_ic_installer"
             android:drawablePadding="3dp"
             android:textAllCaps="false" />
 
@@ -315,7 +342,7 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:drawableTop="@drawable/ic_run_fast"
+            android:drawableTop="@drawable/sphere_ic_running"
             android:drawablePadding="3dp"
             android:textAllCaps="false" />
 
@@ -334,7 +361,7 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:drawableTop="@drawable/ic_settings"
+            android:drawableTop="@drawable/sphere_ic_settings"
             android:drawablePadding="3dp"
             android:textAllCaps="false" />
     </LinearLayout>

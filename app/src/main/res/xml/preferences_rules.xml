@@ -32,7 +32,7 @@
 
     <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
         <io.github.muntashirakon.preference.PrimaryButtonPreference
-            app:icon="@drawable/ic_restore"
+            app:icon="@drawable/sphere_ic_restore"
             app:key="remove_all_rules"
             app:title="@string/pref_remove_all_rules" />
     </PreferenceCategory>

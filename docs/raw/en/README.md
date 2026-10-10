@@ -85,3 +85,8 @@ checkabuse <target-dir>         Detect spams or mistranslations.
 
    Note that the start and end markers must be located in a separate line with
    no additional spaces, similar to EOF markers.
+
+
+### Eclipse Core icons — 4.2.3
+
+The selected Eclipse Core design replaces the gold globe: a dark sphere, silver crescent and wine-red app tiles. Launcher, splash and themed launcher assets match this identity. 24 two-tone vector icons are wired into navigation, dashboard shortcuts, main settings, appearance, theme, power and installer controls. The dock preserves the silver/wine-red palette while selected labels retain theme accents. Third-party package artwork is unchanged.

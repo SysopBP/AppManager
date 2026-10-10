@@ -1,0 +1,4 @@
+Sphere 4.2.3 (455) — Eclipse Core
+Dark sphere, silver crescent and wine-red app-orbit launcher/splash.
+24 matching two-tone vector icons for navigation, dashboard and settings.
+Updated themed launcher icon and What’s New.
