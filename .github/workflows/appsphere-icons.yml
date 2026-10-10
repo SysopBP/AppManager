@@ -1,0 +1,48 @@
+name: Install AppSphere icon resources
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'AppSphere_Icon_Pack.zip'
+      - '.github/workflows/appsphere-icons.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install-icons:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Extract and install AppSphere icon resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f AppSphere_Icon_Pack.zip
+          python3 - <<'PY'
+          import zipfile, pathlib
+          root=pathlib.Path('app/src/main/res')
+          with zipfile.ZipFile('AppSphere_Icon_Pack.zip') as z:
+              for name in z.namelist():
+                  parts=pathlib.PurePosixPath(name).parts
+                  if len(parts)==2 and parts[0].startswith('mipmap-') and parts[1] in ('ic_launcher.png','ic_launcher_round.png'):
+                      dest=root.joinpath(*parts)
+                  elif name=='AppSphere_Master_1024.png':
+                      dest=root/'drawable-nodpi'/'appsphere_splash.png'
+                  else:
+                      continue
+                  dest.parent.mkdir(parents=True,exist_ok=True)
+                  dest.write_bytes(z.read(name))
+                  print('Installed',dest)
+          PY
+      - name: Commit launcher and splash assets
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/src/main/res/mipmap-*/ic_launcher.png app/src/main/res/mipmap-*/ic_launcher_round.png app/src/main/res/drawable-nodpi/appsphere_splash.png
+          if ! git diff --cached --quiet; then
+            git commit -m "Install AppSphere launcher and splash PNG assets"
+            git push
+          fi
