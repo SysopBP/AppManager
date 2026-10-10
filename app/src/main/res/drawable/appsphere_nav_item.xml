@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <shape>
+            <solid android:color="?attr/colorControlHighlight" />
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+    <item android:drawable="?attr/selectableItemBackgroundBorderless" />
+</selector>
