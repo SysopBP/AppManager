@@ -4,7 +4,12 @@
   <img src="docs/raw/images/icon.png" alt="App Manager Logo" height="150dp">
 </p>
 
-<h1 align="center">App Manager</h1>
+<h1 align="center">AppSphere</h1>
+
+**AppSphere — a SysopBP fork of App Manager**
+
+AppSphere is based on [App Manager by Muntashir Al-Islam and contributors](https://github.com/MuntashirAkon/AppManager). Original authorship, copyright notices, and applicable open-source licenses are retained. This independent fork is not endorsed by the original developers.
+
 
 <p align=center>
   <a href="https://muntashirakon.github.io/AppManager">Docs</a> ·
