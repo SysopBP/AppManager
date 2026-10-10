@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><!DOCTYPE changelog SYSTEM "https://raw.githubusercontent.com/MuntashirAkon/AppManager/master/schema/changlelog.dtd">
 <changelog>
     <release type="release" version="4.2.4" code="456" date="10 October 2026">
+        <fix title="Root connection hotfix">Refresh remote server status when returning from Termux or another app after starting the server manually, and when remote services change state.</fix>
+        <fix title="Root connection hotfix">Discard outdated server checks after a mode change or screen recreation so old results cannot overwrite the current status.</fix>
         <fix>Use new Eclipse Core launcher resource names and explicit launcher-alias artwork to refresh icons after updating.</fix>
         <fix>Version the app’s own icon cache and load its app-info artwork directly from the current APK.</fix>
         <note>Sphere Eclipse Core brings the selected black, silver and wine-red identity into the app.</note>
