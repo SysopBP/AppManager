@@ -2,10 +2,10 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
+    <PreferenceCategory app:title="AppSphere identity" app:layout="@layout/m3_preference_category_empty">
         <Preference
             app:iconSpaceReserved="false"
-            app:title="AppSphere"
+            app:title="AppSphere · Application management"
             app:summary="@string/appsphere_about_description"
             app:selectable="false" />
         <Preference
@@ -33,7 +33,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
+    <PreferenceCategory app:title="Project resources" app:layout="@layout/m3_preference_category_empty">
         <io.github.muntashirakon.preference.HyperlinkPreference
             app:iconSpaceReserved="false"
             app:summary="@string/source_code_links"
@@ -60,7 +60,7 @@
             app:title="@string/get_help" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
+    <PreferenceCategory app:title="Open-source acknowledgments" app:layout="@layout/m3_preference_category_empty">
         <Preference
             app:iconSpaceReserved="false"
             app:key="third_party_libraries"
