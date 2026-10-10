@@ -41,6 +41,9 @@ public class AppManager extends Application {
     public void onCreate() {
         super.onCreate();
         if (isIsolatedProcess()) return;
+        if (Build.VERSION.SDK_INT < 28 || getPackageName().equals(Application.getProcessName())) {
+            io.github.chimio.inxlocker.util.InstallerRouting.initialize(this);
+        }
         PermissionOverrideManager.reconcileAll();
         Thread.setDefaultUncaughtExceptionHandler(new AMExceptionHandler(this));
         AppearanceUtils.init(this);

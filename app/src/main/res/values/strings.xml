@@ -51,7 +51,7 @@
     <string name="data_received">Data received</string>
     <string name="data_transmitted">Data transmitted</string>
     <string name="data_usage_msg">Data usage</string>
-    <string name="about">About AppSphere</string>
+    <string name="about">About Sphere</string>
     <string name="data_size">Data</string>
     <string name="cache_size">Cache</string>
     <string name="obb_size">Obb</string>
@@ -86,7 +86,7 @@
     <string name="package_name">Package name</string>
     <string name="class_name">Class name</string>
     <string name="icon_picker">Icon picker</string>
-    <string name="appsphere_about_description">AppSphere is a customized App Manager fork featuring AMOLED Glass and MIUIX-inspired interface styles, a compact floating navigation bar, and Root/ADB backend improvements.</string>
+    <string name="appsphere_about_description">Sphere is a customized App Manager fork with AMOLED gold-globe artwork, a five-tab floating dock, wallpapers with dimming and brightness, Material/True glass/Soft contrast themes, integrated InxLocker controls, and Root/ADB startup and session-power improvements.</string>
     <string name="appsphere_fork_credit">AppSphere customization: SysopBP. Based on App Manager by Muntashir Al-Islam and contributors. Original licenses and third-party credits remain applicable.</string>
     <string name="license">License</string>
     <string name="license_message" translatable="false"><a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General
@@ -367,7 +367,7 @@
     <string name="launch_app">Launch</string>
     <string name="never_ask">Never ask</string>
     <string name="one_click_ops">1-click ops</string>
-    <string name="changelog">Changelog</string>
+    <string name="changelog">What\'s New</string>
     <string name="external_apk_no_app_op">External APK does not have any app operations</string>
     <string name="manifest_viewer">Manifest viewer</string>
     <plurals name="no_of_trackers">
@@ -1651,6 +1651,6 @@
     <string name="launch_activity_dialog_title">Launch activity: action required</string>
     <string name="launch_activity_dialog_message">Android 5.x cannot trigger the <b>Search assistant</b> automatically. To open the activity, activate the Search assistant manually (usually by long-pressing the Home button). Tap <b>Close</b> after the activity opens to restore the original assistant.</string>
     <string name="appsphere_upstream_appmanager_credit" translatable="false">App Manager — originally developed by Muntashir Al-Islam (@MuntashirAkon) and contributors. AppSphere is a customization by SysopBP. Original authorship, copyright notices, licenses, and contributor credits are retained.</string>
-    <string name="appsphere_inxlocker_credit" translatable="false">InxLocker — developed by Chimioo (@Chimioo) and contributors. Project: https://github.com/Chimioo/InxLocker. Licensed under GNU GPL v3. AppSphere Installer Control is currently an independent experimental management interface inspired by InxLocker; InxLocker hook code has not yet been integrated.</string>
+    <string name="appsphere_inxlocker_credit" translatable="false">InxLocker — developed by Chimioo (@Chimioo) and contributors. Project: https://github.com/Chimioo/InxLocker. Licensed under GNU GPL v3. Sphere integrates an InxLocker-derived routing engine with native settings. Original GPL v3 notices and the engine licence are retained. System-wide routing requires compatible libxposed/LSPosed activation and scope.</string>
     <string name="appsphere_licenses_notice" translatable="false">AppSphere retains the original App Manager license and applicable third-party notices. InxLocker is distributed under GNU GPL v3; its license and original copyright notices must be preserved if its source is incorporated. See the original projects and repository license files for complete terms.</string>
 </resources>

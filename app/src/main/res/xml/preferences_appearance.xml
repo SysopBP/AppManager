@@ -11,16 +11,23 @@
             tools:summary="Follow system" />
 
         <Preference
+            android:fragment="io.github.muntashirakon.AppManager.settings.ThemePreferences"
             app:iconSpaceReserved="false"
-            app:key="appsphere_interface_style"
-            app:title="Interface style"
-            app:summary="AMOLED Glass" />
+            app:key="sphere_theme_engine"
+            app:title="@string/sphere_theme_engine"
+            app:summary="@string/sphere_theme_engine_summary" />
 
         <Preference
             app:iconSpaceReserved="false"
             app:key="appsphere_appearance_studio"
-            app:title="Appearance Studio"
-            app:summary="Customize accent, motion and touch feedback" />
+            app:title="@string/sphere_motion_feedback"
+            app:summary="@string/sphere_motion_feedback_summary" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="sphere_wallpaper"
+            app:title="@string/sphere_wallpaper_title"
+            app:summary="@string/sphere_wallpaper_summary" />
 
         <SwitchPreferenceCompat
             app:iconSpaceReserved="false"

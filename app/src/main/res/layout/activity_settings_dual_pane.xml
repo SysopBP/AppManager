@@ -7,9 +7,15 @@
     android:orientation="horizontal"
     tools:context=".settings.SettingsActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <io.github.muntashirakon.AppManager.widgets.GlassCoordinatorLayout
+        android:id="@+id/sphere_settings_root"
         android:layout_width="450dp"
         android:layout_height="match_parent">
+
+        <io.github.muntashirakon.AppManager.widgets.WallpaperView
+            android:id="@+id/sphere_wallpaper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <io.github.muntashirakon.widget.AppBarLayout
             android:id="@+id/appbar"
@@ -39,11 +45,17 @@
             android:layout_height="wrap_content"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </io.github.muntashirakon.AppManager.widgets.GlassCoordinatorLayout>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <io.github.muntashirakon.AppManager.widgets.GlassCoordinatorLayout
+        android:id="@+id/sphere_settings_secondary_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <io.github.muntashirakon.AppManager.widgets.WallpaperView
+            android:id="@+id/sphere_wallpaper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar2"
@@ -73,5 +85,5 @@
             android:layout_height="wrap_content"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </io.github.muntashirakon.AppManager.widgets.GlassCoordinatorLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>

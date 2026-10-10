@@ -21,6 +21,7 @@ public class PerProcessActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
+        io.github.muntashirakon.AppManager.utils.appearance.ThemeEngine.applyAccent(this);
     }
 
     public boolean getTransparentBackground() {

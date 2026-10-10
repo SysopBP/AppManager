@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-or-later -->
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<io.github.muntashirakon.AppManager.widgets.GlassCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator_layout"
@@ -7,6 +7,11 @@
     android:layout_height="match_parent"
     android:background="#0D0C12"
     tools:context="io.github.muntashirakon.AppManager.main.MainActivity">
+
+    <io.github.muntashirakon.AppManager.widgets.WallpaperView
+        android:id="@+id/sphere_wallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <io.github.muntashirakon.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -238,9 +243,8 @@
         android:orientation="horizontal"
         android:paddingHorizontal="5dp">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appsphere_nav_home"
-            style="?attr/borderlessButtonStyle"
             android:background="@drawable/appsphere_nav_item"
             android:minHeight="48dp"
             android:layout_width="0dp"
@@ -250,11 +254,16 @@
             android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
+            android:paddingVertical="6dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableTop="@drawable/ic_home_outlined"
+            android:drawablePadding="3dp"
             android:textAllCaps="false" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appsphere_nav_apps"
-            style="?attr/borderlessButtonStyle"
             android:background="@drawable/appsphere_nav_item"
             android:minHeight="48dp"
             android:layout_width="0dp"
@@ -264,11 +273,16 @@
             android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
+            android:paddingVertical="6dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableTop="@drawable/ic_view_list"
+            android:drawablePadding="3dp"
             android:textAllCaps="false" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appsphere_nav_installer"
-            style="?attr/borderlessButtonStyle"
             android:background="@drawable/appsphere_nav_item"
             android:minHeight="48dp"
             android:layout_width="0dp"
@@ -278,11 +292,16 @@
             android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
+            android:paddingVertical="6dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableTop="@drawable/ic_get_app"
+            android:drawablePadding="3dp"
             android:textAllCaps="false" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appsphere_nav_running"
-            style="?attr/borderlessButtonStyle"
             android:background="@drawable/appsphere_nav_item"
             android:minHeight="48dp"
             android:layout_width="0dp"
@@ -292,11 +311,16 @@
             android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
+            android:paddingVertical="6dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableTop="@drawable/ic_run_fast"
+            android:drawablePadding="3dp"
             android:textAllCaps="false" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appsphere_nav_settings"
-            style="?attr/borderlessButtonStyle"
             android:background="@drawable/appsphere_nav_item"
             android:minHeight="48dp"
             android:layout_width="0dp"
@@ -306,7 +330,13 @@
             android:textSize="12sp"
             android:minWidth="0dp"
             android:paddingHorizontal="2dp"
+            android:paddingVertical="6dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawableTop="@drawable/ic_settings"
+            android:drawablePadding="3dp"
             android:textAllCaps="false" />
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</io.github.muntashirakon.AppManager.widgets.GlassCoordinatorLayout>

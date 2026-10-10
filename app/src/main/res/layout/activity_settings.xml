@@ -1,10 +1,17 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<io.github.muntashirakon.AppManager.widgets.GlassCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sphere_settings_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
     tools:context=".settings.SettingsActivity">
+
+    <io.github.muntashirakon.AppManager.widgets.WallpaperView
+        android:id="@+id/sphere_wallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <io.github.muntashirakon.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -30,7 +37,7 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</io.github.muntashirakon.AppManager.widgets.GlassCoordinatorLayout>

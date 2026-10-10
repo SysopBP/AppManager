@@ -61,31 +61,6 @@ public class AppearancePreferences extends PreferenceFragment {
                     .show();
             return true;
         });
-        // AppSphere interface styles are independent of the upstream night-mode preference.
-        Preference interfaceStyle = Objects.requireNonNull(findPreference("appsphere_interface_style"));
-        String[] styleValues = getResources().getStringArray(R.array.appsphere_style_values);
-        String[] styleNames = getResources().getStringArray(R.array.appsphere_style_entries);
-        String selectedStyle = requireContext().getSharedPreferences("appsphere_appearance", Context.MODE_PRIVATE)
-                .getString("interface_style", "glass");
-        int currentStyle = Arrays.asList(styleValues).indexOf(selectedStyle);
-        interfaceStyle.setSummary(styleNames[Math.max(0, currentStyle)]);
-        interfaceStyle.setOnPreferenceClickListener(preference -> {
-            String selected = requireContext().getSharedPreferences("appsphere_appearance", Context.MODE_PRIVATE)
-                    .getString("interface_style", "glass");
-            int checked = Math.max(0, Arrays.asList(styleValues).indexOf(selected));
-            new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                    .setTitle("Interface style")
-                    .setSingleChoiceItems(styleNames, checked, (dialog, which) -> {
-                        requireContext().getSharedPreferences("appsphere_appearance", Context.MODE_PRIVATE)
-                                .edit().putString("interface_style", styleValues[which]).apply();
-                        interfaceStyle.setSummary(styleNames[which]);
-                        AppearanceUtils.applyConfigurationChangesToActivities();
-                        dialog.dismiss();
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
-            return true;
-        });
         Preference studio = Objects.requireNonNull(findPreference("appsphere_appearance_studio"));
         studio.setOnPreferenceClickListener(preference -> {
             final String[] labels = {"Enable interface animations", "Enable touch haptics"};
@@ -104,6 +79,11 @@ public class AppearancePreferences extends PreferenceFragment {
                     .show();
             return true;
         });
+        Preference wallpaper = Objects.requireNonNull(findPreference("sphere_wallpaper"));
+        wallpaper.setOnPreferenceClickListener(preference -> {
+                    new WallpaperDialogFragment().show(getParentFragmentManager(), "sphere_wallpaper");
+                    return true;
+                });
         // Black theme/custom theme
         SwitchPreferenceCompat fullBlackTheme = Objects.requireNonNull(findPreference("app_theme_pure_black"));
         fullBlackTheme.setChecked(Prefs.Appearance.isPureBlackTheme());
@@ -169,3 +149,4 @@ public class AppearancePreferences extends PreferenceFragment {
         return R.string.pref_cat_appearance;
     }
 }
+

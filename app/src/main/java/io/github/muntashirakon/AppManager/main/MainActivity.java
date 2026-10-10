@@ -104,6 +104,8 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     private static boolean SHOW_DISCLAIMER = true;
     private static final String STATE_APPSPHERE_HOME = "appsphere.home";
     private boolean mAppSphereHome;
+    private boolean mFloatingNavigationHidden;
+    private int mFloatingNavigationScroll;
 
     MainViewModel viewModel;
 
@@ -247,8 +249,18 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         mAdapter.setHasStableIds(true);
         recyclerView.setLayoutManager(UIUtils.getGridLayoutAt450Dp(this));
         recyclerView.setAdapter(mAdapter);
-        // Keep navigation available while browsing the app list.
-        final View floatingBar = findViewById(R.id.appsphere_floating_bar);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView view, int dx, int dy) {
+                if (!mAppSphereHome) {
+                    updateFloatingNavigationForScroll(dy, !view.canScrollVertically(-1));
+                }
+            }
+        });
+        findViewById(R.id.appsphere_dashboard).setOnScrollChangeListener(
+                (view, x, y, oldX, oldY) -> {
+                    if (mAppSphereHome) updateFloatingNavigationForScroll(y - oldY, y == 0);
+                });
         final android.content.SharedPreferences appearance = getSharedPreferences(
                 "appsphere_appearance", MODE_PRIVATE);
         if (appearance.getBoolean("haptics", true)) {
@@ -266,14 +278,13 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             updateAppSphereBackendStatus();
             updateAppSphereSystemActivity();
             if (appearance.getBoolean("haptics", true)) v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
-            if (appearance.getBoolean("animations", true)) floatingBar.animate().translationY(0f).alpha(1f).setDuration(180).start();
-            else { floatingBar.setTranslationY(0f); floatingBar.setAlpha(1f); }
+
         });
         findViewById(R.id.appsphere_nav_apps).setOnClickListener(v -> {
             dashboard.setVisibility(View.GONE);
             updateAppSphereNavigation(false);
             appList.setVisibility(View.VISIBLE);
-            floatingBar.animate().translationY(0f).alpha(1f).setDuration(180).start();
+
         });
         findViewById(R.id.appsphere_dashboard_apps).setOnClickListener(v ->
                 findViewById(R.id.appsphere_nav_apps).performClick());
@@ -454,13 +465,16 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
     @Override
     public void onSelectionModeEnabled() {
-        findViewById(R.id.appsphere_floating_bar).setVisibility(View.GONE);
+        View bar = findViewById(R.id.appsphere_floating_bar);
+        bar.animate().cancel();
+        bar.animate().withEndAction(null);
+        bar.setVisibility(View.GONE);
         mOnBackPressedCallback.setEnabled(true);
     }
 
     @Override
     public void onSelectionModeDisabled() {
-        findViewById(R.id.appsphere_floating_bar).setVisibility(View.VISIBLE);
+        setFloatingNavigationHidden(false, false);
         mOnBackPressedCallback.setEnabled(mAppSphereHome);
     }
 
@@ -620,151 +634,8 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         }
     }
 
-    /**
-     * Safe installer management entry point. This does not install Xposed hooks or
-     * intercept PackageInstaller sessions; interception must remain opt-in.
-     */
-    private final androidx.activity.result.ActivityResultLauncher<String[]> appSphereApkPicker =
-            registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.OpenDocument(),
-                    uri -> {
-                        if (uri != null) dispatchAppSphereApk(uri);
-                    });
-
-    private void dispatchAppSphereApk(@NonNull android.net.Uri uri) {
-        String preferred = getSharedPreferences("appsphere_installer_control", MODE_PRIVATE)
-                .getString("preferred_installer", "");
-        Intent install = new Intent(Intent.ACTION_VIEW);
-        install.setDataAndType(uri, "application/vnd.android.package-archive");
-        install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if (!preferred.isEmpty()) {
-            install.setPackage(preferred);
-        }
-        try {
-            startActivity(install);
-        } catch (android.content.ActivityNotFoundException | SecurityException ex) {
-            new MaterialAlertDialogBuilder(this)
-                    .setTitle("Installer unavailable")
-                    .setMessage("The selected installer cannot open this APK. Use Android's installer instead?")
-                    .setPositiveButton("Use system installer", (dialog, which) -> {
-                        Intent fallback = new Intent(Intent.ACTION_VIEW);
-                        fallback.setDataAndType(uri, "application/vnd.android.package-archive");
-                        fallback.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        try {
-                            startActivity(Intent.createChooser(fallback, "Install APK with"));
-                        } catch (Exception ignored) {
-                            new MaterialAlertDialogBuilder(this)
-                                    .setMessage("No compatible APK installer is available.")
-                                    .setPositiveButton(android.R.string.ok, null).show();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, null).show();
-        }
-    }
-
     private void showAppSphereInstallerControl() {
-        final android.content.SharedPreferences prefs = getSharedPreferences(
-                "appsphere_installer_control", MODE_PRIVATE);
-        final String selected = prefs.getString("preferred_installer", "");
-        final android.widget.LinearLayout panel = new android.widget.LinearLayout(this);
-        panel.setOrientation(android.widget.LinearLayout.VERTICAL);
-        final int pad = (int) (20 * getResources().getDisplayMetrics().density);
-        panel.setPadding(pad, pad / 2, pad, pad / 2);
-
-        final android.widget.TextView status = new android.widget.TextView(this);
-        status.setText("Preferred installer: " + (selected.isEmpty() ? "System default" : selected)
-                + "\\nAPK files can be opened here. System-wide redirection and LSPosed hooks are not active.");
-        status.setTextSize(14);
-        status.setPadding(0, 0, 0, pad / 2);
-        panel.addView(status);
-
-        final String[] actions = {
-                "Install APK from storage",
-                "Choose preferred installer",
-                "Android default app settings",
-                "Open InxLocker",
-                "Reset installer preference"
-        };
-        final android.widget.LinearLayout actionList = new android.widget.LinearLayout(this);
-        actionList.setOrientation(android.widget.LinearLayout.VERTICAL);
-        panel.addView(actionList);
-        final androidx.appcompat.app.AlertDialog dialog = new MaterialAlertDialogBuilder(this)
-                .setTitle("Installer Control")
-                .setView(panel)
-                .setNegativeButton(android.R.string.cancel, null)
-                .create();
-
-        for (int i = 0; i < actions.length; i++) {
-            final int action = i;
-            final com.google.android.material.button.MaterialButton button =
-                    new com.google.android.material.button.MaterialButton(this);
-            button.setText(actions[i]);
-            button.setAllCaps(false);
-            button.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
-            actionList.addView(button, new android.widget.LinearLayout.LayoutParams(
-                    android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
-            button.setOnClickListener(v -> {
-                dialog.dismiss();
-                if (action == 0) {
-                    appSphereApkPicker.launch(new String[]{
-                            "application/vnd.android.package-archive", "application/octet-stream"
-                    });
-                } else if (action == 1) {
-                    chooseAppSphereInstaller();
-                } else if (action == 2) {
-                    try {
-                        startActivity(new Intent(
-                                android.provider.Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS));
-                    } catch (android.content.ActivityNotFoundException ex) {
-                        new MaterialAlertDialogBuilder(this)
-                                .setMessage("Default app settings are not available on this device.")
-                                .setPositiveButton(android.R.string.ok, null).show();
-                    }
-                } else if (action == 3) {
-                    Intent launch = getPackageManager().getLaunchIntentForPackage(
-                            "com.chimioo.inxlocker");
-                    if (launch != null) startActivity(launch);
-                    else new MaterialAlertDialogBuilder(this)
-                            .setMessage("InxLocker is not available under the expected package name.")
-                            .setPositiveButton(android.R.string.ok, null).show();
-                } else {
-                    prefs.edit().remove("preferred_installer").apply();
-                    showAppSphereInstallerControl();
-                }
-            });
-        }
-        dialog.show();
-    }
-
-    private void chooseAppSphereInstaller() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(android.net.Uri.parse("content://appsphere.invalid/sample.apk"),
-                "application/vnd.android.package-archive");
-        java.util.List<android.content.pm.ResolveInfo> handlers =
-                getPackageManager().queryIntentActivities(intent, 0);
-        java.util.LinkedHashMap<String, String> candidates = new java.util.LinkedHashMap<>();
-        for (android.content.pm.ResolveInfo handler : handlers) {
-            if (handler.activityInfo == null) continue;
-            String pkg = handler.activityInfo.packageName;
-            CharSequence label = handler.loadLabel(getPackageManager());
-            candidates.put(pkg, label + " (" + pkg + ")");
-        }
-        if (candidates.isEmpty()) {
-            new MaterialAlertDialogBuilder(this)
-                    .setMessage("No APK installer activities were visible. Android may restrict package visibility.")
-                    .setPositiveButton(android.R.string.ok, null).show();
-            return;
-        }
-        final String[] packages = candidates.keySet().toArray(new String[0]);
-        final String[] labels = candidates.values().toArray(new String[0]);
-        new MaterialAlertDialogBuilder(this)
-                .setTitle("Preferred installer")
-                .setItems(labels, (dialog, which) -> {
-                    getSharedPreferences("appsphere_installer_control", MODE_PRIVATE)
-                            .edit().putString("preferred_installer", packages[which]).apply();
-                    showAppSphereInstallerControl();
-                })
-                .setNegativeButton(android.R.string.cancel, null).show();
+        startActivity(SettingsActivity.getSettingsIntent(this, "installer"));
     }
 
         private void updateAppSphereSystemActivity() {
@@ -805,64 +676,57 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
     private void updateAppSphereNavigation(boolean home) {
         mAppSphereHome = home;
+        setFloatingNavigationHidden(false, false);
         mOnBackPressedCallback.setEnabled(home || (mAdapter != null && mAdapter.isInSelectionMode()));
         findViewById(R.id.appsphere_nav_home).setSelected(home);
         findViewById(R.id.appsphere_nav_apps).setSelected(!home);
+        io.github.muntashirakon.AppManager.utils.appearance.ThemeEngine.updateNavigation(findViewById(R.id.coordinator_layout));
     }
 
-    private void applyAppSphereDashboardColors(View view, int textColor, int surfaceColor) {
-        if (view instanceof android.widget.TextView && !(view instanceof android.widget.Button)) {
-            ((android.widget.TextView) view).setTextColor(textColor);
+    private void updateFloatingNavigationForScroll(int dy, boolean atTop) {
+        if (mAdapter != null && mAdapter.isInSelectionMode()) return;
+        if (atTop) {
+            setFloatingNavigationHidden(false, true);
+            return;
         }
-        if (view.getBackground() != null && !(view instanceof android.widget.Button)) {
-            view.setBackgroundTintList(android.content.res.ColorStateList.valueOf(surfaceColor));
+        if (dy == 0) return;
+        if ((dy > 0) != (mFloatingNavigationScroll > 0)) mFloatingNavigationScroll = 0;
+        mFloatingNavigationScroll += dy;
+        if (Math.abs(mFloatingNavigationScroll) >= getResources().getDisplayMetrics().density * 8) {
+            setFloatingNavigationHidden(dy > 0, true);
         }
-        if (view instanceof ViewGroup) {
-            ViewGroup group = (ViewGroup) view;
-            for (int i = 0; i < group.getChildCount(); ++i) {
-                applyAppSphereDashboardColors(group.getChildAt(i), textColor, surfaceColor);
-            }
+    }
+
+    private void setFloatingNavigationHidden(boolean hidden, boolean animate) {
+        View bar = findViewById(R.id.appsphere_floating_bar);
+        if (bar == null || (mAdapter != null && mAdapter.isInSelectionMode())) return;
+        if (animate && mFloatingNavigationHidden == hidden) return;
+        mFloatingNavigationHidden = hidden;
+        mFloatingNavigationScroll = 0;
+        bar.animate().cancel();
+        bar.animate().withEndAction(null);
+        bar.setVisibility(View.VISIBLE);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) bar.getLayoutParams();
+        float translation = hidden ? bar.getHeight() + params.bottomMargin : 0f;
+        boolean animations = getSharedPreferences("appsphere_appearance", MODE_PRIVATE)
+                .getBoolean("animations", true);
+        if (animate && animations) {
+            bar.animate().translationY(translation).alpha(hidden ? 0f : 1f)
+                    .setDuration(180).withEndAction(() -> {
+                        if (mFloatingNavigationHidden && bar.getVisibility() != View.GONE) {
+                            bar.setVisibility(View.INVISIBLE);
+                        }
+                    }).start();
+        } else {
+            bar.setTranslationY(translation);
+            bar.setAlpha(hidden ? 0f : 1f);
+            bar.setVisibility(hidden ? View.INVISIBLE : View.VISIBLE);
         }
     }
 
     private void applyAppSphereInterfaceStyle() {
-        String style = getSharedPreferences("appsphere_appearance", MODE_PRIVATE)
-                .getString("interface_style", "glass");
         View root = findViewById(R.id.coordinator_layout);
-        View bar = findViewById(R.id.appsphere_floating_bar);
-        View toolbar = findViewById(R.id.toolbar);
-        if (root == null || bar == null || toolbar == null) return;
-        boolean material = "material".equals(style);
-        int dashboardText = material
-                ? com.google.android.material.color.MaterialColors.getColor(root,
-                        com.google.android.material.R.attr.colorOnSurface)
-                : android.graphics.Color.rgb(248, 245, 255);
-        int dashboardSurface = material
-                ? com.google.android.material.color.MaterialColors.getColor(root,
-                        com.google.android.material.R.attr.colorSurfaceContainer)
-                : android.graphics.Color.rgb(28, 27, 34);
-        applyAppSphereDashboardColors(findViewById(R.id.appsphere_dashboard),
-                dashboardText, dashboardSurface);
-        for (int id : new int[]{R.id.appsphere_nav_home, R.id.appsphere_nav_apps,
-                R.id.appsphere_nav_installer, R.id.appsphere_nav_running, R.id.appsphere_nav_settings}) {
-            ((android.widget.TextView) findViewById(id)).setTextColor(dashboardText);
-        }
-        if ("material".equals(style)) {
-            android.util.TypedValue value = new android.util.TypedValue();
-            getTheme().resolveAttribute(com.google.android.material.R.attr.colorSurface, value, true);
-            root.setBackgroundColor(value.data);
-            toolbar.setBackgroundColor(value.data);
-            bar.setBackgroundTintList(android.content.res.ColorStateList.valueOf(value.data));
-        } else if ("miuix".equals(style)) {
-            root.setBackgroundColor(android.graphics.Color.rgb(17, 18, 24));
-            toolbar.setBackgroundColor(android.graphics.Color.rgb(34, 36, 47));
-            bar.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
-                    android.graphics.Color.rgb(49, 52, 68)));
-        } else {
-            root.setBackgroundColor(android.graphics.Color.rgb(13, 12, 18));
-            toolbar.setBackgroundColor(android.graphics.Color.argb(217, 28, 26, 37));
-            bar.setBackgroundTintList(null);
-        }
+        if (root != null) io.github.muntashirakon.AppManager.utils.appearance.ThemeEngine.applyScreen(root);
     }
 
     private boolean mImsVisibleBeforeLeave = false;
@@ -871,6 +735,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     protected void onResume() {
         super.onResume();
         applyAppSphereInterfaceStyle();
+        setFloatingNavigationHidden(false, false);
         updateAppSphereBackendStatus();
         if (viewModel != null) viewModel.onResume();
         if (mAdapter != null && mBatchOpsHandler != null && mAdapter.isInSelectionMode()) {
@@ -921,13 +786,12 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         }
         Snackbar.make(findViewById(android.R.id.content), R.string.view_changelog, 3 * 60 * 1000)
                 .setAction(R.string.ok, v -> {
-                    long lastVersion = AppPref.getLong(AppPref.PrefKey.PREF_DISPLAY_CHANGELOG_LAST_VERSION_LONG);
                     AppPref.set(AppPref.PrefKey.PREF_DISPLAY_CHANGELOG_BOOL, false);
                     AppPref.set(AppPref.PrefKey.PREF_DISPLAY_CHANGELOG_LAST_VERSION_LONG, (long) BuildConfig.VERSION_CODE);
                     viewModel.executor.submit(() -> {
                         Changelog changelog;
                         try {
-                            changelog = new ChangelogParser(getApplication(), R.raw.changelog, lastVersion).parse();
+                            changelog = new ChangelogParser(getApplication(), R.raw.changelog, BuildConfig.VERSION_CODE).parse();
                         } catch (IOException | XmlPullParserException e) {
                             return;
                         }

@@ -1,9 +1,10 @@
-name: Install AppSphere icon resources
+name: Install Sphere AMOLED icon resources
 on:
   push:
     branches: [master]
     paths:
-      - 'AppSphere_Icon_Pack.zip'
+      - 'arts/sphere/amoled-master.png'
+      - 'scripts/generate_sphere_icons.py'
       - '.github/workflows/appsphere-icons.yml'
   workflow_dispatch:
 permissions:
@@ -13,91 +14,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          persist-credentials: true
       - name: Install icon processing dependency
         run: python3 -m pip install --user 'Pillow>=10,<13'
-      - name: Inspect and install icon pack
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path, PurePosixPath
-          from zipfile import ZipFile
-          import io
-          from PIL import Image
-
-          archive = Path('AppSphere_Icon_Pack.zip')
-          if not archive.is_file():
-              raise SystemExit('AppSphere_Icon_Pack.zip is missing')
-          root = Path('app/src/main/res')
-          densities = {'mdpi':48, 'hdpi':72, 'xhdpi':96, 'xxhdpi':144, 'xxxhdpi':192}
-          with ZipFile(archive) as z:
-              entries = [n for n in z.namelist() if n.lower().endswith('.png') and not n.startswith('__MACOSX/')]
-              print('PNG files in icon pack:', *entries, sep='\n - ')
-              if not entries:
-                  raise SystemExit('Icon ZIP contains no PNG images')
-              def choose(keys):
-                  for key in keys:
-                      matches = [n for n in entries if PurePosixPath(n).name.lower() == key.lower()]
-                      if matches:
-                          return sorted(matches, key=lambda n: (len(PurePosixPath(n).parts), len(n)))[0]
-                  return None
-              master = choose(['AppSphere_Master_1024.png', 'appsphere_master.png', 'appsphere_icon.png', 'icon.png'])
-              if master is None:
-                  # Prefer the largest square image, never an arbitrary small launcher thumbnail.
-                  square = []
-                  for n in entries:
-                      with Image.open(io.BytesIO(z.read(n))) as im:
-                          if im.width == im.height:
-                              square.append((im.width, n))
-                  if not square:
-                      raise SystemExit('No square PNG in icon pack')
-                  master = max(square)[1]
-              with Image.open(io.BytesIO(z.read(master))) as im:
-                  art = im.convert('RGBA')
-                  print('Selected master:', master, art.size)
-                  if min(art.size) < 192:
-                      raise SystemExit('Master icon is too small for launcher assets')
-                  splash = root / 'drawable-nodpi/appsphere_splash.png'
-                  splash.parent.mkdir(parents=True, exist_ok=True)
-                  art.resize((512, 512), Image.Resampling.LANCZOS).save(splash)
-                  for density, px in densities.items():
-                      directory = root / ('mipmap-' + density)
-                      directory.mkdir(parents=True, exist_ok=True)
-                      for filename in ('ic_launcher.png', 'ic_launcher_round.png'):
-                          art.resize((px, px), Image.Resampling.LANCZOS).save(directory / filename)
-                          print('Installed', directory / filename)
-                  print('Installed', splash)
-          PY
-      - name: Point launcher and splash layouts to installed artwork
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          paths = [
-              Path('app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml'),
-              Path('app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml'),
-          ]
-          for path in paths:
-              text = path.read_text()
-              text = text.replace('@drawable/ic_launcher_foreground', '@drawable/appsphere_splash')
-              path.write_text(text)
-          path = Path('app/src/main/res/layout/activity_authentication.xml')
-          text = path.read_text().replace('@mipmap/ic_launcher_round', '@drawable/appsphere_splash')
-          path.write_text(text)
-          PY
-          test -s app/src/main/res/drawable-nodpi/appsphere_splash.png
-      - name: Commit generated AppSphere resources
+      - name: Generate launcher and splash assets
+        run: python3 scripts/generate_sphere_icons.py
+      - name: Commit generated Sphere resources
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add app/src/main/res/drawable-nodpi/appsphere_splash.png
           git add app/src/main/res/mipmap-*/ic_launcher.png app/src/main/res/mipmap-*/ic_launcher_round.png
-          git add app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml app/src/main/res/layout/activity_authentication.xml
+          git add app/src/main/ic_launcher-playstore.png
           if ! git diff --cached --quiet; then
-            git commit -m "Install AppSphere gold globe icon pack for launcher and splash"
+            git commit -m "Regenerate Sphere AMOLED launcher and splash assets"
             git push
           fi

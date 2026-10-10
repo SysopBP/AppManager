@@ -1,25 +1,56 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later OR CC-BY-SA-4.0 -->
 
 <p align="center">
-  <img src="docs/raw/images/icon.png" alt="App Manager Logo" height="150dp">
+  <img src="arts/sphere/amoled-master.png" alt="Sphere AMOLED gold globe" height="150dp">
 </p>
 
-<h1 align="center">AppSphere</h1>
+<h1 align="center">Sphere</h1>
 
-**AppSphere — a SysopBP fork of App Manager**
+**Sphere (AppSphere) — a SysopBP fork of App Manager**
 
 AppSphere is based on [App Manager by Muntashir Al-Islam and contributors](https://github.com/MuntashirAkon/AppManager). Original authorship, copyright notices, and applicable open-source licenses are retained. This independent fork is not endorsed by the original developers.
 
 
 <p align=center>
-  <a href="https://muntashirakon.github.io/AppManager">Docs</a> ·
-  <a href="https://github.com/MuntashirAkon/AppManager/releases">Releases</a> ·
+  <a href="docs/APPSPHERE_FEATURES.md">Sphere guide</a> ·
+  <a href="CHANGELOG.md">What's New</a> ·
+  <a href="https://github.com/SysopBP/AppManager/actions/workflows/appsphere-debug.yml">Debug APK builds</a> ·
+  <a href="https://muntashirakon.github.io/AppManager">Upstream manual</a> ·
+  <a href="https://github.com/SysopBP/AppManager/releases">Fork releases</a> ·
   <a href="https://t.me/AppManagerChannel">Telegram Channel</a>
 </p>
 
 ---
 
-## Features
+## Sphere 4.2.2 (454)
+
+- AMOLED edition of the uploaded gold-globe icon pack with pure-black artwork and a themed vector icon.
+- Five labelled dock icons, scrolling hide/show and a Home dashboard with backend/device metrics.
+- Compact app cards, refreshed detail headers/tabs and grouped settings with tablet support.
+- Custom wallpaper with preview, dimming and image-brightness controls.
+- Material, True glass and Soft contrast presets, five accents, blur/opacity and reduced transparency.
+- Integrated InxLocker installer/uninstaller controls, optional scoped session/uninstall routing,
+  module status, launcher visibility, logging and supported hot reload.
+- Power/session controls and root/ADB startup, Binder cleanup and local-server extraction repairs.
+- Android 17 build workflow, package/branding checks and current cumulative What's New notes.
+
+Minimum Android is **8/API 26**; the app targets **Android 17/API 37**.
+Release package: `io.github.sysopbp.sphere`. Debug package: `io.github.sysopbp.sphere.debug`.
+These are separate from the original App Manager IDs. Export settings/backups before migrating.
+
+Download **Sphere-Android17-debug** from a successful
+[workflow run](https://github.com/SysopBP/AppManager/actions/workflows/appsphere-debug.yml).
+System-wide installer routing requires compatible libxposed/LSPosed activation and scope;
+root alone is insufficient. Live glass requires Android 12+ and supported hardware and
+uses solid fallbacks for Battery Saver/reduced transparency. Actual appearance, power use
+and OEM routing support require phone verification.
+
+Read the [feature/setup guide](docs/APPSPHERE_FEATURES.md),
+[installer guide](docs/appsphere-installer-control.md),
+[implementation status](docs/APPSPHERE_MIUIX_INXLOCKER_ROADMAP.md) and
+[complete fork changelog](CHANGELOG.md).
+
+## Inherited App Manager features
 
 ### General features
 - Fully reproducible, copylefted libre software (GPLv3+)
@@ -68,7 +99,7 @@ AppSphere is based on [App Manager by Muntashir Al-Islam and contributors](https
 
 …and many more! This single app combines the features of 5 or 6 apps any tech-savvy person needs!
 
-### Upcoming features
+### Upstream roadmap (not Sphere release features)
 - Finder: Find app components, permissions etc. in all apps
 - Basic APK editing
 - Routine operations
@@ -92,14 +123,16 @@ Help translate [the app strings](https://hosted.weblate.org/engage/app-manager/)
 [![Translation status](https://hosted.weblate.org/widgets/app-manager/-/multi-auto.svg)](https://hosted.weblate.org/engage/app-manager/)
 
 
-## Mirrors
+## Upstream mirrors
 
 [Codeberg](https://codeberg.org/muntashir/AppManager) ·
 [GitLab](https://gitlab.com/muntashir/AppManager) ·
 [Riseup](https://0xacab.org/muntashir/AppManager) ·
 [sourcehut](https://git.sr.ht/~muntashir/AppManager)
 
-## Screenshots
+## Upstream screenshots
+
+These retained images show App Manager, not the current Sphere interface.
 
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/9.png" height="500dp" />
 
@@ -110,7 +143,7 @@ See [BUILDING.rst](BUILDING.rst)
 
 See [CONTRIBUTING.rst](CONTRIBUTING.rst)
 
-## Donation and Funding
+## Upstream donation and funding
 
 As of September 2024, App Manager is not accepting any financial support until further notice. But
 you may still be able to send gifts (e.g., gift cards, subscriptions, food and drink, flowers, or
@@ -124,4 +157,6 @@ affiliated with this project in any way.
 
 ## Credits and Libraries
 
-A list of credits and libraries are available in the **About** section of the app.
+A list of credits and libraries is available in **About**. App Manager: Muntashir Al-Islam
+(@MuntashirAkon) and contributors. InxLocker: Chimioo and contributors, with integrated
+GPL-3.0 source notices and licence retained. Sphere modifications: SysopBP.

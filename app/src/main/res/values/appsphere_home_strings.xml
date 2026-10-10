@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <resources>
-    <string name="appsphere_home_1">AppSphere</string>
+    <string name="appsphere_home_1">Sphere</string>
     <string name="appsphere_home_2">Device overview and quick controls</string>
     <string name="appsphere_home_3">Connection</string>
     <string name="appsphere_home_4">Checking current session…</string>

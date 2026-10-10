@@ -21,7 +21,7 @@
             app:summary="@string/funding_campaign_text" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
+    <PreferenceCategory app:title="@string/sphere_settings_personalize" app:layout="@layout/m3_preference_category">
         <Preference
             android:fragment="io.github.muntashirakon.AppManager.settings.ChangeLanguageFragment"
             app:icon="@drawable/ic_translate"
@@ -52,7 +52,13 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
+    <PreferenceCategory app:title="@string/sphere_settings_tools" app:layout="@layout/m3_preference_category">
+        <Preference
+            android:fragment="io.github.muntashirakon.AppManager.settings.PowerPreferences"
+            app:icon="@drawable/ic_run_fast"
+            app:key="power"
+            app:title="@string/sphere_power"
+            app:summary="@string/sphere_power_summary" />
         <Preference
             android:fragment="io.github.muntashirakon.AppManager.settings.ApkSigningPreferences"
             app:icon="@drawable/ic_shield_key"
@@ -61,11 +67,11 @@
             app:title="@string/apk_signing" />
 
         <Preference
-            android:fragment="io.github.muntashirakon.AppManager.settings.InstallerPreferences"
+            android:fragment="io.github.muntashirakon.AppManager.settings.InstallerControlPreferences"
             app:icon="@drawable/ic_get_app"
             app:key="installer"
-            app:summary="@string/pref_installer_msg"
-            app:title="@string/installer" />
+            app:summary="@string/sphere_routing_summary"
+            app:title="@string/sphere_installer_control" />
 
         <Preference
             android:fragment="io.github.muntashirakon.AppManager.settings.BackupRestorePreferences"
@@ -104,7 +110,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
+    <PreferenceCategory app:title="@string/sphere_settings_device" app:layout="@layout/m3_preference_category">
 
         <Preference
             android:fragment="io.github.muntashirakon.AppManager.settings.AboutDeviceFragment"
@@ -122,7 +128,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:layout="@layout/m3_preference_category_empty">
+    <PreferenceCategory app:title="@string/sphere_settings_advanced" app:layout="@layout/m3_preference_category">
         <Preference
             android:fragment="io.github.muntashirakon.AppManager.settings.AdvancedPreferences"
             app:icon="@drawable/ic_tune"

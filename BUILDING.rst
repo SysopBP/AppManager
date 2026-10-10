@@ -1,15 +1,38 @@
 .. SPDX-License-Identifier: GPL-3.0-or-later OR CC-BY-SA-4.0
 
-====================
-Building App Manager
-====================
+==================
+Building Sphere
+==================
+
+Sphere 4.2.2 build
+==================
+
+The maintained workflow is ``.github/workflows/appsphere-debug.yml``. It installs
+Android 17/API 37 from SDK preview channel 3, build-tools 37.0.0 and platform-tools.
+When the SDK installs ``platforms/android-37.0``, the workflow maps it to
+``platforms/android-37`` for Gradle. The native build also needs NDK/CMake.
+
+Initialise submodules, then run ``./gradlew :app:assembleDebug``. The APK is under
+``app/build/outputs/apk/debug/``. CI verifies ``io.github.sysopbp.sphere.debug``,
+version 4.2.2 (454) and label Sphere, then uploads ``Sphere-Android17-debug``.
+Release uses ``io.github.sysopbp.sphere``. Minimum supported Android is API 26.
+The project includes the Kotlin ``installer-routing`` module with modern libxposed
+API/service dependencies and record desugaring. Hook activation requires a compatible
+LSPosed runtime and scope; it is separate from APK compilation.
+
+The icon workflow packages ``arts/sphere/amoled-master.png`` using
+``scripts/generate_sphere_icons.py``. Install Pillow to regenerate the density assets.
+The current What's New version must match app/build.gradle; an existing regression
+test covers this relationship. Do not substitute upstream release notes for fork notes.
+
+Current features: ``docs/APPSPHERE_FEATURES.md``. Changes: ``CHANGELOG.md``.
 
 Requirements
 ============
 
 * **Hardware:** Any computer with 8 GB RAM and 20 GB storage
 * **Operating system:** Linux/macOS/WSL
-* **Software:** Android Studio/IntelliJ IDEA, Gradle, Latex, pandoc, JDK 17+
+* **Software:** Android Studio/IntelliJ IDEA, Gradle, Latex, pandoc, JDK 21 (used by the Sphere workflow)
 * **Active network connection:** Depending on your development environment,
   you may need at least 20 GB data package.
 
@@ -62,7 +85,7 @@ Clone and Build App Manager
 
 1. Clone the repo along with submodules::
 
-     git clone --recurse-submodules https://github.com/MuntashirAkon/AppManager.git
+     git clone --recurse-submodules https://github.com/SysopBP/AppManager.git
 
    You can use the `--depth 1` argument if you don't want to clone past
    commits.
