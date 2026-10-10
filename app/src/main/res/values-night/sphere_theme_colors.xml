@@ -1,0 +1,19 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <color name="sphere_violet_primary">#CFBCFF</color>
+    <color name="sphere_violet_on_primary">#32165E</color>
+    <color name="sphere_violet_container">#4A2F75</color>
+    <color name="sphere_violet_on_container">#EADDFF</color>
+    <color name="sphere_blue_primary">#A7C8FF</color>
+    <color name="sphere_blue_on_primary">#002F65</color>
+    <color name="sphere_blue_container">#064681</color>
+    <color name="sphere_blue_on_container">#D5E3FF</color>
+    <color name="sphere_mint_primary">#7FD9BA</color>
+    <color name="sphere_mint_on_primary">#00382B</color>
+    <color name="sphere_mint_container">#005141</color>
+    <color name="sphere_mint_on_container">#9FF2D4</color>
+    <color name="sphere_amber_primary">#F8BE49</color>
+    <color name="sphere_amber_on_primary">#442B00</color>
+    <color name="sphere_amber_container">#614000</color>
+    <color name="sphere_amber_on_container">#FFDEAB</color>
+</resources>

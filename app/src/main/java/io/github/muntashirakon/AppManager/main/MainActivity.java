@@ -680,6 +680,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         mOnBackPressedCallback.setEnabled(home || (mAdapter != null && mAdapter.isInSelectionMode()));
         findViewById(R.id.appsphere_nav_home).setSelected(home);
         findViewById(R.id.appsphere_nav_apps).setSelected(!home);
+        io.github.muntashirakon.AppManager.utils.appearance.ThemeEngine.updateNavigation(findViewById(R.id.coordinator_layout));
     }
 
     private void updateFloatingNavigationForScroll(int dy, boolean atTop) {
@@ -723,63 +724,9 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         }
     }
 
-    private void applyAppSphereDashboardColors(View view, int textColor, int surfaceColor) {
-        if (view instanceof android.widget.TextView && !(view instanceof android.widget.Button)) {
-            ((android.widget.TextView) view).setTextColor(textColor);
-        }
-        if (view.getBackground() != null && !(view instanceof android.widget.Button)) {
-            view.setBackgroundTintList(android.content.res.ColorStateList.valueOf(surfaceColor));
-        }
-        if (view instanceof ViewGroup) {
-            ViewGroup group = (ViewGroup) view;
-            for (int i = 0; i < group.getChildCount(); ++i) {
-                applyAppSphereDashboardColors(group.getChildAt(i), textColor, surfaceColor);
-            }
-        }
-    }
-
     private void applyAppSphereInterfaceStyle() {
-        String style = getSharedPreferences("appsphere_appearance", MODE_PRIVATE)
-                .getString("interface_style", "glass");
         View root = findViewById(R.id.coordinator_layout);
-        View bar = findViewById(R.id.appsphere_floating_bar);
-        View toolbar = findViewById(R.id.toolbar);
-        if (root == null || bar == null || toolbar == null) return;
-        ((io.github.muntashirakon.AppManager.widgets.WallpaperView)
-                findViewById(R.id.sphere_wallpaper)).refresh();
-        boolean material = "material".equals(style);
-        int dashboardText = material
-                ? com.google.android.material.color.MaterialColors.getColor(root,
-                        com.google.android.material.R.attr.colorOnSurface)
-                : android.graphics.Color.rgb(248, 245, 255);
-        int dashboardSurface = material
-                ? com.google.android.material.color.MaterialColors.getColor(root,
-                        com.google.android.material.R.attr.colorSurfaceContainer)
-                : android.graphics.Color.rgb(28, 27, 34);
-        applyAppSphereDashboardColors(findViewById(R.id.appsphere_dashboard),
-                dashboardText, dashboardSurface);
-        for (int id : new int[]{R.id.appsphere_nav_home, R.id.appsphere_nav_apps,
-                R.id.appsphere_nav_installer, R.id.appsphere_nav_running, R.id.appsphere_nav_settings}) {
-            android.widget.TextView item = findViewById(id);
-            item.setTextColor(dashboardText);
-            item.setCompoundDrawableTintList(android.content.res.ColorStateList.valueOf(dashboardText));
-        }
-        if ("material".equals(style)) {
-            android.util.TypedValue value = new android.util.TypedValue();
-            getTheme().resolveAttribute(com.google.android.material.R.attr.colorSurface, value, true);
-            root.setBackgroundColor(value.data);
-            toolbar.setBackgroundColor(value.data);
-            bar.setBackgroundTintList(android.content.res.ColorStateList.valueOf(value.data));
-        } else if ("miuix".equals(style)) {
-            root.setBackgroundColor(android.graphics.Color.rgb(17, 18, 24));
-            toolbar.setBackgroundColor(android.graphics.Color.rgb(34, 36, 47));
-            bar.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
-                    android.graphics.Color.rgb(49, 52, 68)));
-        } else {
-            root.setBackgroundColor(android.graphics.Color.rgb(13, 12, 18));
-            toolbar.setBackgroundColor(android.graphics.Color.argb(217, 28, 26, 37));
-            bar.setBackgroundTintList(null);
-        }
+        if (root != null) io.github.muntashirakon.AppManager.utils.appearance.ThemeEngine.applyScreen(root);
     }
 
     private boolean mImsVisibleBeforeLeave = false;

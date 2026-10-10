@@ -1,0 +1,55 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <style name="SphereAccent.Violet" parent="">
+        <item name="colorPrimary">@color/sphere_violet_primary</item>
+        <item name="colorOnPrimary">@color/sphere_violet_on_primary</item>
+        <item name="colorPrimaryContainer">@color/sphere_violet_container</item>
+        <item name="colorOnPrimaryContainer">@color/sphere_violet_on_container</item>
+        <item name="colorSecondary">@color/sphere_violet_primary</item>
+        <item name="colorOnSecondary">@color/sphere_violet_on_primary</item>
+        <item name="colorSecondaryContainer">@color/sphere_violet_container</item>
+        <item name="colorOnSecondaryContainer">@color/sphere_violet_on_container</item>
+        <item name="colorAccent">@color/sphere_violet_primary</item>
+        <item name="android:colorAccent">@color/sphere_violet_primary</item>
+        <item name="colorControlActivated">@color/sphere_violet_primary</item>
+    </style>
+    <style name="SphereAccent.Blue" parent="">
+        <item name="colorPrimary">@color/sphere_blue_primary</item>
+        <item name="colorOnPrimary">@color/sphere_blue_on_primary</item>
+        <item name="colorPrimaryContainer">@color/sphere_blue_container</item>
+        <item name="colorOnPrimaryContainer">@color/sphere_blue_on_container</item>
+        <item name="colorSecondary">@color/sphere_blue_primary</item>
+        <item name="colorOnSecondary">@color/sphere_blue_on_primary</item>
+        <item name="colorSecondaryContainer">@color/sphere_blue_container</item>
+        <item name="colorOnSecondaryContainer">@color/sphere_blue_on_container</item>
+        <item name="colorAccent">@color/sphere_blue_primary</item>
+        <item name="android:colorAccent">@color/sphere_blue_primary</item>
+        <item name="colorControlActivated">@color/sphere_blue_primary</item>
+    </style>
+    <style name="SphereAccent.Mint" parent="">
+        <item name="colorPrimary">@color/sphere_mint_primary</item>
+        <item name="colorOnPrimary">@color/sphere_mint_on_primary</item>
+        <item name="colorPrimaryContainer">@color/sphere_mint_container</item>
+        <item name="colorOnPrimaryContainer">@color/sphere_mint_on_container</item>
+        <item name="colorSecondary">@color/sphere_mint_primary</item>
+        <item name="colorOnSecondary">@color/sphere_mint_on_primary</item>
+        <item name="colorSecondaryContainer">@color/sphere_mint_container</item>
+        <item name="colorOnSecondaryContainer">@color/sphere_mint_on_container</item>
+        <item name="colorAccent">@color/sphere_mint_primary</item>
+        <item name="android:colorAccent">@color/sphere_mint_primary</item>
+        <item name="colorControlActivated">@color/sphere_mint_primary</item>
+    </style>
+    <style name="SphereAccent.Amber" parent="">
+        <item name="colorPrimary">@color/sphere_amber_primary</item>
+        <item name="colorOnPrimary">@color/sphere_amber_on_primary</item>
+        <item name="colorPrimaryContainer">@color/sphere_amber_container</item>
+        <item name="colorOnPrimaryContainer">@color/sphere_amber_on_container</item>
+        <item name="colorSecondary">@color/sphere_amber_primary</item>
+        <item name="colorOnSecondary">@color/sphere_amber_on_primary</item>
+        <item name="colorSecondaryContainer">@color/sphere_amber_container</item>
+        <item name="colorOnSecondaryContainer">@color/sphere_amber_on_container</item>
+        <item name="colorAccent">@color/sphere_amber_primary</item>
+        <item name="android:colorAccent">@color/sphere_amber_primary</item>
+        <item name="colorControlActivated">@color/sphere_amber_primary</item>
+    </style>
+</resources>

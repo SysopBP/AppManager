@@ -1,0 +1,41 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="sphere_theme_engine">Theme engine</string>
+    <string name="sphere_theme_engine_summary">Presets, accent colors and true frosted glass</string>
+    <string name="sphere_motion_feedback">Motion and feedback</string>
+    <string name="sphere_motion_feedback_summary">Animations and touch haptics</string>
+    <string name="sphere_theme_colors">Colors and background</string>
+    <string name="sphere_theme_preset">Theme preset</string>
+    <string name="sphere_theme_accent">Accent color</string>
+    <string name="sphere_theme_glass">Glass surfaces</string>
+    <string name="sphere_theme_blur">Backdrop blur</string>
+    <string name="sphere_theme_blur_summary">Blur radius in dp. Text and icons stay sharp.</string>
+    <string name="sphere_theme_opacity">Surface opacity</string>
+    <string name="sphere_theme_opacity_summary">40–90%. Higher values make the background less visible.</string>
+    <string name="sphere_theme_reduce">Reduce transparency</string>
+    <string name="sphere_theme_reduce_summary">Use solid surfaces for readability and lower rendering cost.</string>
+    <string name="sphere_theme_rendering">Glass rendering</string>
+    <string name="sphere_theme_solid_status">This preset uses solid surfaces.</string>
+    <string name="sphere_theme_reduced_status">Solid surfaces: Reduce transparency is enabled.</string>
+    <string name="sphere_theme_older_status">Solid fallback. Live backdrop blur requires Android 12 or newer.</string>
+    <string name="sphere_theme_power_status">Solid surfaces while Battery saver is active.</string>
+    <string name="sphere_theme_blur_status">Live backdrop blur on supported hardware. Solid fallback if rendering is unavailable.</string>
+    <string name="sphere_theme_apply">Apply theme</string>
+    <string name="sphere_theme_apply_summary">Apply colors and surfaces throughout Sphere.</string>
+    <string name="sphere_theme_reset">Reset theme</string>
+    <string name="sphere_theme_reset_summary">Restore default glass and system accent. Keep your wallpaper.</string>
+    <string name="sphere_theme_preview">Theme preview</string>
+    <string name="sphere_theme_preview_body">Frosted surfaces with clear text and icons</string>
+    <string-array name="sphere_theme_presets">
+        <item>Material</item><item>True glass</item><item>Soft contrast</item>
+    </string-array>
+    <string-array name="sphere_theme_preset_values">
+        <item>material</item><item>glass</item><item>miuix</item>
+    </string-array>
+    <string-array name="sphere_theme_accents">
+        <item>System</item><item>Violet</item><item>Blue</item><item>Mint</item><item>Amber</item>
+    </string-array>
+    <string-array name="sphere_theme_accent_values">
+        <item>system</item><item>violet</item><item>blue</item><item>mint</item><item>amber</item>
+    </string-array>
+</resources>

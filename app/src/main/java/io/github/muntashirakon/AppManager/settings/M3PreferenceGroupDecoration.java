@@ -56,8 +56,12 @@ public class M3PreferenceGroupDecoration extends RecyclerView.ItemDecoration {
         outRect.right = outRect.left;
         outRect.top = isFirstInGroup(adapter, position) ? gap * 3 : 0;
         outRect.bottom = isLastInGroup(adapter, position) ? gap * 5 : gap;
-        cardView.setCardBackgroundColor(com.google.android.material.color.MaterialColors.getColor(parent,
-                com.google.android.material.R.attr.colorSurfaceContainerLow));
+        if (cardView instanceof io.github.muntashirakon.AppManager.widgets.GlassCardView) {
+            ((io.github.muntashirakon.AppManager.widgets.GlassCardView) cardView).refreshTheme();
+        } else {
+            cardView.setCardBackgroundColor(com.google.android.material.color.MaterialColors.getColor(parent,
+                    com.google.android.material.R.attr.colorSurfaceContainerLow));
+        }
         cardView.setStrokeColor(ColorStateList.valueOf(com.google.android.material.color.MaterialColors.getColor(parent,
                 com.google.android.material.R.attr.colorOutlineVariant)));
         cardView.setStrokeWidth(Math.max(1, Math.round(parent.getResources().getDisplayMetrics().density * 0.6f)));

@@ -50,7 +50,7 @@ jobs:
           APK_PATH=$(find app/build/outputs/apk/debug -name '*.apk' -print -quit)
           test -n "$APK_PATH"
           "$ANDROID_HOME/build-tools/37.0.0/aapt2" dump badging "$APK_PATH" > apk-badging.txt
-          grep -F "package: name='io.github.sysopbp.sphere.debug' versionCode='452' versionName='4.2.0'" apk-badging.txt
+          grep -F "package: name='io.github.sysopbp.sphere.debug' versionCode='453' versionName='4.2.1'" apk-badging.txt
           grep -F "application-label:'Sphere'" apk-badging.txt
       - name: Upload Sphere debug APK
         if: success()

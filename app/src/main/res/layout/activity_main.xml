@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-or-later -->
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<io.github.muntashirakon.AppManager.widgets.GlassCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator_layout"
@@ -339,4 +339,4 @@
             android:textAllCaps="false" />
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</io.github.muntashirakon.AppManager.widgets.GlassCoordinatorLayout>

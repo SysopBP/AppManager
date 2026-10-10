@@ -73,7 +73,9 @@ public final class AppearanceUtils {
         options.nightMode = Prefs.Appearance.getNightMode();
         ContextThemeWrapper newCtx = new ContextThemeWrapper(context, options.theme);
         newCtx.applyOverrideConfiguration(createOverrideConfiguration(context, options));
-        return DynamicColors.wrapContextIfAvailable(newCtx);
+        Context themed = DynamicColors.wrapContextIfAvailable(newCtx);
+        ThemeEngine.applyAccent(themed);
+        return themed;
     }
 
     /**
@@ -83,7 +85,9 @@ public final class AppearanceUtils {
     public static Context getThemedWidgetContext(@NonNull Context context, boolean transparent) {
         int theme = transparent ? Prefs.Appearance.getTransparentAppTheme() : Prefs.Appearance.getAppTheme();
         ContextThemeWrapper newCtx = new ContextThemeWrapper(context, theme);
-        return DynamicColors.wrapContextIfAvailable(newCtx);
+        Context themed = DynamicColors.wrapContextIfAvailable(newCtx);
+        ThemeEngine.applyAccent(themed);
+        return themed;
     }
 
     /**
@@ -134,6 +138,7 @@ public final class AppearanceUtils {
             }
             // Theme must be set first because the method below will add dynamic attributes to the theme
             DynamicColors.applyToActivityIfAvailable(activity);
+            ThemeEngine.applyAccent(activity);
         }
 
         @Override

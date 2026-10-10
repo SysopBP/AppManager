@@ -1,0 +1,59 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+package io.github.muntashirakon.AppManager.widgets;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Canvas;
+import android.os.PowerManager;
+import android.util.AttributeSet;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+
+import io.github.muntashirakon.AppManager.utils.appearance.ThemeEngine;
+
+/** Captures only when Android is already drawing a changed frame; there is no polling loop. */
+public class GlassCoordinatorLayout extends CoordinatorLayout {
+    final GlassScene scene;
+    private boolean receiverRegistered;
+    private final BroadcastReceiver powerChanges = new BroadcastReceiver() {
+        @Override public void onReceive(Context context, Intent intent) {
+            refreshTheme();
+        }
+    };
+
+    public GlassCoordinatorLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        scene = new GlassScene(this);
+    }
+
+    public void refreshTheme() {
+        scene.config = ThemeEngine.read(getContext());
+        invalidate();
+    }
+
+    @Override public void draw(Canvas canvas) {
+        if (scene.canCapture(canvas)) scene.capture(backdrop -> super.draw(backdrop));
+        super.draw(canvas);
+    }
+
+    @Override protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        ContextCompat.registerReceiver(getContext(), powerChanges,
+                new IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED),
+                ContextCompat.RECEIVER_NOT_EXPORTED);
+        receiverRegistered = true;
+        refreshTheme();
+    }
+
+    @Override protected void onDetachedFromWindow() {
+        if (receiverRegistered) {
+            getContext().unregisterReceiver(powerChanges);
+            receiverRegistered = false;
+        }
+        scene.release();
+        super.onDetachedFromWindow();
+    }
+}

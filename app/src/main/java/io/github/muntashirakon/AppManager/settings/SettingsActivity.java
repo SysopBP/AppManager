@@ -128,6 +128,15 @@ public class SettingsActivity extends BaseActivity implements PreferenceFragment
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        View primary = findViewById(R.id.sphere_settings_root);
+        if (primary != null) io.github.muntashirakon.AppManager.utils.appearance.ThemeEngine.applyScreen(primary);
+        View secondary = findViewById(R.id.sphere_settings_secondary_root);
+        if (secondary != null) io.github.muntashirakon.AppManager.utils.appearance.ThemeEngine.applyScreen(secondary);
+    }
+
+    @Override
     protected void onNewIntent(@NonNull Intent intent) {
         super.onNewIntent(intent);
         if (setKeysFromIntent(intent)) {
