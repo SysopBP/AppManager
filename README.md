@@ -1,7 +1,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later OR CC-BY-SA-4.0 -->
 
 <p align="center">
-  <img src="arts/sphere/amoled-master.png" alt="Sphere AMOLED gold globe" height="150dp">
+  <img src="arts/sphere/amoled-master.png" alt="Sphere AMOLED gold globe" height="150">
 </p>
 
 <h1 align="center">Sphere</h1>
@@ -24,31 +24,86 @@ AppSphere is based on [App Manager by Muntashir Al-Islam and contributors](https
 
 ## Sphere 4.2.2 (454)
 
-- AMOLED edition of the uploaded gold-globe icon pack with pure-black artwork and a themed vector icon.
-- Five labelled dock icons, scrolling hide/show and a Home dashboard with backend/device metrics.
-- Compact app cards, refreshed detail headers/tabs and grouped settings with tablet support.
-- Custom wallpaper with preview, dimming and image-brightness controls.
-- Material, True glass and Soft contrast presets, five accents, blur/opacity and reduced transparency.
-- Integrated InxLocker installer/uninstaller controls, optional scoped session/uninstall routing,
-  module status, launcher visibility, logging and supported hot reload.
-- Power/session controls and root/ADB startup, Binder cleanup and local-server extraction repairs.
-- Android 17 build workflow, package/branding checks and current cumulative What's New notes.
+Sphere combines App Manager's package-management tools with a refreshed dashboard,
+AMOLED branding, customizable backgrounds and integrated installer controls.
 
-Minimum Android is **8/API 26**; the app targets **Android 17/API 37**.
-Release package: `io.github.sysopbp.sphere`. Debug package: `io.github.sysopbp.sphere.debug`.
-These are separate from the original App Manager IDs. Export settings/backups before migrating.
+### What's included
 
-Download **Sphere-Android17-debug** from a successful
-[workflow run](https://github.com/SysopBP/AppManager/actions/workflows/appsphere-debug.yml).
-System-wide installer routing requires compatible libxposed/LSPosed activation and scope;
-root alone is insufficient. Live glass requires Android 12+ and supported hardware and
-uses solid fallbacks for Battery Saver/reduced transparency. Actual appearance, power use
-and OEM routing support require phone verification.
+| Area | Sphere changes |
+| --- | --- |
+| AMOLED identity | Gold-globe launcher artwork with pure-black surroundings, adaptive/themed icons and matching Android/authentication splash screens. |
+| Home dashboard | Device and backend summaries, memory/storage metrics, search, filters and tool shortcuts. |
+| Floating navigation | Labelled Home, Apps, Installer, Running and Settings icons; hides when scrolling down and returns when scrolling up. |
+| App pages | Compact app cards, refreshed detail headers/tabs and clearer metadata. Installed apps keep their own icons. |
+| Settings | Grouped cards and single-pane/tablet layouts. |
+| Backgrounds | Custom image picker, preview, wallpaper dimming from 0–100% and image brightness from 0–200%. |
+| Theme engine | Material, True glass and Soft contrast presets; System, Violet, Blue, Mint and Amber accents; blur, opacity and reduced transparency. |
+| Installer Control | Integrated InxLocker-derived installer/uninstaller selection, source-app rules, forced target activities and optional scoped routing. |
+| Power and sessions | Battery-settings shortcuts, persistent-session control and requested versus detected privileged mode. |
+| Startup repairs | Root/ADB startup, Binder checks/cleanup, private local-server extraction and the Android 17 navigation-drawable crash fix. |
+| Release information | Current cumulative What's New popup, About version information and updated setup/build documentation. |
 
-Read the [feature/setup guide](docs/APPSPHERE_FEATURES.md),
-[installer guide](docs/appsphere-installer-control.md),
-[implementation status](docs/APPSPHERE_MIUIX_INXLOCKER_ROADMAP.md) and
-[complete fork changelog](CHANGELOG.md).
+Soft contrast is the current name of the earlier MIUIX-inspired preset. The theme engine
+uses native Android rendering. Dashboard refresh controls read current metrics.
+
+### Download and install
+
+1. Open [Sphere Android 17 Debug APK builds](https://github.com/SysopBP/AppManager/actions/workflows/appsphere-debug.yml).
+2. Choose a **successful** run for the branch or commit you want. Pull-request runs are previews; choose **master** for merged changes.
+3. Under **Artifacts**, download **Sphere-Android17-debug**. GitHub may require sign-in to download artifacts.
+4. Extract the ZIP and install its APK. Allow installation from your browser or file manager if Android asks.
+5. Open **Sphere** and choose the operating mode appropriate for your device.
+
+A successful build confirms compilation and packaging; appearance, privileged operations,
+OEM installer hooks and power use still need device testing. Published APK releases, when
+available, appear on the [releases page](https://github.com/SysopBP/AppManager/releases).
+Upstream App Manager distribution links below install the upstream app.
+
+### Requirements and updates
+
+| Item | Requirement |
+| --- | --- |
+| Minimum Android | Android 8 / API 26 |
+| Target Android | Android 17 / API 37 |
+| Release package | `io.github.sysopbp.sphere` |
+| Debug package | `io.github.sysopbp.sphere.debug` |
+| Updating an existing Sphere install | Same package ID and compatible signing key |
+| Live glass blur | Android 12+ with supported hardware rendering |
+| System-wide installer routing | Compatible modern libxposed/LSPosed service, module activation and scope |
+
+Sphere's package IDs are separate from original App Manager installations. Export settings
+and backups before migrating. Release and debug builds also use separate package IDs.
+Do not uninstall an existing installation to resolve a signing conflict until you have
+exported anything you need to keep.
+
+### First-launch setup
+
+- **Appearance:** open **Settings → Appearance → Theme engine** to choose a preset, accent,
+  blur and surface opacity. Use reduced transparency for solid surfaces.
+- **Wallpaper:** choose **Custom background**, enable it and adjust the dimming and image
+  brightness in the preview. Image brightness does not change display brightness.
+- **Installer:** open the **Installer** tab for APK selection and installer preferences.
+  Ordinary local installer selection and system-wide interception have different setup requirements.
+- **System-wide routing:** activate Sphere in compatible libxposed/LSPosed, configure scope
+  and check the connected-service status. Root alone does not activate hooks. Hot reload
+  requires API 102 capability; otherwise restart scoped processes. Experimental path-access
+  and ColorOS controls are off by default.
+- **Power:** open **Settings → Power and background activity** for persistent-session controls,
+  Android battery settings and requested/detected backend status.
+
+True glass falls back to solid surfaces with Battery Saver, reduced transparency, older
+Android versions or unavailable hardware rendering. Wallpaper and glass support cover
+the refreshed main/settings surfaces; inherited tool screens may use their existing layouts.
+Privileged capabilities depend on the selected backend and device. This fork retains
+App Manager's operating modes; it does not add TokenX's separate Root/System routing architecture.
+
+### Guides
+
+- [Full feature and setup guide](docs/APPSPHERE_FEATURES.md)
+- [Installer Control and LSPosed setup](docs/appsphere-installer-control.md)
+- [Implementation status and roadmap](docs/APPSPHERE_MIUIX_INXLOCKER_ROADMAP.md)
+- [Complete fork changelog](CHANGELOG.md)
+- [Build from source](BUILDING.rst)
 
 ## Inherited App Manager features
 
