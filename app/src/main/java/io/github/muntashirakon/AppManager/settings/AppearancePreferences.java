@@ -3,6 +3,7 @@
 package io.github.muntashirakon.AppManager.settings;
 
 import android.os.Bundle;
+import android.content.Context;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -55,6 +56,31 @@ public class AppearancePreferences extends PreferenceFragment {
                             Prefs.Appearance.setNightMode(mCurrentTheme);
                             AppCompatDelegate.setDefaultNightMode(mCurrentTheme);
                         }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+            return true;
+        });
+        // AppSphere interface styles are independent of the upstream night-mode preference.
+        Preference interfaceStyle = Objects.requireNonNull(findPreference("appsphere_interface_style"));
+        String[] styleValues = getResources().getStringArray(R.array.appsphere_style_values);
+        String[] styleNames = getResources().getStringArray(R.array.appsphere_style_entries);
+        String selectedStyle = requireContext().getSharedPreferences("appsphere_appearance", Context.MODE_PRIVATE)
+                .getString("interface_style", "glass");
+        int currentStyle = Arrays.asList(styleValues).indexOf(selectedStyle);
+        interfaceStyle.setSummary(styleNames[Math.max(0, currentStyle)]);
+        interfaceStyle.setOnPreferenceClickListener(preference -> {
+            String selected = requireContext().getSharedPreferences("appsphere_appearance", Context.MODE_PRIVATE)
+                    .getString("interface_style", "glass");
+            int checked = Math.max(0, Arrays.asList(styleValues).indexOf(selected));
+            new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                    .setTitle("Interface style")
+                    .setSingleChoiceItems(styleNames, checked, (dialog, which) -> {
+                        requireContext().getSharedPreferences("appsphere_appearance", Context.MODE_PRIVATE)
+                                .edit().putString("interface_style", styleValues[which]).apply();
+                        interfaceStyle.setSummary(styleNames[which]);
+                        AppearanceUtils.applyConfigurationChangesToActivities();
+                        dialog.dismiss();
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .show();
