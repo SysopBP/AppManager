@@ -86,6 +86,24 @@ public class AppearancePreferences extends PreferenceFragment {
                     .show();
             return true;
         });
+        Preference studio = Objects.requireNonNull(findPreference("appsphere_appearance_studio"));
+        studio.setOnPreferenceClickListener(preference -> {
+            final String[] labels = {"Enable interface animations", "Enable touch haptics"};
+            android.content.SharedPreferences prefs = requireContext().getSharedPreferences(
+                    "appsphere_appearance", Context.MODE_PRIVATE);
+            final boolean[] checked = {prefs.getBoolean("animations", true),
+                    prefs.getBoolean("haptics", true)};
+            new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                    .setTitle("Appearance Studio")
+                    .setMultiChoiceItems(labels, checked, (dialog, which, value) -> {
+                        checked[which] = value;
+                        prefs.edit().putBoolean(which == 0 ? "animations" : "haptics", value).apply();
+                    })
+                    .setPositiveButton(R.string.close, (dialog, which) ->
+                            AppearanceUtils.applyConfigurationChangesToActivities())
+                    .show();
+            return true;
+        });
         // Black theme/custom theme
         SwitchPreferenceCompat fullBlackTheme = Objects.requireNonNull(findPreference("app_theme_pure_black"));
         fullBlackTheme.setChecked(Prefs.Appearance.isPureBlackTheme());
