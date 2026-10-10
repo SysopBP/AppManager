@@ -28,8 +28,8 @@ jobs:
           test -x "$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" || test -x "$SDK_ROOT/cmdline-tools/16.0/bin/sdkmanager"
       - name: Install Android 17 SDK
         run: |
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager "platforms;android-37" "build-tools;37.0.0" "platform-tools"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37" "build-tools;37.0.0" "platform-tools"
       - name: Build debug APK
         run: |
           chmod +x gradlew
