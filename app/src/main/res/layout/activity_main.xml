@@ -245,6 +245,17 @@
             android:textAllCaps="false" />
 
         <Button
+            android:id="@+id/appsphere_nav_installer"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:text="Installer"
+            android:textSize="11sp"
+            android:minWidth="0dp"
+            android:paddingHorizontal="2dp"
+            android:textAllCaps="false" />
+
+        <Button
             android:id="@+id/appsphere_nav_running"
             style="?attr/borderlessButtonStyle"
             android:layout_width="64dp"
