@@ -10,15 +10,11 @@
             app:title="@string/pref_app_theme"
             tools:summary="Follow system" />
 
-        <ListPreference
+        <Preference
             app:iconSpaceReserved="false"
             app:key="appsphere_interface_style"
             app:title="Interface style"
-            app:summary="Choose Material, AMOLED Glass or MIUIX"
-            app:entries="@array/appsphere_style_entries"
-            app:entryValues="@array/appsphere_style_values"
-            app:defaultValue="glass"
-            app:useSimpleSummaryProvider="true" />
+            app:summary="AMOLED Glass" />
 
         <SwitchPreferenceCompat
             app:iconSpaceReserved="false"
