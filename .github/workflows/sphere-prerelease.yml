@@ -22,8 +22,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      SOURCE_SHA: 107185f72fe9a08e241019a61213ef2cb7deebbc
-      APK_RUN: '38063802872'
+      SOURCE_SHA: 6f5df1f4bfec6e10b4f636a600ed91f93ca9fc3e
+      APK_RUN: '38183759395'
       RELEASE_TAG: v4.2.4-preview.1
     steps:
       - uses: actions/checkout@v4
@@ -43,11 +43,10 @@ jobs:
           AAPT=$(find "$ANDROID_HOME/build-tools" -name aapt2 -type f | sort -V | tail -1)
           "$AAPT" dump badging dist/Sphere-4.2.4-Eclipse-Core-preview.apk > badging.txt
           grep -F "package: name='io.github.sysopbp.sphere.debug' versionCode='456' versionName='4.2.4'" badging.txt
-          gh api "repos/$GH_REPO/contents/app/src/main/java/io/github/muntashirakon/AppManager/settings/ModeOfOpsPreference.java?ref=$SOURCE_SHA" --jq .content | base64 -d > mode.java
-          grep -F 'private void refreshServerHealth()' mode.java
-          grep -F 'generation != mServerHealthGeneration' mode.java
-          gh api "repos/$GH_REPO/contents/app/src/main/res/raw/changelog.xml?ref=$SOURCE_SHA" --jq .content | base64 -d > changelog.xml
-          grep -F 'Root connection hotfix' changelog.xml
+          gh api "repos/$GH_REPO/contents/app/src/main/java/io/github/muntashirakon/AppManager/scanner/vt/VtHistoryActivity.java?ref=$SOURCE_SHA" --jq .content | base64 -d > history.java
+          grep -F 'private void startHistoryRefresh()' history.java
+          grep -F 'if (mResumed && mViewModel != null && !isFinishing() && !isDestroyed())' history.java
+          grep -F 'if (mViewModel == null || mProgress == null || isFinishing() || isDestroyed())' history.java
       - name: Update existing prerelease and preserve other assets
         shell: bash
         run: |
@@ -61,23 +60,23 @@ jobs:
           from pathlib import Path
           p = Path("release-body.md")
           body = p.read_text()
-          marker = "## Root server status hotfix — 10 October 2026"
+          marker = "## VirusTotal history hotfix — 11 October 2026"
           body = body.split(marker, 1)[0].rstrip()
           body += """
 
-          ## Root connection hotfix — 10 October 2026
+          ## VirusTotal history hotfix — 11 October 2026
 
-          - Fix native server startup rejecting Sphere's generated private JAR paths.
-          - Keep the Root route selected while reconnecting privileged services.
-          - Refresh server health after returning from Termux and discard stale health checks.
-          - Root connection confirmed by the tester both before and after reboot on SM-S948U1, Android 17 / One UI 9.
-          - Includes the existing in-app What's New root connection notes.
+          - Fix a crash opening VirusTotal history while authentication or backend setup is pending.
+          - Start periodic history refresh only after authentication initializes the screen.
+          - Restart refresh when authentication completes while the activity is resumed.
+          - Guard history loading and incoming file intents until initialization completes and while the activity is closing.
+          - Retains the previous Root connection hotfix.
           - Published APK: 4.2.4 (456), package io.github.sysopbp.sphere.debug.
-          - Source: 107185f72fe9a08e241019a61213ef2cb7deebbc.
-          - APK build, tests, lint and CodeQL passed for this source.
-          - Reboot confirmation validates the tested root connection; broader device/OEM behavior still requires testing.
+          - Source: 6f5df1f4bfec6e10b4f636a600ed91f93ca9fc3e.
+          - Android 17 debug APK build passed. Device confirmation of the VirusTotal fix is pending.
+          - Thanks to reckaH2281 for reporting the crash.
 
-          Build: https://github.com/SysopBP/AppManager/actions/runs/38063802872
+          Build: https://github.com/SysopBP/AppManager/actions/runs/38183759395
           """
           p.write_text(body)
           PY
