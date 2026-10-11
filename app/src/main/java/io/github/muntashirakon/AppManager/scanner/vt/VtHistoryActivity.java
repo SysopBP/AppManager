@@ -83,7 +83,7 @@ public class VtHistoryActivity extends BaseActivity {
     private final Runnable mRefreshRunnable = new Runnable() {
         @Override
         public void run() {
-            if (mResumed) {
+            if (mResumed && mViewModel != null && !isFinishing() && !isDestroyed()) {
                 loadData(false);
                 mHandler.postDelayed(this, 2_000L);
             }
@@ -136,6 +136,8 @@ public class VtHistoryActivity extends BaseActivity {
         });
         loadData(true);
         handleIncomingIntent(getIntent());
+        // Authentication may complete after onResume. Start polling only once the UI is ready.
+        startHistoryRefresh();
     }
 
     private void showPendingConsentDialog(@NonNull List<VtHistoryItem> history) {
@@ -157,6 +159,7 @@ public class VtHistoryActivity extends BaseActivity {
     }
 
     private void handleIncomingIntent(@Nullable Intent intent) {
+        if (mViewModel == null || mProgress == null || isFinishing() || isDestroyed()) return;
         if (intent == null || (!Intent.ACTION_VIEW.equals(intent.getAction())
                 && !Intent.ACTION_SEND.equals(intent.getAction()))) return;
         Uri uri = IntentCompat.getDataUri(intent);
@@ -189,10 +192,16 @@ public class VtHistoryActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        sVisible = true;
         mResumed = true;
+        startHistoryRefresh();
+    }
+
+    private void startHistoryRefresh() {
         mHandler.removeCallbacks(mRefreshRunnable);
-        mHandler.post(mRefreshRunnable);
+        sVisible = mResumed && mViewModel != null && !isFinishing() && !isDestroyed();
+        if (sVisible) {
+            mHandler.post(mRefreshRunnable);
+        }
     }
 
     @Override
@@ -204,6 +213,9 @@ public class VtHistoryActivity extends BaseActivity {
     }
 
     private void loadData(boolean showProgress) {
+        if (mViewModel == null || mProgress == null || isFinishing() || isDestroyed()) {
+            return;
+        }
         if (showProgress) {
             mProgress.show();
         }
