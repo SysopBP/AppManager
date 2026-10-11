@@ -35,13 +35,13 @@ jobs:
           jq -e --arg sha "$SOURCE_SHA" '.head_sha == $sha and .status == "completed" and .conclusion == "success"' run.json
           gh run download "$APK_RUN" --name Sphere-Android17-debug --dir dist
           test -s dist/app-debug.apk
-          mv dist/app-debug.apk dist/Sphere-4.2.4-Eclipse-Core-preview.apk
+          mv dist/app-debug.apk dist/Sphere-4.2.4-Eclipse-Core-hotfix.apk
       - name: Verify APK identity and hotfix source
         shell: bash
         run: |
           set -euo pipefail
           AAPT=$(find "$ANDROID_HOME/build-tools" -name aapt2 -type f | sort -V | tail -1)
-          "$AAPT" dump badging dist/Sphere-4.2.4-Eclipse-Core-preview.apk > badging.txt
+          "$AAPT" dump badging dist/Sphere-4.2.4-Eclipse-Core-hotfix.apk > badging.txt
           grep -F "package: name='io.github.sysopbp.sphere.debug' versionCode='456' versionName='4.2.4'" badging.txt
           gh api "repos/$GH_REPO/contents/app/src/main/java/io/github/muntashirakon/AppManager/scanner/vt/VtHistoryActivity.java?ref=$SOURCE_SHA" --jq .content | base64 -d > history.java
           grep -F 'private void startHistoryRefresh()' history.java
@@ -54,12 +54,13 @@ jobs:
           gh release view "$RELEASE_TAG" --json body,url,isDraft,isPrerelease > release-before.json
           mkdir existing
           gh release download "$RELEASE_TAG" --dir existing
-          cp dist/Sphere-4.2.4-Eclipse-Core-preview.apk existing/
+          rm -f existing/Sphere-4.2.4-Eclipse-Core-preview.apk
+          cp dist/Sphere-4.2.4-Eclipse-Core-hotfix.apk existing/
           jq -r .body release-before.json > release-body.md
           python3 - <<'PY'
           from pathlib import Path
           p = Path("release-body.md")
-          body = p.read_text()
+          body = p.read_text().replace("Sphere-4.2.4-Eclipse-Core-preview.apk", "Sphere-4.2.4-Eclipse-Core-hotfix.apk")
           marker = "## VirusTotal history hotfix — 11 October 2026"
           body = body.split(marker, 1)[0].rstrip()
           body += """
@@ -82,8 +83,9 @@ jobs:
           PY
           cp release-body.md existing/Sphere-4.2.4-Release-Notes.md
           (cd existing && find . -maxdepth 1 -type f ! -name SHA256SUMS.txt -printf '%f\n' | sort | xargs -d '\n' sha256sum > SHA256SUMS.txt)
-          gh release upload "$RELEASE_TAG" existing/Sphere-4.2.4-Eclipse-Core-preview.apk existing/Sphere-4.2.4-Release-Notes.md existing/SHA256SUMS.txt --clobber
-          gh release edit "$RELEASE_TAG" --notes-file release-body.md
+          gh release upload "$RELEASE_TAG" existing/Sphere-4.2.4-Eclipse-Core-hotfix.apk existing/Sphere-4.2.4-Release-Notes.md existing/SHA256SUMS.txt --clobber
+          gh release delete-asset "$RELEASE_TAG" Sphere-4.2.4-Eclipse-Core-preview.apk --yes
+          gh release edit "$RELEASE_TAG" --title "Sphere 4.2.4 — Eclipse Core Preview Hotfix" --notes-file release-body.md
           gh release view "$RELEASE_TAG" --json url,isDraft,isPrerelease > release-after.json
           jq -e --slurp '.[0].isDraft == .[1].isDraft and .[0].isPrerelease == .[1].isPrerelease' release-before.json release-after.json
           cat release-after.json
